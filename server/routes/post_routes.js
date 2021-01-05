@@ -80,17 +80,19 @@ router.delete("/delete/:id", (req, res) => {
     Post.findOneAndDelete({_id: id}, (err, post) => {
         if(!err) {
             console.log(`Post with id: ${post._id} deleted!`)
+            // retrieve posts of post's category
             Category.findOne({_id: post.catId}, (err, cat) => {
                 if(!err) {
+                    // filter out deleted post
                     let posts = cat.posts.filter((postId) => {
                         postId === id ? false : true; 
                     })
+                    // update category's posts
                     Category.findByIdAndUpdate({_id: post.catId }, {posts: posts}, (err, cat) => {
                         console.log(`Category with id: ${cat._id} posts updated!`)
                     })
                 }
             })
- 
         } else {
             console.log(err)
         }

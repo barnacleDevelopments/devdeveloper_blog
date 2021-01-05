@@ -16,6 +16,7 @@ import Post from "../controllers/post_controller";
 import PostBody from "./PostBody";
 import Comment from "./Comment";
 import Title from "./Title";
+import CommentForm from "./CommentForm";
 
 const Body = styled("section")`
 
@@ -39,7 +40,7 @@ const PostView = () => {
             <PostBody id={id} date={post.date} title={post.title} content={post.content} subTitle={""}/>
             
             <Title title="COMMENTS" />
-            <Comment />
+            <CommentForm/>
         </Body>
     )
 }

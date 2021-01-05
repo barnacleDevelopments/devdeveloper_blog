@@ -7,6 +7,8 @@ FILE: comment_model.js
 import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema({
+    content: String,
+    date: String,
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -15,8 +17,6 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post"
     },
-    content: String,
-    date: String,
     replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reply"
