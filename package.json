@@ -7,6 +7,8 @@
     "@babel/core": "^7.12.10",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "mongoose": "^5.11.9",
@@ -19,7 +21,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "assets": "parcel ./src/index.html"
+    "assets": "parcel ./src/index.html",
+    "server": "nodemon -r esm ./server/app.js"
   },
   "author": "",
   "license": "ISC"

@@ -4,10 +4,15 @@ DATE: January 1st, 2021
 FILE: Card.tsx
 */
 
+// DEPENDENCIES
 import * as React from "react";
 import {FunctionComponent} from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+
+// CONTROLLERS
+import Category from "../controllers/category_controller";
+import { useState } from "react/cjs/react.development";
 
 const CardBody = styled("div")`
     background-color: #314455;
@@ -16,6 +21,26 @@ const CardBody = styled("div")`
     border-radius: 4px;
     margin-bottom: 14px;
     box-shadow: 3px 3px 30px -20px black;
+    position: relative;
+    > a:nth-of-type(1) {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        background-color: #97aabd; 
+        padding: 6px;
+        border-radius: 30px;
+        color: #f5f5f5;
+    }
+
+    > a:nth-of-type(2) {
+        position: absolute;
+        right: -10px;
+        top: 30px;
+        background-color: #97aabd; 
+        padding: 6px;
+        border-radius: 30px;
+        color: #f5f5f5;
+    }
 `;
 
 const CardImg = styled("img")`
@@ -61,21 +86,48 @@ const CardContent = styled("div")`
     }
 `;
 
+const CardCount = styled("div")`
+    background-color: #9E5A63;
+    font-size: 2em;
+    color: #f5f5f5;
+    padding-top: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 130px;
+    right: 10px;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+`;
 
-const Card = ({id, name, desc, img}) => {
 
- 
+const Card = ({id, name, desc, count, img}) => {
+    const [isDeleted, setIsDeleted] = useState(false);
 
+    const handleDelete = () => {
+        setIsDeleted(true);
+        Category.prototype.delete(id);
+    }
+
+    if(!isDeleted) {
     return (
         <CardBody>
             <CardImg src={img}/>
+            <CardCount>{count}</CardCount>
             <CardContent>
                 <h2>{name}</h2>
                 <p>{desc}</p>
-                <Link to={`/blogs/${name}/${id}`} >VIEW</Link>
+                <Link to={`/categories/posts/${id}`}>VIEW</Link>
             </CardContent>
+            <Link to={`/categories/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
+            <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link>
         </CardBody>
     )
+    } else {
+        return null;
+    }
 }
 
-export default Card
+export default Card;

@@ -7,7 +7,7 @@ FILE: CategoryTitle.tsx
 import * as React from "react";
 import styled from "@emotion/styled";
 
-const TitleBody = styled("div")`
+const Body = styled("div")`
     padding: 13px 10px 10px 10px;
     color: #f5f5f5;
     background-color: #9E5A63;
@@ -21,20 +21,16 @@ const TitleBody = styled("div")`
     display: flex;
     alight-items: center;
     justify-content: center;
-    box-shadow: 3px 3px 30px -25px black;
+    box-shadow: 3px 3px 30px -20px black;
 
 `;
 
-interface CategoryTitleData {
-    title: string
-}
-
-const CategoryTitle:React.FunctionComponent<CategoryTitleData> = ({title}) => {
+const Title = ({title}) => {
     return (
-        <TitleBody>
+        <Body>
             <h1>{title}</h1>
-        </TitleBody>
+        </Body>
     )
 }
 
-export default CategoryTitle;
+export default Title;

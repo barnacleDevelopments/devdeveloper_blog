@@ -14,12 +14,17 @@ import { Switch, Route, useParams, useLocation, BrowserRouter as Router } from "
 import Container from "./ts/components/Container";
 import Navbar from "./ts/components/Navbar";
 import CategoriesView from "./ts/components/CategoriesView";
-import BlogsView from "./ts/components/BlogsView";
-import BlogView from "./ts/components/BlogView";
+import PostsView from "./ts/components/PostsView";
+import PostView from "./ts/components/PostView";
+import CategoryEditView from "./ts/components/CategoryEditView";
+import CategoryCreateView from "./ts/components/CategoryCreateView";
+import PostEditView from "./ts/components/PostEditView";
+import PostCreateView from "./ts/components/PostCreateView";
+
 //GLOBAL STYLES
 import "./css/reset.css";
 import "./css/global.css";
-import "./img/logo.png"
+import "./img/logo.png";
 
 
 //STYLES
@@ -28,36 +33,20 @@ const Body = styled("div")`
 `
 
 const App = () => {
-    const [backBtnStatus, setBackBtnStatus] = useState(false);
-    const location = useLocation()
-    
-    const checkBackBtn = () => {
-        if(location.pathname === "/categories") {
-            setBackBtnStatus(false)
-        } else {
-            setBackBtnStatus(true)
-        }
-    }
-
-    useEffect(() => {
-        checkBackBtn()
-    }, [location])
 
     return (
         <Body>
-            <Navbar backBtnStatus={backBtnStatus} />
+            <Navbar />
+
             <Container>
-            
                 <Switch>
-                    <Route path="/categories">
-                        <CategoriesView />
-                    </Route>
-                    <Route path="/blogs/:title/:id">
-                        <BlogsView />
-                    </Route>
-                    <Route path="/blog/:id">
-                        <BlogView />
-                    </Route>
+                    <Route exact path="/categories" component={CategoriesView} />
+                    <Route path="/categories/create" component={CategoryCreateView} />
+                    <Route path="/categories/edit/:id" component={CategoryEditView}/>
+                    <Route path="/categories/posts/:id" component={PostsView} />
+                    <Route path="/posts/create/:id" component={PostCreateView} />
+                    <Route path="/posts/edit/:id" component={PostEditView} />
+                    <Route path="/posts/:id" component={PostView} />
                 </Switch>
             </Container>
         </Body>

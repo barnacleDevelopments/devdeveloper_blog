@@ -4,21 +4,29 @@ DATE: January 1st, 2021
 FILE: app.js
 */
 
+// ENV VARIABLES
+const port = 3000;
+
 // DEPENDENCIES
 import express from "express";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import cors from "cors";
 
-const port = 3000;
-const app = express();
+// ROUTES
+import postRoutes from "./routes/post_routes";
+import categoryRoutes from "./routes/category_routes";
 
-// MODELS
-import Blog from "./models/blog_model";
+import Post from "./models/post_model";
 import Category from "./models/category_model";
 
+// CLASSES 
+import EasyDate from "./classes/EasyDate";
 
+const app = express();
 
 // MONGOOOSE CONFIGURATION
-mongoose.connect("mongodb://localhost/blogs", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb://localhost/blogs", {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 const db = mongoose.connection;
 
@@ -26,6 +34,15 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("Connected to database!");
 });
+
+// MIDDLEWARE 
+app.use(bodyParser.json());
+app.use(cors());
+// INITIALIZE ROUTES
+app.use("/posts", postRoutes);
+app.use("/categories", categoryRoutes);
+
+
 
 // Category.create({
 //     name: "web develoment",
@@ -42,139 +59,29 @@ db.once('open', function() {
 //     desc: "Random tangents I find myself on.",
 // })
 
-// Blog.create({
-//     title: "Walking the DOM",
-//     content: "Just another walk in the park."
+// Post.create({
+//     title: "Depression is more than you think",
+//     content: "Oh really?.",
+//     date: EasyDate.prototype.getRegDate()
 // })
 
 
-// Category.updateOne({_id:"5ff0b52bf6185b5654d65cc6"}, {blogs: [{_id:"5ff0b52bf6185b5654d65cc9"}]}, () => {
+Category.updateOne({_id:"5ff372762f4df76a7c601a09"}, {posts: [{_id:"5ff372f05a7003726414eee9"}]}, () => {
+
+})
+
+// Category.updateOne({_id:"5ff0b52bf6185b5654d65cc8"}, {blogs: [{_id:"5ff22b4cd4936a19e0461be1"}, {_id: "5ff22df6130cb155e8b042a6" }]}, () => {
 
 // })
+
+
 
 // Blog.updateOne({_id: "5ff0b52bf6185b5654d65cc9"}, {
 //    cat: {_id:"5ff0b52bf6185b5654d65cc6"}
 // }, () => {})
 
-// ROUTES
 app.get("/", (req, res) => {
     res.redirect()
-});
-
-// BLOG ROUTES
-
-//retrieve all blogs
-app.get("/blogs", (req, res) => {
-    Blog.find({}, (err, blogs) => {
-        if(!err) {
-            res.json(blogs)
-        } else {
-            console.log(err)
-        }
-    })
-});
-
-// retrieve blogs of category
-app.get("/blogs/:name/:id", (req, res) => {
-    const catId = req.params.id
-    Category.findOne({_id: catId})
-    .populate("blogs")
-    .exec((err, cat) => {
-        if(!err) {
-            res.json(cat.blogs)
-        } else {
-            console.log(err)
-        }
-    })
-});
-
-// retrieve one blog
-app.get("/blog/:title/:id", (req, res) => {
-    // retrieve url information 
-    const blogId = req.params.id
-    // retrieve blog
-    Blog.findOne({_id: blogId}, (err, blog) => {
-        if(!err) {
-            res.json(blog);
-        } else {
-            console.log(err)
-        }
-    })
-});
-
-// create a blog
-app.post("/blogs/:blogid/:catid", (req, res) => {
-    // retrieve url information 
-    const blogId = req.params.blogid
-    const catId = req.params.catid;
-
-    // create blog
-    // Blog.create({})
-
-    // add blog to category in database
-    //    Category.updateOne({_id: "5ff072b879796458a0278293"},
-    //     {
-    //         blogs: [
-    //             {
-    //                 _id: "5ff072b879796458a0278292"
-    //             }
-    //         ]
-    //     },  (err, cat) => {
-    // });
-});
-
-// update blog
-app.put("/blogs/id", (req, res) => {
-
-});
-
-// delete blog
-app.delete("/blogs/id", (req, res) => {
-
-});
-
-
-
-// CATEGORY ROUTES
-
-// retrieve all categories
-app.get("/categories", (req, res) => {
-    Category.find({}, (err, cats) => {
-        if(!err) {
-            res.json(cats)
-        } else {
-            console.log(err)
-        }
-    })
-});
-
-// retrieve one category
-app.get("/categories/:id", (req, res) => {
-    // retrieve url information 
-    const catId = req.params.id
-    // retrieve category
-    Category.findOne({_id: catId}, (err, cat) => {
-        if(!err) {
-            res.json(cat);
-        } else {
-            console.log(err)
-        }
-    })
-});
-
-// create category
-app.post("/categories/id", (req, res) => {
-    
-});
-
-// update category
-app.put("/categories/id", (req, res) => {
-    // retrieve url information
-});
-
-// delete category
-app.delete("/categories/id", (req, res) => {
-
 });
 
 app.listen(port, () => console.log(`Server started on port: ${port}`));

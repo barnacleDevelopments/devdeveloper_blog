@@ -1,7 +1,7 @@
 /*
 AUTHOR: Devin Davis
 DATE: January 2st, 2021
-FILE: blog_model.js
+FILE: post_model.js
 */
 
 import mongoose from "mongoose";
@@ -10,9 +10,9 @@ const categorySchema = new mongoose.Schema({
     name: String,
     desc: String,
     count: Number,
-    blogs: [{
+    posts: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Blog"
+        ref: "Post"
     }]
 });
 

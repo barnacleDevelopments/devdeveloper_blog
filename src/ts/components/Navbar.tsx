@@ -5,9 +5,11 @@ FILE: Navbar.tsx
 */
 
 import * as React from "react";
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
-import logoImage from  "../../img/logo_3.png"
+import { Link, useLocation, useParams } from "react-router-dom";
+import logoImage from  "../../img/logo_3.png";
+import useNav from "../hooks/useNav"
 
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -19,6 +21,7 @@ const Navbody = styled("nav")`
     display: flex;
     justify-content: space-between;
     box-shadow: 0px 3px 30px -20px black;
+    z-index: 10000
 `;
 
 const Logo = styled("div")`
@@ -52,13 +55,14 @@ const MediaLinks = styled("div")`
     }
 `;
 
-const Navbar = ({backBtnStatus}) => {
 
-    
+
+const Navbar = () => {
+    const { backBtnParams, backBtnStatus } = useNav();
+  
     return (
         <Navbody>
-          
-            {backBtnStatus ? <Link to="/categories"><BackBtn>
+            {backBtnStatus ? <Link to={backBtnParams}><BackBtn>
                 <i className="fas fa-arrow-left fa-3x"></i>
             </BackBtn></Link> : <Logo />} 
                
