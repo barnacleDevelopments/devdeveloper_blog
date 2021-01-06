@@ -25,7 +25,11 @@ const Body = styled("div")`
 
 `;
 
-const Title = ({title}) => {
+interface TitleData {
+    title: string
+}
+
+const Title: React.FunctionComponent<TitleData> = ({ title }) => {
     return (
         <Body>
             <h1>{title}</h1>

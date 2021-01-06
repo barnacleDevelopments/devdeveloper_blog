@@ -25,7 +25,11 @@ const Button = styled("a")`
     align-items: center;
 `;
 
-const CreateBtn = ({link}) => {
+interface CreateBtnData {
+    link: string
+}
+
+const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ link }) => {
     return (
         <Link to={link}>
             <Button>

@@ -10,6 +10,11 @@ import styled from "@emotion/styled";
 // CLASSES 
 import EasyDate from "../classes/EasyDate";
 
+// INTERFACES
+interface CommentFormComponent {
+    username: string
+}
+
 const Body = styled("article")`
     width: 100%;
     background-color: #314455;
@@ -79,17 +84,13 @@ const Content = styled("div")`
     align-items: flex-start;
 `;
 
-const CommentForm = ({username}) => {
-
-    
-    
-    
+const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ username }) => {
     return (
         <Body>
-             <h1>{username} Bob</h1>
+            <h1>{username} Bob</h1>
             <Content>
-            <TextArea />
-            <p>{EasyDate.prototype.getRegDate()}</p>
+                <TextArea />
+                <p>{EasyDate.prototype.getRegDate()}</p>
             </Content>
             <div>
                 <a>ADD</a>

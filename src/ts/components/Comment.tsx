@@ -1,4 +1,4 @@
-/*
+/**
 AUTHOR: Devin Davis
 DATE: January 4th, 2021
 FILE: Comment.tsx
@@ -6,6 +6,13 @@ FILE: Comment.tsx
 
 import * as React from "react";
 import styled from "@emotion/styled";
+
+// INTERFACES 
+interface CommentComponent {
+    content: string,
+    date: string,
+    username: string
+}
 
 const Body = styled("article")`
     width: 100%;
@@ -78,15 +85,15 @@ const Content = styled("div")`
     grid-column: 1;
 `;
 
-const Comment = ({content, date, username}) => {
-    
-    
+const Comment: React.FunctionComponent<CommentComponent> = ({ content, date, username }) => {
+
+
     return (
         <Body>
-            <h1>user3345</h1>
+            <h1>{username}</h1>
             <Content>
-                <p>Mauris consectetur aliquet libero, in gravida dolor accumsan non. Aenean sed nibh id ante tristique venenatis.</p>
-                <p>January 3rd, 2020</p>
+                <p>{content}</p>
+                <p>{date}</p>
             </Content>
             <div>
                 <a><i className="far fa-trash-alt fa-1x"></i></a>

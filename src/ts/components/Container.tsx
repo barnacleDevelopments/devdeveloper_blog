@@ -13,10 +13,11 @@ const ContainerBody = styled("div")`
     margin-top: 74px;
 `
 
-const Container = (props) => (
+
+const Container: React.FunctionComponent = (props) => (
     <ContainerBody>
         {props.children}
     </ContainerBody>
 );
 
-export default Container;
+export default Container

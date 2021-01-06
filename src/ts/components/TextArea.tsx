@@ -29,7 +29,12 @@ const TextAreaBody = styled("article")`
     }
 `;
 
-const TextArea = ({title, content}) => {
+interface TextAreaData {
+    title: string,
+    content: string
+}
+
+const TextArea: React.FunctionComponent<TextAreaData> = ({ title, content }) => {
     return (
         <TextAreaBody>
             <h1>{title}</h1>

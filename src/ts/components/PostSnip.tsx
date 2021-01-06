@@ -80,7 +80,13 @@ const PostSnipContent = styled("div")`
     }
 `;
 
-const PostSnip = ({id, title, content}) => {
+interface PostData {
+    id: string,
+    title: string,
+    content: string
+}
+
+const PostSnip: React.FunctionComponent<PostData> = ({ id, title, content }) => {
     const [isDeleted, setIsDeleted] = useState(false);
 
     const handleDelete = () => {
@@ -88,10 +94,10 @@ const PostSnip = ({id, title, content}) => {
         Post.prototype.delete(id)
     }
 
-    if(!isDeleted) {
+    if (!isDeleted) {
         return (
             <PostSnipBody>
-                <img src="./"/>
+                <img src="./" />
                 <PostSnipContent>
                     <h2>{title}</h2>
                     <p>{content}</p>
@@ -101,7 +107,7 @@ const PostSnip = ({id, title, content}) => {
                 </PostSnipContent>
                 <Link to={`/posts/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
                 <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link>
-            </PostSnipBody>    
+            </PostSnipBody>
         )
     } else {
         return null

@@ -9,7 +9,18 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
-const Body = styled("article")`
+// INTERFACES
+import { NewCategoryData } from "../controllers/category_controller";
+
+interface CategoryFormData {
+    name: string,
+    desc: string,
+    btnText: string,
+    submitFunc(data: NewCategoryData): void
+}
+
+
+const Body = styled("form")`
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -49,12 +60,17 @@ const Body = styled("article")`
     }
 `;
 
-const CategoryForm = ({ name, desc, btnText, submitFunc }) => {
-    const [formData, setFormData] = useState({name: name, desc: desc});
 
-    const handleFormData = (e) => {
-        let data = formData;
-        data[e.target.name] = e.target.value;
+
+const CategoryForm: React.FunctionComponent<CategoryFormData> = ({ name, desc, btnText, submitFunc }) => {
+    const [formData, setFormData] = useState<NewCategoryData>({
+        name: "",
+        desc: ""
+    });
+
+    const handleFormData = () => {
+        let data: NewCategoryData = formData;
+        // data[event.target.name] = event.target.value;
         setFormData(data);
     }
 
@@ -64,7 +80,7 @@ const CategoryForm = ({ name, desc, btnText, submitFunc }) => {
 
     return (
         <Body>
-            <input name="name" onChange={handleFormData} placeholder={name} type="text"/>
+            <input name="name" onChange={handleFormData} placeholder={name} type="text" />
             <textarea name="desc" onChange={handleFormData} placeholder={desc} />
             <Link to="/categories" onClick={handleSubmit}>{btnText}</Link>
         </Body>

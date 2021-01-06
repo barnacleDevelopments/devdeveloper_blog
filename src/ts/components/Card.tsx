@@ -6,13 +6,13 @@ FILE: Card.tsx
 
 // DEPENDENCIES
 import * as React from "react";
-import {FunctionComponent} from "react";
+
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
 // CONTROLLERS
 import Category from "../controllers/category_controller";
-import { useState } from "react/cjs/react.development";
+import { useState } from "react";
 
 const CardBody = styled("div")`
     background-color: #314455;
@@ -102,8 +102,16 @@ const CardCount = styled("div")`
     display: table-cell;
 `;
 
+interface CategoryComponentData {
+    id: string,
+    name: string,
+    desc: string,
+    count: number,
+    img: string
+}
 
-const Card = ({id, name, desc, count, img}) => {
+
+const Card: React.FunctionComponent<CategoryComponentData> = ({ id, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);
 
     const handleDelete = () => {
@@ -111,20 +119,20 @@ const Card = ({id, name, desc, count, img}) => {
         Category.prototype.delete(id);
     }
 
-    if(!isDeleted) {
-    return (
-        <CardBody>
-            <CardImg src={img}/>
-            <CardCount>{count}</CardCount>
-            <CardContent>
-                <h2>{name}</h2>
-                <p>{desc}</p>
-                <Link to={`/categories/posts/${id}`}>VIEW</Link>
-            </CardContent>
-            <Link to={`/categories/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
-            <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link>
-        </CardBody>
-    )
+    if (!isDeleted) {
+        return (
+            <CardBody>
+                <CardImg src={img} />
+                <CardCount>{count}</CardCount>
+                <CardContent>
+                    <h2>{name}</h2>
+                    <p>{desc}</p>
+                    <Link to={`/categories/posts/${id}`}>VIEW</Link>
+                </CardContent>
+                <Link to={`/categories/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
+                <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link>
+            </CardBody>
+        )
     } else {
         return null;
     }

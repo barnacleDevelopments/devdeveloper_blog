@@ -13,7 +13,7 @@ export default () => {
     const [backBtnParams, setBackBtnParams] = useState("/categories");
 
     useEffect(() => {
-        if(location.pathname !== "/categories") {
+        if (location.pathname !== "/categories") {
             setBackBtnStatus(true);
         } else {
             setBackBtnStatus(false);
@@ -21,9 +21,9 @@ export default () => {
     }, [location]);
 
     const checkBackBtn = () => {
-        if(location.pathname === "/categories/:title") {
+        if (location.pathname === "/categories/:title") {
             setBackBtnParams(location.pathname)
-        } 
+        }
     }
 
     useEffect(() => {

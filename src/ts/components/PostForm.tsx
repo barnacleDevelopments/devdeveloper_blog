@@ -5,10 +5,25 @@ FILE: TextProcessor.tsx
 */
 
 import * as React from "react";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from "@emotion/styled";
 import { Link, useParams } from "react-router-dom";
 
+// INTERFACES 
+import { NewPostData } from "../controllers/post_controller";
+
+interface PostFormData {
+    postId: string,
+    title: string,
+    subTitle: string,
+    content: string,
+    btnText: string,
+    submitFunc(data: NewPostData): void
+}
+
+interface ParamTypes {
+    id: string
+}
 
 const Body = styled("article")`
     padding: 10px;
@@ -47,22 +62,22 @@ const Body = styled("article")`
         border-radius: 4px;
         text-decoration: none;
     }
-`;    
+`;
 
-const PostForm = ({ postId, title, subTitle, content, btnText, submitFunc }) => {
-    const { id } = useParams();
+
+const PostForm: React.FunctionComponent<PostFormData> = ({ postId, title, subTitle, content, btnText, submitFunc }) => {
+    const { id } = useParams<ParamTypes>();
 
     const [formData, setFormData] = useState({
-        title: title,
-        subTitle: subTitle,
-        content: content,
-        catId: id
-
+        title: "",
+        subTitle: "",
+        content: "",
+        catId: ""
     });
 
-    const handleFormData = (e) => {
+    const handleFormData = () => {
         let data = formData;
-        data[e.target.name] = e.target.value;
+        // data[event.target.name] = event.target.value;
         setFormData(data);
     }
 
@@ -72,8 +87,8 @@ const PostForm = ({ postId, title, subTitle, content, btnText, submitFunc }) => 
 
     return (
         <Body>
-            <input name="title" onChange={handleFormData} placeholder={title} type="text"/>
-            {subTitle ? <input placeholder={subTitle} type="text"/> : null}
+            <input name="title" onChange={handleFormData} placeholder={title} type="text" />
+            {subTitle ? <input placeholder={subTitle} type="text" /> : null}
             <textarea name="content" onChange={handleFormData} placeholder={content} />
             <Link to={postId ? `"/posts/${postId}"` : `/categories/posts/${id}`} onClick={handleSubmit}>{btnText}</Link>
         </Body>

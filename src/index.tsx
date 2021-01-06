@@ -5,10 +5,9 @@ FILE: index.tsx
 */
 
 import * as React from "react";
-import { useState, useEffect } from "react";
 import * as  ReactDOM from "react-dom";
 import styled from "@emotion/styled";
-import { Switch, Route, useParams, useLocation, BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 // COMPONENTS
 import Container from "./ts/components/Container";
@@ -24,7 +23,7 @@ import PostCreateView from "./ts/components/PostCreateView";
 //GLOBAL STYLES
 import "./css/reset.css";
 import "./css/global.css";
-import "./img/logo.png";
+// import "./img/logo.png";
 
 
 //STYLES
@@ -42,7 +41,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/categories" component={CategoriesView} />
                     <Route path="/categories/create" component={CategoryCreateView} />
-                    <Route path="/categories/edit/:id" component={CategoryEditView}/>
+                    <Route path="/categories/edit/:id" component={CategoryEditView} />
                     <Route path="/categories/posts/:id" component={PostsView} />
                     <Route path="/posts/create/:id" component={PostCreateView} />
                     <Route path="/posts/edit/:id" component={PostEditView} />
@@ -53,4 +52,4 @@ const App = () => {
     );
 }
 
-ReactDOM.render(<Router><App/></Router>, document.getElementById("root"));
+ReactDOM.render(<Router><App /></Router>, document.getElementById("root"));

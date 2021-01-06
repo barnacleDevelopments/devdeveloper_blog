@@ -59,13 +59,21 @@ const Body = styled("article")`
     }
 `;
 
-const Post = ({id, title, subTitle, content, date}) => {
+export interface PostComponent {
+    id: string,
+    title: string,
+    subTitle: string,
+    content: string,
+    date: string
+}
+
+const Post: React.FunctionComponent<PostComponent> = ({ id, title, subTitle, content, date }) => {
     return (
         <Body>
             <h1>{title}</h1>
             <h2>{subTitle}</h2>
             <h3>{date}</h3>
-            <img src="/"/>
+            <img src="/" />
             <p>{content}</p>
             <Link to={`/posts/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
             <Link to={`/posts/delete/${id}`}><i className="far fa-trash-alt"></i></Link>
