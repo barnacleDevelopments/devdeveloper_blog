@@ -4,6 +4,9 @@ DATE: January 3rd, 2021
 FILE: category_controller.ts
 */
 
+// ENV VARIABLES
+const PORT = 5000;
+
 // INTERFACES
 import { PostData } from "./post_controller";
 
@@ -42,7 +45,7 @@ class Category {
             }]
         }];
 
-        await fetch(`http://localhost:3000/categories`, {
+        await fetch(`http://localhost:${PORT}/categories`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -74,7 +77,7 @@ class Category {
             }]
         }
 
-        await fetch(`http://localhost:3000/categories/${id}`, {
+        await fetch(`http://localhost${PORT}/categories/${id}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -106,7 +109,7 @@ class Category {
             }]
         }
 
-        await fetch(`http://localhost:3000/categories/posts/${id}`, {
+        await fetch(`http://localhost${PORT}/categories/posts/${id}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -116,6 +119,7 @@ class Category {
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 recievedData = data;
             });
         return recievedData
@@ -127,7 +131,7 @@ class Category {
             desc: "",
         }
 
-        await fetch(`http://localhost:3000/categories/create`, {
+        await fetch(`http://localhost${PORT}/categories/create`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -145,8 +149,9 @@ class Category {
     }
 
     async update(id: string, newCategory: NewCategoryData) {
-        await fetch(`http://localhost:3000/categories/update/${id}`, {
+        await fetch(`http://localhost${PORT}/categories/update/${id}`, {
             method: "PUT",
+            mode: "cors",
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json"
@@ -156,8 +161,9 @@ class Category {
     }
 
     async delete(id: string) {
-        await fetch(`http://localhost:3000/categories/delete/${id}`, {
+        await fetch(`http://localhost${PORT}/categories/delete/${id}`, {
             method: "DELETE",
+            mode: "cors",
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json"

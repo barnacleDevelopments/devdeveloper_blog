@@ -4,6 +4,9 @@ DATE: January 3rd, 2021
 FILE: post_controller.ts
 */
 
+// ENV VARIABLES
+const PORT = 5000;
+
 // INTERFACES
 export interface PostData {
     _id: string,
@@ -25,7 +28,7 @@ class Post {
 
     async getAll() {
         let recievedData;
-        await fetch(`http://localhost:3000/posts`, {
+        await fetch(`http://localhost${PORT}/posts`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -49,7 +52,7 @@ class Post {
             date: "",
             catId: ""
         };
-        await fetch(`http://localhost:3000/posts/${id}`, {
+        await fetch(`http://localhost${PORT}/posts/${id}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -71,7 +74,7 @@ class Post {
             catId: ""
         };
 
-        await fetch(`http://localhost:3000/posts/create/${newPost.catId}`, {
+        await fetch(`http://localhost${PORT}/posts/create/${newPost.catId}`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -89,7 +92,7 @@ class Post {
     }
 
     async update(id: string, newPost: NewPostData) {
-        await fetch(`http://localhost:3000/posts/update/${id}`, {
+        await fetch(`http://localhost${PORT}/posts/update/${id}`, {
             method: "PUT",
             mode: "cors",
             headers: {
@@ -101,7 +104,7 @@ class Post {
     }
 
     async delete(id: string) {
-        await fetch(`http://localhost:3000/posts/delete/${id}`, {
+        await fetch(`http://localhost${PORT}/posts/delete/${id}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
