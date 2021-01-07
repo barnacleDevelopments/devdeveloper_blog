@@ -7,7 +7,7 @@ FILE: index.tsx
 import * as React from "react";
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import PostForm from "./PostForm";
 
 // CONTROLERS
@@ -20,11 +20,16 @@ interface ParamTypes {
     id: string
 }
 
+// INTERFACES 
+interface EditViewComponent {
+    user: { status: boolean, role: string }
+}
+
 const Body = styled("section")`
 
 `;
 
-const PostEditView: React.FunctionComponent = () => {
+const PostEditView: React.FunctionComponent<EditViewComponent> = ({ user }) => {
     const [post, setPost] = useState<NewPostData>({
         title: "",
         content: "",
@@ -47,6 +52,8 @@ const PostEditView: React.FunctionComponent = () => {
 
     return (
         <Body>
+            {user.role === "user" ?
+                <Redirect to="/categories" /> : null}
             <PostForm subTitle="" postId={id} title={post.title} content={post.content} btnText="UPDATE" submitFunc={handleFormData} />
         </Body>
     )

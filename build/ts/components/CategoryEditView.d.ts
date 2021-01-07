@@ -1,3 +1,9 @@
 import * as React from "react";
-declare const CategoryEditView: React.FunctionComponent;
+interface CategoryEditViewComponent {
+    user: {
+        status: boolean;
+        role: string;
+    };
+}
+declare const CategoryEditView: React.FunctionComponent<CategoryEditViewComponent>;
 export default CategoryEditView;

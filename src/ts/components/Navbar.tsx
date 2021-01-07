@@ -8,7 +8,10 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 // import logoImage from "../../img/logo_3.png";
-import useNav from "../hooks/useNav"
+
+// HOOKS
+import useNav from "../hooks/useNav";
+
 // background-image: url("${logoImage}");
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -55,8 +58,12 @@ const MediaLinks = styled("div")`
 `;
 
 
+interface NavComponent {
+    user: { status: boolean, role: string }
+}
 
-const Navbar: React.FunctionComponent = () => {
+
+const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
     const { backBtnParams, backBtnStatus } = useNav();
 
     return (
@@ -68,6 +75,11 @@ const Navbar: React.FunctionComponent = () => {
             <MediaLinks>
                 <a href="https://www.linkedin.com/in/devin-dev-davis-63008412b"><i className="fab fa-linkedin fa-2x"></i></a>
                 <a href="https://github.com/barnacleDevelopments"><i className="fab fa-github-alt fa-2x"></i></a>
+
+                {user.status ? (
+                    user.role === "administrator" ? <i className="fas fa-user-tie"></i> : <i className="fas fa-user"></i>
+                )
+                    : <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
             </MediaLinks>
         </Navbody>
     )

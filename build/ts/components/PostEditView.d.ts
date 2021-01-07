@@ -1,3 +1,9 @@
 import * as React from "react";
-declare const PostEditView: React.FunctionComponent;
+interface EditViewComponent {
+    user: {
+        status: boolean;
+        role: string;
+    };
+}
+declare const PostEditView: React.FunctionComponent<EditViewComponent>;
 export default PostEditView;

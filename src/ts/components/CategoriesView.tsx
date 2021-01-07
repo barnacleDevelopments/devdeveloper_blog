@@ -22,7 +22,12 @@ const Body = styled("section")`
 // INTERFACES
 import { CategoryData } from "../controllers/category_controller";
 
-const CategoriesView: React.FunctionComponent = () => {
+interface CategoriesViewComponent {
+    user: { role: string, status: boolean }
+}
+
+
+const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user }) => {
     const [categories, setCategories] = useState<CategoryData[]>([{
         _id: "",
         name: "",
@@ -46,11 +51,11 @@ const CategoriesView: React.FunctionComponent = () => {
 
     return (
         <Body>
-            <CreateBtn link="/categories/create" />
+            { user.role === "administrator" ? <CreateBtn link="/categories/create" /> : null}
             <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
             {categories.map((cat) => {
                 let postCount = cat.posts.length;
-                return <Card key={cat._id} count={postCount} id={cat._id} name={cat.name} desc={cat.desc} img="/" />
+                return <Card user={user} key={cat._id} count={postCount} id={cat._id} name={cat.name} desc={cat.desc} img="/" />
             })}
         </Body>
     )

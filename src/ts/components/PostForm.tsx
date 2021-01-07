@@ -12,7 +12,7 @@ import { Link, useParams } from "react-router-dom";
 // INTERFACES 
 import { NewPostData } from "../controllers/post_controller";
 
-interface PostFormData {
+interface PostFormComponent {
     postId: string,
     title: string,
     subTitle: string,
@@ -21,9 +21,19 @@ interface PostFormData {
     submitFunc(data: NewPostData): void
 }
 
+interface PostFormData {
+    [index: string]: string,
+    title: string,
+    subTitle: string,
+    content: string,
+    catId: string
+}
+
 interface ParamTypes {
     id: string
 }
+
+
 
 const Body = styled("article")`
     padding: 10px;
@@ -65,19 +75,20 @@ const Body = styled("article")`
 `;
 
 
-const PostForm: React.FunctionComponent<PostFormData> = ({ postId, title, subTitle, content, btnText, submitFunc }) => {
+const PostForm: React.FunctionComponent<PostFormComponent> = ({ postId, title, subTitle, content, btnText, submitFunc }) => {
     const { id } = useParams<ParamTypes>();
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<PostFormData>({
         title: "",
         subTitle: "",
         content: "",
         catId: ""
     });
 
-    const handleFormData = () => {
-        let data = formData;
-        // data[event.target.name] = event.target.value;
+    const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        let data: PostFormData = formData;
+        data[event.target.name] = event.target.value;
+        data.catId = id
         setFormData(data);
     }
 

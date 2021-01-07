@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import Category from "../controllers/category_controller";
 import { useState } from "react";
 
+
 const CardBody = styled("div")`
     background-color: #314455;
     color: #f5f5f5;
@@ -107,12 +108,14 @@ interface CategoryComponentData {
     name: string,
     desc: string,
     count: number,
-    img: string
+    img: string,
+    user: { role: string, status: boolean }
 }
 
 
-const Card: React.FunctionComponent<CategoryComponentData> = ({ id, name, desc, count, img }) => {
+const Card: React.FunctionComponent<CategoryComponentData> = ({ user, id, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);
+
 
     const handleDelete = () => {
         setIsDeleted(true);
@@ -129,8 +132,12 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ id, name, desc, 
                     <p>{desc}</p>
                     <Link to={`/categories/posts/${id}`}>VIEW</Link>
                 </CardContent>
-                <Link to={`/categories/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
-                <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link>
+
+                {user.role === "administrator" ?
+                    <Link to={`/categories/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
+
+                {user.role === "administrator" ?
+                    <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link> : null}
             </CardBody>
         )
     } else {

@@ -25,10 +25,15 @@ interface ParamTypes {
     id: string
 }
 
+// INTERFACES 
+interface PostsViewComponent {
+    user: { status: boolean, role: string }
+}
+
 const Body = styled("section")`
 
 `;
-const PostsView: React.FunctionComponent = () => {
+const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
     const [posts, setPosts] = useState<PostData[]>([{
         _id: "",
         title: "",
@@ -51,7 +56,7 @@ const PostsView: React.FunctionComponent = () => {
 
     return (
         <Body>
-            <CreateBtn link={`/posts/create/${id}`} />
+            {user.role === "administrator" ? <CreateBtn link={`/posts/create/${id}`} /> : null}
             <Title title={catTitle} />
             {
                 posts.length <= 0 ? <PostSnipFallback /> :

@@ -7,7 +7,7 @@ FILE: index.tsx
 import * as React from "react";
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import CategoryForm from "./CategoryForm";
 
 // CONTROLERS
@@ -19,11 +19,17 @@ import { NewCategoryData } from "../controllers/category_controller";
 interface ParamTypes {
     id: string
 }
+
+// INTERFACES 
+interface CategoryEditViewComponent {
+    user: { status: boolean, role: string }
+}
+
 const Body = styled("section")`
 
 `;
 
-const CategoryEditView: React.FunctionComponent = () => {
+const CategoryEditView: React.FunctionComponent<CategoryEditViewComponent> = ({ user }) => {
     const [category, setCategory] = useState<NewCategoryData>({
         name: "",
         desc: ""
@@ -44,6 +50,8 @@ const CategoryEditView: React.FunctionComponent = () => {
 
     return (
         <Body>
+            {user.role === "user" ?
+                <Redirect to="/categories" /> : null}
             <CategoryForm name={category.name} desc={category.desc} btnText="UPDATE" submitFunc={handleFormData} />
         </Body>
     )

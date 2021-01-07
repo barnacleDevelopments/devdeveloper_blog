@@ -1,3 +1,9 @@
 import * as React from "react";
-declare const PostsView: React.FunctionComponent;
+interface PostsViewComponent {
+    user: {
+        status: boolean;
+        role: string;
+    };
+}
+declare const PostsView: React.FunctionComponent<PostsViewComponent>;
 export default PostsView;

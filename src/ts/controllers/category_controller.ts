@@ -77,7 +77,7 @@ class Category {
             }]
         }
 
-        await fetch(`http://localhost${PORT}/categories/${id}`, {
+        await fetch(`http://localhost:${PORT}/categories/${id}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -109,7 +109,7 @@ class Category {
             }]
         }
 
-        await fetch(`http://localhost${PORT}/categories/posts/${id}`, {
+        await fetch(`http://localhost:${PORT}/categories/posts/${id}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -131,7 +131,7 @@ class Category {
             desc: "",
         }
 
-        await fetch(`http://localhost${PORT}/categories/create`, {
+        await fetch(`http://localhost:${PORT}/categories/create`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -149,7 +149,7 @@ class Category {
     }
 
     async update(id: string, newCategory: NewCategoryData) {
-        await fetch(`http://localhost${PORT}/categories/update/${id}`, {
+        await fetch(`http://localhost:${PORT}/categories/update/${id}`, {
             method: "PUT",
             mode: "cors",
             headers: {
@@ -161,7 +161,7 @@ class Category {
     }
 
     async delete(id: string) {
-        await fetch(`http://localhost${PORT}/categories/delete/${id}`, {
+        await fetch(`http://localhost:${PORT}/categories/delete/${id}`, {
             method: "DELETE",
             mode: "cors",
             headers: {

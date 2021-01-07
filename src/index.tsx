@@ -7,7 +7,7 @@ FILE: index.tsx
 import * as React from "react";
 import * as  ReactDOM from "react-dom";
 import styled from "@emotion/styled";
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
 
 // COMPONENTS
 import Container from "./ts/components/Container";
@@ -19,10 +19,15 @@ import CategoryEditView from "./ts/components/CategoryEditView";
 import CategoryCreateView from "./ts/components/CategoryCreateView";
 import PostEditView from "./ts/components/PostEditView";
 import PostCreateView from "./ts/components/PostCreateView";
+import LoginView from "./ts/components/LoginView";
+import SignupView from "./ts/components/LoginView";
 
 //GLOBAL STYLES
 import "./css/reset.css";
 import "./css/global.css";
+
+// HOOKS 
+import useAuth from "./ts/hooks/useAuth";
 // import "./img/logo.png";
 
 
@@ -32,20 +37,42 @@ const Body = styled("div")`
 `
 
 const App = () => {
+    const user = useAuth();
+
 
     return (
         <Body>
-            <Navbar />
-
+            {user.status ? null : <Redirect to="/categories" />}
+            <Navbar user={user} />
             <Container>
                 <Switch>
-                    <Route exact path="/categories" component={CategoriesView} />
-                    <Route path="/categories/create" component={CategoryCreateView} />
-                    <Route path="/categories/edit/:id" component={CategoryEditView} />
-                    <Route path="/categories/posts/:id" component={PostsView} />
-                    <Route path="/posts/create/:id" component={PostCreateView} />
-                    <Route path="/posts/edit/:id" component={PostEditView} />
-                    <Route path="/posts/:id" component={PostView} />
+                    <Route exact path="/signup">
+                        <SignupView user={user} />
+                    </Route>
+                    <Route exact path="/login" >
+                        <LoginView user={user} />
+                    </Route>
+                    <Route exact path="/categories" >
+                        <CategoriesView user={user} />
+                    </Route>
+                    <Route path="/categories/create">
+                        <CategoryCreateView user={user} />
+                    </Route>
+                    <Route path="/categories/edit/:id">
+                        <CategoryEditView user={user} />
+                    </Route>
+                    <Route path="/categories/posts/:id">
+                        <PostsView user={user} />
+                    </Route>
+                    <Route path="/posts/create/:id">
+                        <PostCreateView user={user} />
+                    </Route>
+                    <Route path="/posts/edit/:id">
+                        <PostEditView user={user} />
+                    </Route>
+                    <Route path="/posts/:id" >
+                        <PostView user={user} />
+                    </Route>
                 </Switch>
             </Container>
         </Body>

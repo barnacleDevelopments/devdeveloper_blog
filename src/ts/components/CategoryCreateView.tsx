@@ -14,12 +14,20 @@ import Category from "../controllers/category_controller";
 // INTERFACES 
 import { NewCategoryData } from "../controllers/category_controller";
 
+interface CategoryCreateViewComponent {
+    user: { status: boolean, role: string }
+}
+
+// HOOKS 
+import { Redirect } from "react-router-dom";
+
 const Body = styled("section")`
 
 `;
 
 
-const CategoryCreateView: React.FunctionComponent = () => {
+
+const CategoryCreateView: React.FunctionComponent<CategoryCreateViewComponent> = ({ user }) => {
 
     const handleFormData = (category: NewCategoryData) => {
         Category.prototype.create({
@@ -30,7 +38,11 @@ const CategoryCreateView: React.FunctionComponent = () => {
 
     return (
         <Body>
-            <CategoryForm name="" desc="" btnText="CREATE" submitFunc={handleFormData} />
+            {user.role === "administrator" && user.status ? <CategoryForm name="" desc="" btnText="CREATE" submitFunc={handleFormData} />
+                : <Redirect to="/categories" />}
+
+
+
         </Body>
     )
 }

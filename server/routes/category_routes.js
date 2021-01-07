@@ -11,7 +11,6 @@ const router = express.Router();
 // MODELS
 import Category from "../models/category_model";
 import Post from "../models/post_model";
-import { createEmitAndSemanticDiagnosticsBuilderProgram } from "typescript";
 
 // CATEGORY ROUTES
 
@@ -25,7 +24,7 @@ router.get("/", (req, res) => {
 // retrieve one category 
 router.get("/:id", (req, res) => {
     const catId = req.params.id;
-    Category.findOne({_id: catId}, (err, cat) => {
+    Category.findOne({ _id: catId }, (err, cat) => {
         err ? console.log(err) : res.json(cat);
     });
 });
@@ -33,11 +32,12 @@ router.get("/:id", (req, res) => {
 // retrieve blogs of category
 router.get("/posts/:id", (req, res) => {
     const catId = req.params.id;
-    Category.findOne({_id: catId})
-    .populate("posts")
-    .exec((err, cat) => {
-        err ? console.log(err) : res.json(cat)
-    })
+    console.log(catId)
+    Category.findById(catId)
+        .populate("posts")
+        .exec((err, cat) => {
+            err ? console.log(err) : res.json(cat)
+        })
 });
 
 // create one post 
@@ -54,7 +54,7 @@ router.post("/create", (req, res) => {
 router.put("/update/:id", (req, res) => {
     const body = req.body;
     const id = req.params.id;
-    Category.findOneAndUpdate({_id: id}, body, (err, cat) => {
+    Category.findOneAndUpdate({ _id: id }, body, (err, cat) => {
         err ? console.log(err) : console.log(`Category with id: ${cat._id} updated!`)
     })
 
@@ -63,11 +63,11 @@ router.put("/update/:id", (req, res) => {
 // delete one post
 router.delete("/delete/:id", (req, res) => {
     const id = req.params.id;
-    Category.findOneAndDelete({_id: id}, (err, cat) => {
-        if(!err) {
-            Category.findOne({_id: id}, (err, cat) => {
-                if(!err) {
-                    Post.deleteMany({catId: id}, (err, cat) => {
+    Category.findOneAndDelete({ _id: id }, (err, cat) => {
+        if (!err) {
+            Category.findOne({ _id: id }, (err, cat) => {
+                if (!err) {
+                    Post.deleteMany({ catId: id }, (err, cat) => {
                         err ? console.log(err) : console.log()
                     })
                 }

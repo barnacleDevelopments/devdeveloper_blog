@@ -5,6 +5,10 @@ export interface PostComponent {
     subTitle: string;
     content: string;
     date: string;
+    user: {
+        role: string;
+        status: boolean;
+    };
 }
 declare const Post: React.FunctionComponent<PostComponent>;
 export default Post;

@@ -64,10 +64,11 @@ export interface PostComponent {
     title: string,
     subTitle: string,
     content: string,
-    date: string
+    date: string,
+    user: { role: string, status: boolean }
 }
 
-const Post: React.FunctionComponent<PostComponent> = ({ id, title, subTitle, content, date }) => {
+const Post: React.FunctionComponent<PostComponent> = ({ user, id, title, subTitle, content, date }) => {
     return (
         <Body>
             <h1>{title}</h1>
@@ -75,8 +76,10 @@ const Post: React.FunctionComponent<PostComponent> = ({ id, title, subTitle, con
             <h3>{date}</h3>
             <img src="/" />
             <p>{content}</p>
-            <Link to={`/posts/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
-            <Link to={`/posts/delete/${id}`}><i className="far fa-trash-alt"></i></Link>
+            {user.role === "administrator" ?
+                <Link to={`/posts/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
+            {user.role === "administrator" ?
+                <Link to={`/posts/delete/${id}`}><i className="far fa-trash-alt"></i></Link> : null}
         </Body>
     )
 }

@@ -23,11 +23,16 @@ interface ParamTypes {
     id: string
 }
 
+// INTERFACES 
+interface PostView {
+    user: { status: boolean, role: string }
+}
+
 const Body = styled("section")`
 
 `;
 
-const PostView: React.FunctionComponent = () => {
+const PostView: React.FunctionComponent<PostView> = ({ user }) => {
     const [post, setPost] = useState({ title: "", content: "", date: "" });
     const { id } = useParams<ParamTypes>();
 
@@ -42,7 +47,7 @@ const PostView: React.FunctionComponent = () => {
 
     return (
         <Body>
-            <PostBody id={id} date={post.date} title={post.title} content={post.content} subTitle={""} />
+            <PostBody user={user} id={id} date={post.date} title={post.title} content={post.content} subTitle={""} />
 
             <Title title="COMMENTS" />
             <CommentForm username="" />

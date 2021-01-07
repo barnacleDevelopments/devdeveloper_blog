@@ -12,11 +12,17 @@ import { Link } from "react-router-dom";
 // INTERFACES
 import { NewCategoryData } from "../controllers/category_controller";
 
-interface CategoryFormData {
+interface CategoryFormComponent {
     name: string,
     desc: string,
     btnText: string,
     submitFunc(data: NewCategoryData): void
+}
+
+interface CategoryFormData {
+    [index: string]: string,
+    name: string,
+    desc: string
 }
 
 
@@ -62,15 +68,15 @@ const Body = styled("form")`
 
 
 
-const CategoryForm: React.FunctionComponent<CategoryFormData> = ({ name, desc, btnText, submitFunc }) => {
-    const [formData, setFormData] = useState<NewCategoryData>({
+const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc }) => {
+    const [formData, setFormData] = useState<CategoryFormData>({
         name: "",
         desc: ""
     });
 
-    const handleFormData = () => {
-        let data: NewCategoryData = formData;
-        // data[event.target.name] = event.target.value;
+    const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        let data: CategoryFormData = formData;
+        data[event.target.name] = event.target.value;
         setFormData(data);
     }
 
