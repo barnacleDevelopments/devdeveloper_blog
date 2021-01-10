@@ -1,12 +1,14 @@
 import * as React from "react";
-import { NewPostData } from "../controllers/post_controller";
+import { PostFormData } from "../interfaces/post_interfaces";
 interface PostFormComponent {
-    postId: string;
+    postId?: string;
     title: string;
     subTitle: string;
     content: string;
     btnText: string;
-    submitFunc(data: NewPostData): void;
+    catId?: string;
+    isSubmited: boolean;
+    submitFunc(data: PostFormData): void;
 }
 declare const PostForm: React.FunctionComponent<PostFormComponent>;
 export default PostForm;

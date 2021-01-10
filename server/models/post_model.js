@@ -21,8 +21,7 @@ const postSchema = new mongoose.Schema({
     image: {
         data: Buffer,
         contentType: String
-    },
-    catId: String
+    }
 });
 
 const Post = mongoose.model("Post", postSchema);

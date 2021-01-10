@@ -21,7 +21,7 @@ POST ROUTES
 //retrieve all posts
 router.get("/", (req, res) => {
     Post.find({}, (err, blogs) => {
-        if(!err) {
+        if (!err) {
             res.json(blogs)
         } else {
             console.log(err)
@@ -33,8 +33,8 @@ router.get("/", (req, res) => {
 // retrieve one post
 router.get("/:id", (req, res) => {
     const blogId = req.params.id  // retrieve url information 
-    Post.findOne({_id: blogId}, (err, blog) => {  // retrieve post
-        if(!err) {
+    Post.findOne({ _id: blogId }, (err, blog) => {  // retrieve post
+        if (!err) {
             res.json(blog);
         } else {
             console.log(err)
@@ -43,18 +43,22 @@ router.get("/:id", (req, res) => {
 });
 
 // create one post 
-router.post("/create/:id", (req, res) => {
+router.post("/create/:catId", (req, res) => {
     const body = req.body;
-    const catId = req.params.id;
+    const catId = req.params.catId;
     Post.create(body, (err, post) => {
-        if(!err) {
-            Category.findOne({_id: catId}, (err, cat) => {
-                if(!err) {
+        if (!err) {
+            Category.findOne({ _id: catId }, (err, cat) => {
+                if (!err) {
                     let newPostArr = cat.posts
                     newPostArr.push(post._id)
-                    Category.findOneAndUpdate({_id: catId}, {posts: newPostArr}, (err, cat) => {
-                        err ? console.log(err) : console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
+                    Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
+                        err ? console.log(err) : (
+                            console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
+
+                        )
                     })
+                    res.json(post)
                 }
             })
             console.log(`Post created! It's id is: ${post._id}`)
@@ -68,35 +72,48 @@ router.post("/create/:id", (req, res) => {
 router.put("/update/:id", (req, res) => {
     const body = req.body;
     const id = req.params.id;
-    Post.findOneAndUpdate({_id: id}, body, (err, post) => {
-        err ? console.log(err) : console.log(`Post with id: ${post._id} updated!`)
+    Post.findOneAndUpdate({ _id: id }, body, (err, post) => {
+        if (!err) {
+            res.json(post)
+        } else {
+            console.log(err)
+        }
+
     })
 
 });
 
 // delete one post
-router.delete("/delete/:id", (req, res) => {
-    const id = req.params.id;
-    Post.findOneAndDelete({_id: id}, (err, post) => {
-        if(!err) {
+router.delete("/delete/:postId/:catId", (req, res) => {
+    const postId = req.params.postId;
+    const catId = req.params.catId
+    Post.findOneAndDelete({ _id: postId }, (err, post) => {
+        if (!err) {
             console.log(`Post with id: ${post._id} deleted!`)
             // retrieve posts of post's category
-            Category.findOne({_id: post.catId}, (err, cat) => {
-                if(!err) {
+            Category.findById(catId, (err, cat) => {
+                if (!err) {
+                    console.log(cat.posts)
                     // filter out deleted post
-                    let posts = cat.posts.filter((postId) => {
-                        postId === id ? false : true; 
+                    let posts = cat.posts.filter((id) => {
+                        return id === postId ? false : true;
                     })
+                    console.log(posts)
                     // update category's posts
-                    Category.findByIdAndUpdate({_id: post.catId }, {posts: posts}, (err, cat) => {
-                        console.log(`Category with id: ${cat._id} posts updated!`)
+                    Category.findByIdAndUpdate(catId, { posts: posts }, (err, cat) => {
+                        if (!err) {
+                            console.log(`Category with id: ${cat._id} posts updated!`)
+                        } else {
+                            console.log(err)
+                        }
+
                     })
                 }
             })
         } else {
             console.log(err)
         }
-       
+
     })
 })
 

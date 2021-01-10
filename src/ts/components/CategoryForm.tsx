@@ -7,23 +7,20 @@ FILE: TextProcessor.tsx
 import * as React from "react";
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 // INTERFACES
-import { NewCategoryData } from "../controllers/category_controller";
+import { NewCategoryData, CategoryFormData } from "../interfaces/category_interfaces";
 
 interface CategoryFormComponent {
     name: string,
     desc: string,
     btnText: string,
+    isSubmited: boolean,
     submitFunc(data: NewCategoryData): void
 }
 
-interface CategoryFormData {
-    [index: string]: string,
-    name: string,
-    desc: string
-}
+
 
 
 const Body = styled("form")`
@@ -68,7 +65,7 @@ const Body = styled("form")`
 
 
 
-const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc }) => {
+const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, isSubmited }) => {
     const [formData, setFormData] = useState<CategoryFormData>({
         name: "",
         desc: ""
@@ -86,9 +83,10 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
 
     return (
         <Body>
+            {isSubmited ? <Redirect to={`/categories`} /> : null}
             <input name="name" onChange={handleFormData} placeholder={name} type="text" />
             <textarea name="desc" onChange={handleFormData} placeholder={desc} />
-            <Link to="/categories" onClick={handleSubmit}>{btnText}</Link>
+            <a onClick={handleSubmit}>{btnText}</a>
         </Body>
     )
 }

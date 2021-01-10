@@ -16,11 +16,7 @@ const commentSchema = new mongoose.Schema({
     postId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post"
-    },
-    replies: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Reply"
-    }]
+    }
 });
 
 

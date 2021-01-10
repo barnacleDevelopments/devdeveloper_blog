@@ -20,10 +20,11 @@ const Body = styled("section")`
 `;
 
 // INTERFACES
-import { CategoryData } from "../controllers/category_controller";
+import { CategoryData } from "../interfaces/category_interfaces";
+import { UserComponentData } from "../interfaces/user_interfaces";
 
 interface CategoriesViewComponent {
-    user: { role: string, status: boolean }
+    user: UserComponentData;
 }
 
 
@@ -55,7 +56,7 @@ const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user
             <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
             {categories.map((cat) => {
                 let postCount = cat.posts.length;
-                return <Card user={user} key={cat._id} count={postCount} id={cat._id} name={cat.name} desc={cat.desc} img="/" />
+                return <Card user={user} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
             })}
         </Body>
     )

@@ -53,12 +53,13 @@ const CardImg = styled("img")`
 const CardContent = styled("div")`
     display: grid;
     grid-template-columns: 3fr 1fr;
-    padding: 15px;
+    padding: 15px 17px;
     h2 {
         font-size: 2em;
         grid-column: 1 / span 2 ;
         margin-bottom: 5px;
         text-transform: capitalize;
+        margin-bottom: 10px
     }
 
     p {
@@ -72,7 +73,7 @@ const CardContent = styled("div")`
     a {
         background-color: #9E5A63;
         border-radius: 4px;
-        padding: 6px 20px;
+        padding: 10px 15px;
         box-shadow: 
         display: inline-block;
         grid-column: 2;
@@ -84,6 +85,7 @@ const CardContent = styled("div")`
         text-decoration: none;
         color: #f5f5f5;
         box-shadow: 3px 3px 30px -10px black;
+        margin-top: 9px;
     }
 `;
 
@@ -103,23 +105,24 @@ const CardCount = styled("div")`
     display: table-cell;
 `;
 
+import { UserComponentData } from "../interfaces/user_interfaces";
+
 interface CategoryComponentData {
-    id: string,
+    catId: string,
     name: string,
     desc: string,
     count: number,
     img: string,
-    user: { role: string, status: boolean }
+    user: UserComponentData
 }
 
 
-const Card: React.FunctionComponent<CategoryComponentData> = ({ user, id, name, desc, count, img }) => {
+const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);
-
 
     const handleDelete = () => {
         setIsDeleted(true);
-        Category.prototype.delete(id);
+        Category.prototype.delete(catId);
     }
 
     if (!isDeleted) {
@@ -128,16 +131,16 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, id, name, 
                 <CardImg src={img} />
                 <CardCount>{count}</CardCount>
                 <CardContent>
-                    <h2>{name}</h2>
-                    <p>{desc}</p>
-                    <Link to={`/categories/posts/${id}`}>VIEW</Link>
+                    <h2>{name ? name : "No Name"}</h2>
+                    {<p>{desc ? desc : "This category has no description."}</p>}
+                    <Link to={`/categories/posts/${catId}`}>VIEW</Link>
                 </CardContent>
 
                 {user.role === "administrator" ?
-                    <Link to={`/categories/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
+                    <Link to={`/categories/edit/${catId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
 
                 {user.role === "administrator" ?
-                    <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link> : null}
+                    <a onClick={handleDelete} ><i className="far fa-trash-alt"></i></a> : null}
             </CardBody>
         )
     } else {

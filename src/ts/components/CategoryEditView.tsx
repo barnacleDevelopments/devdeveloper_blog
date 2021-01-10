@@ -14,15 +14,16 @@ import CategoryForm from "./CategoryForm";
 import Category from "../controllers/category_controller";
 
 // INTERFACES 
-import { NewCategoryData } from "../controllers/category_controller";
+import { NewCategoryData } from "../interfaces/category_interfaces";
+import { UserComponentData } from "../interfaces/user_interfaces";
 
 interface ParamTypes {
-    id: string
+    catId: string
 }
 
 // INTERFACES 
 interface CategoryEditViewComponent {
-    user: { status: boolean, role: string }
+    user: UserComponentData;
 }
 
 const Body = styled("section")`
@@ -34,25 +35,28 @@ const CategoryEditView: React.FunctionComponent<CategoryEditViewComponent> = ({ 
         name: "",
         desc: ""
     });
-    const { id } = useParams<ParamTypes>();
+    const [isSubmited, setIsSubmited] = useState(false);
+    const { catId } = useParams<ParamTypes>();
 
     useEffect(() => {
-        Category.prototype.getOne(id)
-            .then(data => setCategory(data))
+        Category.prototype.getOne(catId)
+            .then(data => {
+                setCategory(data)
+            })
     }, []);
 
     const handleFormData = (category: NewCategoryData) => {
-        Category.prototype.update(id, {
+        Category.prototype.update(catId, {
             name: category.name,
             desc: category.desc
-        })
+        }).then(() => setIsSubmited(true))
     }
 
     return (
         <Body>
             {user.role === "user" ?
                 <Redirect to="/categories" /> : null}
-            <CategoryForm name={category.name} desc={category.desc} btnText="UPDATE" submitFunc={handleFormData} />
+            <CategoryForm isSubmited={isSubmited} name={category.name} desc={category.desc} btnText="UPDATE" submitFunc={handleFormData} />
         </Body>
     )
 }

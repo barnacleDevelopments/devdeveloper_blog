@@ -12,6 +12,16 @@ import { Link } from "react-router-dom";
 // HOOKS
 import useNav from "../hooks/useNav";
 
+// INTERFACES
+import { UserComponentData } from "../interfaces/user_interfaces";
+
+// COMPONENTS
+import DropDownMenu from "../components/DropDownMenu";
+
+interface NavComponent {
+    user: UserComponentData
+}
+
 // background-image: url("${logoImage}");
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -57,12 +67,6 @@ const MediaLinks = styled("div")`
     }
 `;
 
-
-interface NavComponent {
-    user: { status: boolean, role: string }
-}
-
-
 const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
     const { backBtnParams, backBtnStatus } = useNav();
 
@@ -76,10 +80,11 @@ const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
                 <a href="https://www.linkedin.com/in/devin-dev-davis-63008412b"><i className="fab fa-linkedin fa-2x"></i></a>
                 <a href="https://github.com/barnacleDevelopments"><i className="fab fa-github-alt fa-2x"></i></a>
 
-                {user.status ? (
-                    user.role === "administrator" ? <i className="fas fa-user-tie"></i> : <i className="fas fa-user"></i>
-                )
-                    : <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
+                <DropDownMenu user={user} menuItems={[
+                    { name: "Loggout", link: "/" },
+                    { name: "Settings", link: "/" }
+                ]} />
+                {user.status ? null : <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
             </MediaLinks>
         </Navbody>
     )

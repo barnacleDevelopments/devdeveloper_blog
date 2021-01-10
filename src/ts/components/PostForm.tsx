@@ -7,32 +7,21 @@ FILE: TextProcessor.tsx
 import * as React from "react";
 import { useState } from 'react';
 import styled from "@emotion/styled";
-import { Link, useParams } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 // INTERFACES 
-import { NewPostData } from "../controllers/post_controller";
+import { PostFormData } from "../interfaces/post_interfaces";
 
 interface PostFormComponent {
-    postId: string,
+    postId?: string,
     title: string,
     subTitle: string,
     content: string,
     btnText: string,
-    submitFunc(data: NewPostData): void
+    catId?: string,
+    isSubmited: boolean,
+    submitFunc(data: PostFormData): void
 }
-
-interface PostFormData {
-    [index: string]: string,
-    title: string,
-    subTitle: string,
-    content: string,
-    catId: string
-}
-
-interface ParamTypes {
-    id: string
-}
-
 
 
 const Body = styled("article")`
@@ -75,20 +64,17 @@ const Body = styled("article")`
 `;
 
 
-const PostForm: React.FunctionComponent<PostFormComponent> = ({ postId, title, subTitle, content, btnText, submitFunc }) => {
-    const { id } = useParams<ParamTypes>();
+const PostForm: React.FunctionComponent<PostFormComponent> = ({ catId, title, subTitle, content, btnText, submitFunc, isSubmited }) => {
+
 
     const [formData, setFormData] = useState<PostFormData>({
-        title: "",
-        subTitle: "",
-        content: "",
-        catId: ""
+        title: title,
+        content: content
     });
 
     const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         let data: PostFormData = formData;
         data[event.target.name] = event.target.value;
-        data.catId = id
         setFormData(data);
     }
 
@@ -98,10 +84,11 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ postId, title, s
 
     return (
         <Body>
-            <input name="title" onChange={handleFormData} placeholder={title} type="text" />
-            {subTitle ? <input placeholder={subTitle} type="text" /> : null}
-            <textarea name="content" onChange={handleFormData} placeholder={content} />
-            <Link to={postId ? `"/posts/${postId}"` : `/categories/posts/${id}`} onClick={handleSubmit}>{btnText}</Link>
+            {isSubmited ? <Redirect to={`/categories/posts/${catId}`} /> : null}
+            <input name="title" onChange={handleFormData} defaultValue={title} type="text" />
+            {subTitle ? <input defaultValue={subTitle} type="text" /> : null}
+            <textarea name="content" onChange={handleFormData} defaultValue={content} />
+            <a onClick={handleSubmit}>{btnText}</a>
         </Body>
     )
 }

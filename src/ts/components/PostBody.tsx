@@ -59,21 +59,22 @@ const Body = styled("article")`
     }
 `;
 
+// INTERFACES
+import { UserComponentData } from "../interfaces/user_interfaces";
+
 export interface PostComponent {
     id: string,
     title: string,
     subTitle: string,
     content: string,
-    date: string,
-    user: { role: string, status: boolean }
+    user: UserComponentData
 }
 
-const Post: React.FunctionComponent<PostComponent> = ({ user, id, title, subTitle, content, date }) => {
+const Post: React.FunctionComponent<PostComponent> = ({ user, id, title, subTitle, content }) => {
     return (
         <Body>
             <h1>{title}</h1>
             <h2>{subTitle}</h2>
-            <h3>{date}</h3>
             <img src="/" />
             <p>{content}</p>
             {user.role === "administrator" ?

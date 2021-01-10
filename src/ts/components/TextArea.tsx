@@ -29,6 +29,7 @@ const TextAreaBody = styled("article")`
     }
 `;
 
+
 interface TextAreaData {
     title: string,
     content: string

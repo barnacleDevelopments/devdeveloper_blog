@@ -11,9 +11,12 @@ import { Redirect } from "react-router-dom";
 // COMPONENTS
 import LoginForm from "./LoginForm"
 
+// INTERFACES
+import { UserComponentData } from "../interfaces/user_interfaces";
+
 // INTERFACES 
 interface LoginViewComponent {
-    user: { status: boolean, role: string }
+    user: UserComponentData;
 }
 
 const Body = styled("section")`

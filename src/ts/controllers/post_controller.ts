@@ -8,20 +8,7 @@ FILE: post_controller.ts
 const PORT = 5000;
 
 // INTERFACES
-export interface PostData {
-    _id: string,
-    title: string,
-    subTitle: string,
-    content: string,
-    catId: string,
-    date: string
-}
-
-export interface NewPostData {
-    title: string,
-    content: string,
-    catId: string
-}
+import { PostData, NewPostData, EditPostData } from "../interfaces/post_interfaces";
 
 class Post {
     constructor() { }
@@ -67,18 +54,20 @@ class Post {
         return recievedData
     }
 
-    async create(newPost: NewPostData) {
-        let recievedData: NewPostData = {
+    async create(newPost: NewPostData, catId: string): Promise<PostData> {
+        let recievedData: PostData = {
+            _id: "",
             title: "",
+            subTitle: "",
             content: "",
+            date: "",
             catId: ""
         };
-
-        await fetch(`http://localhost:${PORT}/posts/create/${newPost.catId}`, {
+        await fetch(`http://localhost:${PORT}/posts/create/${catId}`, {
             method: "POST",
             mode: "cors",
             headers: {
-                "Content-Type": "application/json;charset=UTF-8",
+                "Content-Type": "application/json",
                 Accept: "application/json"
             },
             body: JSON.stringify(newPost)
@@ -86,12 +75,12 @@ class Post {
             .then(response => response.json())
             .then(data => {
                 recievedData = data;
-            })
-
+            });
         return recievedData;
     }
 
-    async update(id: string, newPost: NewPostData) {
+    async update(id: string, newPost: EditPostData) {
+        console.log(newPost)
         await fetch(`http://localhost:${PORT}/posts/update/${id}`, {
             method: "PUT",
             mode: "cors",
@@ -101,10 +90,16 @@ class Post {
             },
             body: JSON.stringify(newPost)
         })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response not ok.")
+                }
+            }).catch(err => console.log(err))
     }
 
-    async delete(id: string) {
-        await fetch(`http://localhost:${PORT}/posts/delete/${id}`, {
+    async delete(id: string, catId: string) {
+        console.log(catId, id)
+        await fetch(`http://localhost:${PORT}/posts/delete/${id}/${catId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
@@ -112,6 +107,11 @@ class Post {
                 Accept: "application/json"
             }
         })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response not ok.")
+                }
+            }).catch(err => console.log(err))
     }
 }
 

@@ -19,6 +19,7 @@ import cookieParser from "cookie-parser";
 import postRoutes from "./routes/post_routes";
 import categoryRoutes from "./routes/category_routes";
 import userRoutes from "./routes/user_routes";
+import commentRoutes from "./routes/comment_routes"
 
 // MODELS
 import User from "./models/user_model";
@@ -73,8 +74,7 @@ passport.deserializeUser(function (id, done) {
 passport.use("local-login", new LocalStrategy({
   passReqToCallback: true
 },
-  function (req, username, password, done) {
-
+  (req, username, password, done) => {
     User.findOne({ username: username }, (err, user) => {
       if (err) { return done(err); }
       if (!user) {
@@ -93,29 +93,35 @@ passport.use("local-signup", new LocalStrategy({
 },
   (req, username, password, done) => {
     User.find({}, (err, users) => {
+      if (err) {
+        return done(err);
+      }
       if (!err) {
+        let userExists = false;
+        // check if the users exists 
         users.forEach(user => {
-          if (user.username !== username) {
-            return err ? done(err) : done(null, req.user)
-
-          } else {
-            return done(null, false, { message: 'username taken.' });
-          }
+          user.username === username ? userExists = true : null
         })
+        // if user does not exist create new user
+        if (!userExists) {
+          User.create({ username: username, password: password }, (err, user) => {
+            console.log(`New user with id: ${user._id}!`)
+            return err ? done(err) : done(null, user)
+          });
+
+        } else {
+          return done(null, false, { message: 'username taken.' });
+        }
       }
     })
   }
 ));
 
-// User.create({ username: "dev", password: "grape", role: "administrator" }, () => { })
-// Post.create({ title: "This is a new post", content: "this is some interesting content" })
-
-// Category.updateOne({ _id: "5ff72375686fde2220c79e87" }, { posts: [{ _id: "5ff727fd1f62464118401221" }] }, () => { })
-// User.create({ username: "jill", password: "grape" }, () => { })
 // INITIALIZE ROUTES
 app.use("/", userRoutes)
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
+app.use("/comments", commentRoutes)
 
 
 app

@@ -12,17 +12,20 @@ import PostForm from "./PostForm";
 
 // CONTROLERS
 import Post from "../controllers/post_controller";
-import { NewPostData } from "../controllers/post_controller";
+
 
 // INTERFACES 
+import { UserComponentData } from "../interfaces/user_interfaces";
+import { EditPostData } from "../interfaces/post_interfaces";
 
-interface ParamTypes {
-    id: string
+interface Params {
+    postId: string,
+    catId: string
 }
 
 // INTERFACES 
 interface EditViewComponent {
-    user: { status: boolean, role: string }
+    user: UserComponentData
 }
 
 const Body = styled("section")`
@@ -30,31 +33,30 @@ const Body = styled("section")`
 `;
 
 const PostEditView: React.FunctionComponent<EditViewComponent> = ({ user }) => {
-    const [post, setPost] = useState<NewPostData>({
+    const [post, setPost] = useState<EditPostData>({
         title: "",
         content: "",
-        catId: ""
     });
-    const { id } = useParams<ParamTypes>();
+    const [isSubmited, setIsSubmited] = useState(false);
+    const { postId, catId } = useParams<Params>();
 
     useEffect(() => {
-        Post.prototype.getOne(id)
+        Post.prototype.getOne(postId)
             .then(data => setPost(data))
     }, []);
 
-    const handleFormData = (post: NewPostData) => {
-        Post.prototype.update(id, {
+    const handleFormData = (post: EditPostData) => {
+        Post.prototype.update(postId, {
             title: post.title,
             content: post.content,
-            catId: ""
-        })
+        }).then(() => setIsSubmited(true))
     }
 
     return (
         <Body>
             {user.role === "user" ?
-                <Redirect to="/categories" /> : null}
-            <PostForm subTitle="" postId={id} title={post.title} content={post.content} btnText="UPDATE" submitFunc={handleFormData} />
+                <Redirect to={`/categories`} /> : null}
+            <PostForm isSubmited={isSubmited} subTitle="" catId={catId} title={post.title} content={post.content} btnText="UPDATE" submitFunc={handleFormData} />
         </Body>
     )
 }

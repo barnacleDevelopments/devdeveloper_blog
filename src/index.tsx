@@ -20,7 +20,7 @@ import CategoryCreateView from "./ts/components/CategoryCreateView";
 import PostEditView from "./ts/components/PostEditView";
 import PostCreateView from "./ts/components/PostCreateView";
 import LoginView from "./ts/components/LoginView";
-import SignupView from "./ts/components/LoginView";
+import SignupView from "./ts/components/SignupView";
 
 //GLOBAL STYLES
 import "./css/reset.css";
@@ -38,7 +38,6 @@ const Body = styled("div")`
 
 const App = () => {
     const user = useAuth();
-
 
     return (
         <Body>
@@ -58,21 +57,22 @@ const App = () => {
                     <Route path="/categories/create">
                         <CategoryCreateView user={user} />
                     </Route>
-                    <Route path="/categories/edit/:id">
+                    <Route path="/categories/edit/:catId">
                         <CategoryEditView user={user} />
                     </Route>
-                    <Route path="/categories/posts/:id">
+                    <Route path="/categories/posts/:catId">
                         <PostsView user={user} />
                     </Route>
-                    <Route path="/posts/create/:id">
-                        <PostCreateView user={user} />
-                    </Route>
-                    <Route path="/posts/edit/:id">
-                        <PostEditView user={user} />
-                    </Route>
-                    <Route path="/posts/:id" >
+                    <Route exact path="/posts/:id" >
                         <PostView user={user} />
                     </Route>
+                    <Route path="/posts/edit/:catId/:postId">
+                        <PostEditView user={user} />
+                    </Route>
+                    <Route path="/posts/create/:catId">
+                        <PostCreateView user={user} />
+                    </Route>
+
                 </Switch>
             </Container>
         </Body>

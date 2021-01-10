@@ -16,8 +16,10 @@ const Body = styled("section")`
 `;
 
 // INTERFACES 
+import { UserComponentData } from "../interfaces/user_interfaces";
+
 interface SignupViewComponent {
-    user: { status: boolean, role: string }
+    user: UserComponentData;
 }
 
 

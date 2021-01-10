@@ -1,17 +1,8 @@
-export interface UserData {
-    _id: string;
-    username: string;
-    password: string;
-    posts: [];
-    comments: [];
-}
-export interface UserStatus {
-    status: boolean;
-    role: string;
-}
+import { UserData, UserComponentData } from "../interfaces/user_interfaces";
 declare class User {
     constructor();
+    login(username: string, password: string): Promise<void>;
     get(): Promise<UserData>;
-    isAuthenticated(): Promise<UserStatus>;
+    isAuthenticated(): Promise<UserComponentData>;
 }
 export default User;

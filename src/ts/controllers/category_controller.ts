@@ -8,22 +8,7 @@ FILE: category_controller.ts
 const PORT = 5000;
 
 // INTERFACES
-import { PostData } from "./post_controller";
-
-export interface CategoryData {
-    _id: string,
-    name: string,
-    desc: string,
-    count: number,
-    img: string,
-    posts: PostData[]
-}
-
-export interface NewCategoryData {
-    name: string,
-    desc: string,
-}
-
+import { CategoryData, NewCategoryData } from "../interfaces/category_interfaces";
 
 class Category {
     constructor() { }

@@ -32,7 +32,6 @@ router.get("/:id", (req, res) => {
 // retrieve blogs of category
 router.get("/posts/:id", (req, res) => {
     const catId = req.params.id;
-    console.log(catId)
     Category.findById(catId)
         .populate("posts")
         .exec((err, cat) => {
@@ -40,13 +39,17 @@ router.get("/posts/:id", (req, res) => {
         })
 });
 
-// create one post 
+// create one category
 router.post("/create", (req, res) => {
     const body = req.body;
     Category.create(body, (err, cat) => {
-        err ? console.log(err) : (
+        if (!err) {
+            res.json(cat);
             console.log(`Category created! It's id is: ${cat._id}`)
-        )
+        } else {
+            console.log(err)
+        }
+
     })
 });
 
@@ -55,7 +58,12 @@ router.put("/update/:id", (req, res) => {
     const body = req.body;
     const id = req.params.id;
     Category.findOneAndUpdate({ _id: id }, body, (err, cat) => {
-        err ? console.log(err) : console.log(`Category with id: ${cat._id} updated!`)
+        if (!err) {
+            res.json(cat)
+            console.log(`Category with id: ${cat._id} updated!`)
+        } else {
+            console.log(err)
+        }
     })
 
 });

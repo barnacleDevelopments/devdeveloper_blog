@@ -13,6 +13,17 @@ import { Link } from "react-router-dom";
 // CONTROLLERS
 import Post from "../controllers/post_controller";
 
+// INTERFACES
+import { UserComponentData } from "../interfaces/user_interfaces";
+interface PostData {
+    postId: string,
+    title: string,
+    content: string,
+    user: UserComponentData,
+    catId: string
+}
+
+
 const PostSnipBody = styled("div")`
     background-color: #314455;
     color: #f5f5f5;
@@ -62,7 +73,7 @@ const PostSnipContent = styled("div")`
     a {
         background-color: #9E5A63;
         border-radius: 4px;
-        padding: 6px 20px;
+        padding: 10px 15px;
         box-shadow: 3px 3px 30px -10px black;
         display: inline-block;
         grid-column: 2;
@@ -73,6 +84,7 @@ const PostSnipContent = styled("div")`
         height: 30px;
         text-decoration: none;
         color: #f5f5f5;
+        margin-top: 9px;
     }
     div {
         display: flex;
@@ -80,18 +92,13 @@ const PostSnipContent = styled("div")`
     }
 `;
 
-interface PostData {
-    id: string,
-    title: string,
-    content: string
-}
-
-const PostSnip: React.FunctionComponent<PostData> = ({ id, title, content }) => {
+const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, title, content }) => {
     const [isDeleted, setIsDeleted] = useState(false);
 
-    const handleDelete = () => {
+
+    const deletePost = () => {
         setIsDeleted(true);
-        Post.prototype.delete(id)
+        Post.prototype.delete(postId, catId)
     }
 
     if (!isDeleted) {
@@ -99,14 +106,14 @@ const PostSnip: React.FunctionComponent<PostData> = ({ id, title, content }) => 
             <PostSnipBody>
                 <img src="./" />
                 <PostSnipContent>
-                    <h2>{title}</h2>
-                    <p>{content}</p>
+                    <h2>{title ? title : "No Title"}</h2>
+                    <p>{content ? content : "This post has no content."}</p>
                     <div>
-                        <Link to={`/posts/${id}`}>READ</Link>
+                        <Link to={`/posts/${postId}`}>READ</Link>
                     </div>
                 </PostSnipContent>
-                <Link to={`/posts/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link>
-                <Link onClick={handleDelete} to={`/categories`}><i className="far fa-trash-alt"></i></Link>
+                {user.role === "administrator" ? <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
+                {user.role === "administrator" ? <a onClick={deletePost}><i className="far fa-trash-alt"></i></a> : null}
             </PostSnipBody>
         )
     } else {

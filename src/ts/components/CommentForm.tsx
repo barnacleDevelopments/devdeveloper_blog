@@ -11,8 +11,10 @@ import styled from "@emotion/styled";
 import EasyDate from "../classes/EasyDate";
 
 // INTERFACES
+import { CommentFormData } from "../interfaces/comment_interfaces";
+
 interface CommentFormComponent {
-    username: string
+    createComment(comment: CommentFormData): void
 }
 
 const Body = styled("article")`
@@ -21,20 +23,9 @@ const Body = styled("article")`
     position: relative;
     border-radius: 4px;
     color: #f5f5f5;
-    margin-top: 28px;
     display: grid;
     grid-template-columns: 4fr 1fr;
-    h1 {
-        position: absolute;
-        top: -17px;
-        left: 15px;
-        background-color: #9e5a63;
-        padding: 8px 10px 8px 10px;
-        border-radius: 4px;
-        font-weight: bold;
-        text-transform: lowercase;
-        text-transform: capitalize;
-    }
+    margin-bottom: 14px;
     p {
         margin-bottom: 10px;
         font-size: 16px;
@@ -84,16 +75,25 @@ const Content = styled("div")`
     align-items: flex-start;
 `;
 
-const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ username }) => {
+const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment }) => {
+    const [commentData, setCommentData] = React.useState<CommentFormData>({ content: "", date: "" })
+
+    const handleFormData = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        let comment = {
+            content: e.target.value,
+            date: EasyDate.prototype.getRegDate()
+        }
+        setCommentData(comment)
+    }
+
     return (
         <Body>
-            <h1>{username} Bob</h1>
             <Content>
-                <TextArea />
-                <p>{EasyDate.prototype.getRegDate()}</p>
+                <TextArea onChange={(e) => handleFormData(e)} />
+                <p>{ }</p>
             </Content>
             <div>
-                <a>ADD</a>
+                <a onClick={() => createComment(commentData)}>ADD</a>
             </div>
         </Body>
     )

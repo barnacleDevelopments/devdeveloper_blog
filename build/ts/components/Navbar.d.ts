@@ -1,9 +1,7 @@
 import * as React from "react";
+import { UserComponentData } from "../interfaces/user_interfaces";
 interface NavComponent {
-    user: {
-        status: boolean;
-        role: string;
-    };
+    user: UserComponentData;
 }
 declare const Navbar: React.FunctionComponent<NavComponent>;
 export default Navbar;

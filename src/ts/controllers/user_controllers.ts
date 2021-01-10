@@ -8,21 +8,29 @@ FILE: user_controller.ts
 const PORT = 5000;
 
 // INTERFACES
-export interface UserData {
-    _id: string,
-    username: string,
-    password: string,
-    posts: [],
-    comments: []
-}
-
-export interface UserStatus {
-    status: boolean,
-    role: string
-}
+import { UserData, UserComponentData, NewUserData } from "../interfaces/user_interfaces";
 
 class User {
     constructor() { }
+
+    async login(username: string, password: string) {
+        let recievedData: NewUserData = {
+            username: username,
+            password: password
+        }
+        await fetch(`http://localhost:${PORT}/login`, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            },
+            body: JSON.stringify(recievedData)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error("Network response not ok.")
+            }
+        }).catch(err => console.log(err))
+    }
 
     async get() {
         let recievedData: UserData = {
@@ -48,7 +56,7 @@ class User {
     }
 
     async isAuthenticated() {
-        let recievedData: UserStatus = { status: false, role: "" };
+        let recievedData: UserComponentData = { _id: "", status: false, role: "" };
 
         await fetch(`http://localhost:${PORT}/isloggedin`, {
             method: "GET",

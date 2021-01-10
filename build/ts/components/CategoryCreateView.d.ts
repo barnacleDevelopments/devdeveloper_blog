@@ -1,9 +1,7 @@
-import * as React from "react";
+import React from "react";
+import { UserComponentData } from "../interfaces/user_interfaces";
 interface CategoryCreateViewComponent {
-    user: {
-        status: boolean;
-        role: string;
-    };
+    user: UserComponentData;
 }
 declare const CategoryCreateView: React.FunctionComponent<CategoryCreateViewComponent>;
 export default CategoryCreateView;

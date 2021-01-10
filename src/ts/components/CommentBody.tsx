@@ -4,16 +4,25 @@ DATE: January 4th, 2021
 FILE: Comment.tsx
 */
 
-import * as React from "react";
+// DEPENDENCIES
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 
+// CONTROLLERS
+import Comment from "../controllers/comment_controler";
+
 // INTERFACES 
+import { UserComponentData } from "../interfaces/user_interfaces";
+
 interface CommentComponent {
+    id: string,
     content: string,
     date: string,
-    username: string
+    username: string,
+    user: UserComponentData
 }
 
+// STYLES
 const Body = styled("article")`
     width: 100%;
     background-color: #314455;
@@ -85,25 +94,37 @@ const Content = styled("div")`
     grid-column: 1;
 `;
 
-const Comment: React.FunctionComponent<CommentComponent> = ({ content, date, username }) => {
+// COMPONENT
+const CommentBody: React.FunctionComponent<CommentComponent> = ({ user, id, content, date, username }) => {
+    const [isDeleted, setIsDeleted] = useState(false)
 
+    // delete comment
+    const deleteComment = () => {
+        setIsDeleted(true)
+        Comment.prototype.delete(id)
 
-    return (
-        <Body>
-            <h1>{username}</h1>
-            <Content>
-                <p>{content}</p>
-                <p>{date}</p>
-            </Content>
-            <div>
-                <a><i className="far fa-trash-alt fa-1x"></i></a>
-                <a>REPLY</a>
-            </div>
-            {/* <h1>{username}</h1>
-            <p>{content}</p>
-            <p>{date}</p> */}
-        </Body>
-    )
+    }
+
+    // display comment if not deleted
+    if (isDeleted) {
+        return null;
+    } else {
+        return (
+            <Body>
+                <h1>{username}</h1>
+                <Content>
+                    <p>{content}</p>
+                    <p>{date}</p>
+                </Content>
+                <div>
+                    {user.role === "administrator" && user.status ?
+                        <a onClick={deleteComment}><i className="far fa-trash-alt fa-1x"></i></a> : null}
+                </div>
+            </Body>
+        )
+
+    }
+
 }
 
-export default Comment;
+export default CommentBody;

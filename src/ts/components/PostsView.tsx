@@ -19,35 +19,28 @@ import CreateBtn from "./CreateBtn";
 import Category from "../controllers/category_controller";
 
 // INTERFACES
-import { PostData } from "../controllers/post_controller"
+import { PostData } from "../interfaces/post_interfaces"
+import { UserComponentData } from "../interfaces/user_interfaces";
 
 interface ParamTypes {
-    id: string
+    catId: string
 }
 
 // INTERFACES 
 interface PostsViewComponent {
-    user: { status: boolean, role: string }
+    user: UserComponentData;
 }
 
 const Body = styled("section")`
 
 `;
 const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
-    const [posts, setPosts] = useState<PostData[]>([{
-        _id: "",
-        title: "",
-        subTitle: "",
-        content: "",
-        catId: "",
-        date: ""
-    }]);
-
+    const [posts, setPosts] = useState<PostData[]>([]);
     const [catTitle, setCatTitle] = useState("")
-    const { id } = useParams<ParamTypes>();
+    const { catId } = useParams<ParamTypes>();
 
     useEffect(() => {
-        Category.prototype.getPosts(id)
+        Category.prototype.getPosts(catId)
             .then(data => {
                 setPosts(data.posts)
                 setCatTitle(data.name)
@@ -56,13 +49,13 @@ const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
 
     return (
         <Body>
-            {user.role === "administrator" ? <CreateBtn link={`/posts/create/${id}`} /> : null}
+            {user.role === "administrator" ? <CreateBtn link={`/posts/create/${catId}`} /> : null}
             <Title title={catTitle} />
             {
                 posts.length <= 0 ? <PostSnipFallback /> :
                     posts.map(post => {
                         return (
-                            <PostSnip key={post._id} id={post._id} title={post.title} content={post.content} />
+                            <PostSnip user={user} key={post._id} postId={post._id} catId={catId} title={post.title} content={post.content} />
                         );
                     })
             }

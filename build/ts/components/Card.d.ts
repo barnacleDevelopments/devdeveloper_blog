@@ -1,14 +1,12 @@
 import * as React from "react";
+import { UserComponentData } from "../interfaces/user_interfaces";
 interface CategoryComponentData {
-    id: string;
+    catId: string;
     name: string;
     desc: string;
     count: number;
     img: string;
-    user: {
-        role: string;
-        status: boolean;
-    };
+    user: UserComponentData;
 }
 declare const Card: React.FunctionComponent<CategoryComponentData>;
 export default Card;
