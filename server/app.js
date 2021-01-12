@@ -92,6 +92,7 @@ passport.use("local-signup", new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
+    console.log(username)
     User.find({}, (err, users) => {
       if (err) {
         return done(err);
@@ -116,6 +117,10 @@ passport.use("local-signup", new LocalStrategy({
     })
   }
 ));
+
+// User.create({ username: "dev", password: "grape", role: "administrator" }, () => {
+
+// })
 
 // INITIALIZE ROUTES
 app.use("/", userRoutes)

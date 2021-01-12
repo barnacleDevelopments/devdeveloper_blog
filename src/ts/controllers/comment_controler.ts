@@ -9,6 +9,9 @@ const PORT = 5000;
 
 // INTERFACES
 import { CommentData, NewCommentData } from "../interfaces/comment_interfaces";
+type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
+
+
 
 class Comment {
     constructor() { }
@@ -64,11 +67,13 @@ class Comment {
     }
 
 
-    async create(userId: string, postId: string, newComment: NewCommentData) {
-        let recievedData: NewCommentData[] = [{
+    async create(userId: string, postId: string, newComment: NewCommentData): Promise<CommentData[]> {
+        let recievedData: CommentData[] = [{
             _id: "",
             content: "",
             date: "",
+            userId: "",
+            postId: "",
         }];
         await fetch(`http://localhost:${PORT}/comments/create/${userId}/${postId}`, {
             method: "POST",
@@ -99,8 +104,9 @@ class Comment {
         })
     }
 
-    async delete(id: string) {
-        await fetch(`http://localhost:${PORT}/comments/delete/${id}`, {
+    async delete(commentId: string, userId: string, postId: string): Promise<ResponseStatus> {
+        let recievedData: ResponseStatus = { status: "pending" }
+        await fetch(`http://localhost:${PORT}/comments/delete/${commentId}/${userId}/${postId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
@@ -108,7 +114,13 @@ class Comment {
                 Accept: "application/json"
             }
         })
+            .then(response => response.json())
+            .then(data => {
+                recievedData = data;
+            })
+        return recievedData;
     }
+
 }
 
 export default Comment;

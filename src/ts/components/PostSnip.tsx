@@ -115,7 +115,7 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
                     <h2>{title ? title : "No Title"}</h2>
                     <p>{content ? content : "This post has no content."}</p>
                     <div>
-                        <Link to={`/posts/${postId}`}>READ</Link>
+                        <Link to={`/posts/${catId}/${postId}`}>READ</Link>
                     </div>
                 </PostSnipContent>
                 {user.role === "administrator" ? <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}

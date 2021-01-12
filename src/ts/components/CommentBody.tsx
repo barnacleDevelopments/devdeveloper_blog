@@ -15,7 +15,8 @@ import Comment from "../controllers/comment_controler";
 import { UserComponentData } from "../interfaces/user_interfaces";
 
 interface CommentComponent {
-    id: string,
+    commentId: string,
+    postId: string,
     content: string,
     date: string,
     username: string,
@@ -95,14 +96,15 @@ const Content = styled("div")`
 `;
 
 // COMPONENT
-const CommentBody: React.FunctionComponent<CommentComponent> = ({ user, id, content, date, username }) => {
+const CommentBody: React.FunctionComponent<CommentComponent> = ({ user, commentId, content, date, username, postId }) => {
     const [isDeleted, setIsDeleted] = useState(false)
 
     // delete comment
     const deleteComment = () => {
-        setIsDeleted(true)
-        Comment.prototype.delete(id)
-
+        Comment.prototype.delete(commentId, user._id, postId)
+            .then((res) => {
+                res.status === "success" ? setIsDeleted(true) : setIsDeleted(false)
+            })
     }
 
     // display comment if not deleted

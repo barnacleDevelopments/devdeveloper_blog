@@ -73,14 +73,15 @@ import CardPhoto from "../../img/logo.png"
 import { UserComponentData } from "../interfaces/user_interfaces";
 
 export interface PostComponent {
-    id: string,
+    postId: string,
+    catId: string,
     title: string,
     subTitle: string,
     content: string,
     user: UserComponentData
 }
 
-const Post: React.FunctionComponent<PostComponent> = ({ user, id, title, subTitle, content }) => {
+const Post: React.FunctionComponent<PostComponent> = ({ user, postId, catId, title, subTitle, content }) => {
     return (
         <Body>
             <img src={CardPhoto} />
@@ -91,9 +92,7 @@ const Post: React.FunctionComponent<PostComponent> = ({ user, id, title, subTitl
             </Content>
 
             {user.role === "administrator" ?
-                <Link to={`/posts/edit/${id}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
-            {user.role === "administrator" ?
-                <Link to={`/posts/delete/${id}`}><i className="far fa-trash-alt"></i></Link> : null}
+                <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
         </Body>
     )
 }

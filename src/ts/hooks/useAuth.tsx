@@ -11,7 +11,12 @@ import { useState, useEffect } from "react";
 import User from "../controllers/user_controllers";
 
 export default () => {
-    const [user, setUser] = useState({ _id: "", status: false, role: "" });
+    const [user, setUser] = useState({
+        _id: "",
+        username: "",
+        status: false,
+        role: ""
+    });
 
     useEffect(() => {
         User.prototype.isAuthenticated()

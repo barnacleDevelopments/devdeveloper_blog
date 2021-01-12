@@ -10,8 +10,6 @@ import express from "express";
 import Post from "../models/post_model";
 import Category from "../models/category_model";
 
-
-
 const router = express.Router();
 
 /*

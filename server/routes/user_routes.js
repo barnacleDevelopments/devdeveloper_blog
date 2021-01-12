@@ -23,6 +23,7 @@ router.post('/login', passport.authenticate('local-login', { failureRedirect: '/
 });
 
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/' }), (req, res) => {
+    console.log("hit")
     res.redirect("/");
 
 });
@@ -42,7 +43,12 @@ router.get("/user", isLoggedIn, (req, res) => {
 
 router.get("/isloggedin", isLoggedIn, (req, res) => {
     if (req.user) {
-        let user = { _id: req.user._id, status: true, role: req.user.role }
+        let user = {
+            _id: req.user._id,
+            username: req.user.username,
+            status: true,
+            role: req.user.role
+        }
         res.json(user)
     } else {
         res.json({ status: "failure", message: "User successfully logged out." })

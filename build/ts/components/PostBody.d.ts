@@ -1,7 +1,8 @@
 import * as React from "react";
 import { UserComponentData } from "../interfaces/user_interfaces";
 export interface PostComponent {
-    id: string;
+    postId: string;
+    catId: string;
     title: string;
     subTitle: string;
     content: string;

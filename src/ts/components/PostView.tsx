@@ -26,7 +26,8 @@ import { NewCommentData } from "../interfaces/comment_interfaces";
 import { NewPostData } from "../interfaces/post_interfaces";
 
 interface ParamTypes {
-    id: string
+    postId: string,
+    catId: string
 }
 
 // INTERFACES 
@@ -37,18 +38,19 @@ interface PostView {
 
 // STYLES
 const Body = styled("section")`
-    div {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-    }
     h2 {
         color: #f5f5f5;
         text-align: center;
         font-size: 2em;
     }
-    div a {
+`;
+
+const Fallback = styled("div")`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    a {
         background-color: #314455;
         border-radius: 4px;
         padding: 10px 15px;
@@ -74,11 +76,11 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
     });
 
     // Retrieve post id from url
-    const { id } = useParams<ParamTypes>();
+    const { postId, catId } = useParams<ParamTypes>();
 
     // retrieve post
     useEffect(() => {
-        Post.prototype.getOne(id)
+        Post.prototype.getOne(postId)
             .then((post) => {
                 setPost(post);
             }).catch((err) => {
@@ -91,7 +93,7 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
 
     // create new comment on post
     const createComment = (comment: NewCommentData) => {
-        Comment.prototype.create(user._id, id, comment)
+        Comment.prototype.create(user._id, postId, comment)
             .then(data => {
                 console.log(data)
                 setComments(data)
@@ -100,24 +102,24 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
 
     // retrieve post comments
     useEffect(() => {
-        Comment.prototype.getFromPost(id)
+        Comment.prototype.getFromPost(postId)
             .then(data => setComments(data))
     }, [])
 
 
     return (
         <Body>
-            <PostBody user={user} id={id} title={post.title} content={post.content} subTitle={""} />
+            <PostBody user={user} postId={postId} catId={catId} title={post.title} content={post.content} subTitle={""} />
             <Title title="COMMENTS" />
             {user.status ? <CommentForm createComment={createComment} /> : null}
             {user.status ? null : <Link to="/login">Login</Link>}
             {comments.length <= 0 ?
-                <div>
+                <Fallback>
                     <h2>No comments... <br />be the first!</h2>
-                </div>
+                </Fallback>
 
                 : comments.map((comment) => {
-                    return <CommentBody username="f" key={comment._id} user={user} id={comment._id} content={comment.content} date={comment.date} />
+                    return <CommentBody username="" key={comment._id} user={user} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
                 })}
 
         </Body>

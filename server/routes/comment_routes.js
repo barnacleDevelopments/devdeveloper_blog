@@ -32,10 +32,12 @@ router.get("/:id", (req, res) => {
 // retrieve post's comments
 router.get("/post/:id", (req, res) => {
     let postId = req.params.id
-    Post.findById(postId).populate({ path: "comments", populate: { path: "userId" } }).exec((err, post) => {
-        console.log(post)
-        res.json(post.comments.reverse())
-    })
+    Post.findById(postId)
+        .populate({ path: "comments", populate: { path: "userId" } })
+        .exec((err, post) => {
+
+            res.json(post.comments.reverse())
+        })
 })
 
 // create one comment
@@ -61,16 +63,18 @@ router.post("/create/:userId/:postId", (req, res) => {
                                     let newCommentList = post.comments;
                                     newCommentList.push(com._id);
                                     Post.findByIdAndUpdate(postId,
-                                        { comments: newCommentList })
-                                        .populate("comments")
-                                        .exec((err, post) => {
+                                        { comments: newCommentList }, (err, post) => {
                                             if (!err) {
-                                                console.log(post)
-                                                res.json(post.comments.reverse())
+                                                Post.findById(postId)
+                                                    .populate("comments")
+                                                    .exec((err, post) => {
+                                                        !err ? res.json(post.comments) : console.log(err)
+                                                    })
                                             } else {
                                                 console.log(err)
                                             }
-                                        });
+                                        })
+
                                 } else {
                                     console.log(err);
                                 }
@@ -102,12 +106,51 @@ router.put("/update/:id", (req, res) => {
 });
 
 // delete one comment
-router.delete("/delete/:id", (req, res) => {
-    const id = req.params.id;
-    Comment.findOneAndDelete({ _id: id }, (err, com) => {
-        err ? console.log(err) : (
-            console.log(`Comment with id: ${id} deleted!`)
-        )
+router.delete("/delete/:commentId/:userId/:postId", (req, res) => {
+    const commentId = req.params.commentId;
+    const userId = req.params.userId;
+    const postId = req.params.postId;
+    // find comment and delete from database
+    Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
+        if (!err) {
+            // find the comment's associated user
+            User.findById(userId, (err, data) => {
+                if (!err) {
+                    let newUserCommentList = data.comments.filter((id) => {
+                        id === commentId ? false : true;
+                    })
+                    // update the users comments list 
+                    User.findByIdAndUpdate(userId, { comments: newUserCommentList }, (err, data) => {
+                        if (!err) {
+                            // find associated post
+                            Post.findById(postId, (err, data) => {
+                                if (!err) {
+                                    let newPostCommentList = data.comments.filter((id) => {
+                                        id === commentId ? false : true;
+                                    })
+                                    // update post comment list 
+                                    Post.findByIdAndUpdate(postId, { comments: newPostCommentList }, (err, data) => {
+                                        if (!err) {
+                                            console.log(`Comment with id: ${commentId} deleted!`)
+                                            res.json({ status: "success" })
+                                        } else {
+                                            console.log(err)
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+        } else {
+
+        }
+
+
+
+
     })
 })
 

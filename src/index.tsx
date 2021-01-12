@@ -63,14 +63,16 @@ const App = () => {
                     <Route path="/categories/posts/:catId">
                         <PostsView user={user} />
                     </Route>
-                    <Route exact path="/posts/:id" >
-                        <PostView user={user} />
-                    </Route>
-                    <Route path="/posts/edit/:catId/:postId">
+
+                    <Route exact path="/posts/edit/:catId/:postId">
                         <PostEditView user={user} />
                     </Route>
+
                     <Route path="/posts/create/:catId">
                         <PostCreateView user={user} />
+                    </Route>
+                    <Route exact path="/posts/:catId/:postId" >
+                        <PostView user={user} />
                     </Route>
 
                 </Switch>

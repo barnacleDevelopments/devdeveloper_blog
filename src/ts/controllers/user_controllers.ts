@@ -62,7 +62,10 @@ class User {
 
     async isAuthenticated() {
         let recievedData: UserComponentData | ResponseStatus = {
-            _id: "", status: false, role: ""
+            _id: "",
+            status: false,
+            role: "",
+            username: ""
         };
 
         await fetch(`http://localhost:${PORT}/isloggedin`, {

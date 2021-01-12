@@ -1,7 +1,8 @@
 import React from "react";
 import { UserComponentData } from "../interfaces/user_interfaces";
 interface CommentComponent {
-    id: string;
+    commentId: string;
+    postId: string;
     content: string;
     date: string;
     username: string;

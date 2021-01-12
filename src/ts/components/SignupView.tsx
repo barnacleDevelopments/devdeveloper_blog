@@ -25,6 +25,10 @@ interface SignupViewComponent {
 
 const SignupView: React.FunctionComponent<SignupViewComponent> = ({ user }) => {
 
+
+
+
+
     return (
         <Body>
             {user.status ?

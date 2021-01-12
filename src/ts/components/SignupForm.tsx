@@ -51,7 +51,7 @@ const SignupForm: React.FunctionComponent = () => {
                 <input type="text" name="password" placeholder="Enter password..." />
             </div>
             <div>
-                <input type="text" name="password" placeholder="Enter password..." />
+                <input type="text" placeholder="Enter password..." />
             </div>
             <div>
                 <button type="submit">Sign Up</button>

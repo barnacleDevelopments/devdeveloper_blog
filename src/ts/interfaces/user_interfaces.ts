@@ -16,7 +16,8 @@ export interface UserData {
 export interface UserComponentData {
     _id: string,
     status: boolean,
-    role: string
+    role: string,
+    username: string
 }
 
 export interface NewUserData {
