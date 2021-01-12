@@ -28,4 +28,6 @@ export interface UserFormData {
     [index: string]: string,
     username: string,
     password: string
-} 
+}
+
+export type UserStatus = boolean

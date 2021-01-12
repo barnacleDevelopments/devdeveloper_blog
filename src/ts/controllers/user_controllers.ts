@@ -8,28 +8,33 @@ FILE: user_controller.ts
 const PORT = 5000;
 
 // INTERFACES
-import { UserData, UserComponentData, NewUserData } from "../interfaces/user_interfaces";
+import { UserData, UserComponentData } from "../interfaces/user_interfaces";
+
+
+type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
 
 class User {
     constructor() { }
 
-    async login(username: string, password: string) {
-        let recievedData: NewUserData = {
-            username: username,
-            password: password
-        }
-        await fetch(`http://localhost:${PORT}/login`, {
+    async logout(): Promise<ResponseStatus> {
+        let recievedData: ResponseStatus = { status: "pending" }
+
+        await fetch(`http://localhost:${PORT}/logout`, {
             method: "POST",
             mode: "cors",
             headers: {
-                "Content-Type": 'application/x-www-form-urlencoded'
-            },
-            body: JSON.stringify(recievedData)
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error("Network response not ok.")
+                "Content-Type": "application/json",
+                Accept: "application/json"
             }
-        }).catch(err => console.log(err))
+        })
+            .then(response => response.json())
+            .then(data => recievedData = data)
+            .catch(err => {
+                console.log(err)
+                recievedData = { status: "failure" }
+            })
+
+        return recievedData;
     }
 
     async get() {
@@ -56,7 +61,9 @@ class User {
     }
 
     async isAuthenticated() {
-        let recievedData: UserComponentData = { _id: "", status: false, role: "" };
+        let recievedData: UserComponentData | ResponseStatus = {
+            _id: "", status: false, role: ""
+        };
 
         await fetch(`http://localhost:${PORT}/isloggedin`, {
             method: "GET",

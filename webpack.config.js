@@ -28,6 +28,17 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'public/images/[name].[ext]',
+            },
+          },
+        ],
+      }
     ],
   },
 

@@ -18,18 +18,18 @@ export function isLoggedIn(req, res, next) {
 }
 
 router.post('/login', passport.authenticate('local-login', { failureRedirect: '/' }), (req, res) => {
-    res.redirect("/")
+    res.redirect("/");
 
 });
 
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/' }), (req, res) => {
-    res.redirect("/")
+    res.redirect("/");
 
 });
 
-router.post("/signout", (req, res) => {
+router.post("/logout", (req, res) => {
     req.logout();
-    res.redirect("/")
+    res.json({ status: "success", message: "User successfully logged out." })
 })
 
 router.get("/user", isLoggedIn, (req, res) => {
@@ -45,7 +45,7 @@ router.get("/isloggedin", isLoggedIn, (req, res) => {
         let user = { _id: req.user._id, status: true, role: req.user.role }
         res.json(user)
     } else {
-        res.redirect("/categories")
+        res.json({ status: "failure", message: "User successfully logged out." })
     }
 })
 

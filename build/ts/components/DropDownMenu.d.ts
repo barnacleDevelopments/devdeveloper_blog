@@ -3,6 +3,7 @@ import { UserComponentData } from "../interfaces/user_interfaces";
 interface MenuItem {
     link: string;
     name: string;
+    func?(): any;
 }
 interface DropDownMenuInterface {
     menuItems: MenuItem[];

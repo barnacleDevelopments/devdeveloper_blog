@@ -27,7 +27,6 @@ interface CategoriesViewComponent {
     user: UserComponentData;
 }
 
-
 const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user }) => {
     const [categories, setCategories] = useState<CategoryData[]>([{
         _id: "",

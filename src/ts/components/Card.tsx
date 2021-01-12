@@ -6,7 +6,6 @@ FILE: Card.tsx
 
 // DEPENDENCIES
 import * as React from "react";
-
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -115,7 +114,6 @@ interface CategoryComponentData {
     img: string,
     user: UserComponentData
 }
-
 
 const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);

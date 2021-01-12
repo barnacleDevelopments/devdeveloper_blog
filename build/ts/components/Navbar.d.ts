@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { UserComponentData } from "../interfaces/user_interfaces";
 interface NavComponent {
     user: UserComponentData;

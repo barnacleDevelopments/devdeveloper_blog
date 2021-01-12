@@ -7,28 +7,13 @@ FILE: post_controller.ts
 // ENV VARIABLES
 const PORT = 5000;
 
-// INTERFACES
+// INTERFACES / TYPES
 import { PostData, NewPostData, EditPostData } from "../interfaces/post_interfaces";
+
+type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
 
 class Post {
     constructor() { }
-
-    async getAll() {
-        let recievedData;
-        await fetch(`http://localhost:${PORT}/posts`, {
-            method: "GET",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                recievedData = data;
-            });
-        return recievedData
-    }
 
     async getOne(id: string): Promise<PostData> {
         let recievedData: PostData = {
@@ -48,21 +33,14 @@ class Post {
             }
         })
             .then(response => response.json())
-            .then(data => {
-                recievedData = data;
-            });
+            .then(data => recievedData = data);
         return recievedData
     }
 
-    async create(newPost: NewPostData, catId: string): Promise<PostData> {
-        let recievedData: PostData = {
-            _id: "",
-            title: "",
-            subTitle: "",
-            content: "",
-            date: "",
-            catId: ""
-        };
+    async create(newPost: NewPostData, catId: string): Promise<ResponseStatus> {
+        let recievedData: ResponseStatus = {
+            status: "pending"
+        }
         await fetch(`http://localhost:${PORT}/posts/create/${catId}`, {
             method: "POST",
             mode: "cors",
@@ -73,14 +51,19 @@ class Post {
             body: JSON.stringify(newPost)
         })
             .then(response => response.json())
-            .then(data => {
-                recievedData = data;
-            });
+            .then(data => recievedData = data)
+            .catch(err => {
+                console.log(err)
+                recievedData = { status: "failure" }
+            })
+
         return recievedData;
     }
 
-    async update(id: string, newPost: EditPostData) {
-        console.log(newPost)
+    async update(id: string, newPost: EditPostData): Promise<ResponseStatus> {
+        let recievedData: ResponseStatus = {
+            status: "pending"
+        }
         await fetch(`http://localhost:${PORT}/posts/update/${id}`, {
             method: "PUT",
             mode: "cors",
@@ -90,14 +73,19 @@ class Post {
             },
             body: JSON.stringify(newPost)
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response not ok.")
-                }
-            }).catch(err => console.log(err))
+            .then(response => response.json())
+            .then(data => recievedData = data)
+            .catch(err => {
+                console.log(err)
+                recievedData = { status: "failure" }
+            })
+        return recievedData;
     }
 
-    async delete(id: string, catId: string) {
+    async delete(id: string, catId: string): Promise<ResponseStatus> {
+        let recievedData: ResponseStatus = {
+            status: "pending"
+        }
         console.log(catId, id)
         await fetch(`http://localhost:${PORT}/posts/delete/${id}/${catId}`, {
             method: "DELETE",
@@ -107,11 +95,13 @@ class Post {
                 Accept: "application/json"
             }
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response not ok.")
-                }
-            }).catch(err => console.log(err))
+            .then(response => response.json())
+            .then(data => recievedData = data)
+            .catch(err => {
+                console.log(err)
+                recievedData = { status: "failure" }
+            })
+        return recievedData;
     }
 }
 

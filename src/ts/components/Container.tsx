@@ -12,8 +12,6 @@ const ContainerBody = styled("div")`
     margin: 0 auto;
     margin-top: 74px;
 `
-
-
 const Container: React.FunctionComponent = (props) => (
     <ContainerBody>
         {props.children}

@@ -41,7 +41,7 @@ const App = () => {
 
     return (
         <Body>
-            {user.status ? null : <Redirect to="/categories" />}
+            {user.status ? console.log("User must authenticate") : <Redirect to="/categories" />}
             <Navbar user={user} />
             <Container>
                 <Switch>

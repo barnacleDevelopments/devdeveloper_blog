@@ -4,25 +4,27 @@ DATE: January 1st, 2021
 FILE: Navbar.tsx
 */
 
-import * as React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
-// import logoImage from "../../img/logo_3.png";
+import { Link, Redirect } from "react-router-dom";
+import * as logoImage from "../../img/logo_3.png";
 
 // HOOKS
 import useNav from "../hooks/useNav";
 
+// CONTROLLERS 
+import User from "../controllers/user_controllers";
+
 // INTERFACES
 import { UserComponentData } from "../interfaces/user_interfaces";
-
-// COMPONENTS
-import DropDownMenu from "../components/DropDownMenu";
 
 interface NavComponent {
     user: UserComponentData
 }
 
-// background-image: url("${logoImage}");
+// COMPONENTS
+import DropDownMenu from "../components/DropDownMenu";
+
 const Navbody = styled("nav")`
     background-color: #314455;
     width: 100%;
@@ -39,7 +41,7 @@ const Navbody = styled("nav")`
 const Logo = styled("div")`
     height: 40px;
     width: 40px;
-   
+    background-image: url("${logoImage.default}");
     background-repeat: no-repeat;
     background-size: 50px;
     background-position: center
@@ -68,10 +70,22 @@ const MediaLinks = styled("div")`
 `;
 
 const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
+    const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false)
     const { backBtnParams, backBtnStatus } = useNav();
+
+
+    const handleLogout = () => {
+        User.prototype.logout()
+            .then(() => {
+                setIsLoggedOut(true)
+                window.location.reload()
+            })
+
+    }
 
     return (
         <Navbody>
+            {isLoggedOut ? <Redirect to="/" /> : null}
             {backBtnStatus ? <Link to={backBtnParams}><BackBtn>
                 <i className="fas fa-arrow-left fa-3x"></i>
             </BackBtn></Link> : <Logo />}
@@ -80,11 +94,11 @@ const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
                 <a href="https://www.linkedin.com/in/devin-dev-davis-63008412b"><i className="fab fa-linkedin fa-2x"></i></a>
                 <a href="https://github.com/barnacleDevelopments"><i className="fab fa-github-alt fa-2x"></i></a>
 
-                <DropDownMenu user={user} menuItems={[
-                    { name: "Loggout", link: "/" },
+                {user.status ? <DropDownMenu user={user} menuItems={[
+                    { name: "Loggout", link: "/", func: handleLogout },
                     { name: "Settings", link: "/" }
-                ]} />
-                {user.status ? null : <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
+                ]} /> :
+                    <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
             </MediaLinks>
         </Navbody>
     )

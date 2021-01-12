@@ -1,10 +1,19 @@
 import { PostData, NewPostData, EditPostData } from "../interfaces/post_interfaces";
+declare type ResponseStatus = {
+    status: "success";
+    message?: "";
+} | {
+    status: "failure";
+    message?: "";
+} | {
+    status: "pending";
+    message?: "";
+};
 declare class Post {
     constructor();
-    getAll(): Promise<undefined>;
     getOne(id: string): Promise<PostData>;
-    create(newPost: NewPostData, catId: string): Promise<PostData>;
-    update(id: string, newPost: EditPostData): Promise<void>;
-    delete(id: string, catId: string): Promise<void>;
+    create(newPost: NewPostData, catId: string): Promise<ResponseStatus>;
+    update(id: string, newPost: EditPostData): Promise<ResponseStatus>;
+    delete(id: string, catId: string): Promise<ResponseStatus>;
 }
 export default Post;
