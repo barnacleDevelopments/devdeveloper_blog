@@ -110,15 +110,16 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
             <PostBody user={user} id={id} title={post.title} content={post.content} subTitle={""} />
             <Title title="COMMENTS" />
             {user.status ? <CommentForm createComment={createComment} /> : null}
+            {user.status ? null : <Link to="/login">Login</Link>}
             {comments.length <= 0 ?
                 <div>
                     <h2>No comments... <br />be the first!</h2>
-                    <Link to="/login">Login</Link>
                 </div>
 
                 : comments.map((comment) => {
                     return <CommentBody username="f" key={comment._id} user={user} id={comment._id} content={comment.content} date={comment.date} />
                 })}
+
         </Body>
     )
 }

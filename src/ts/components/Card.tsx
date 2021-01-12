@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 import Category from "../controllers/category_controller";
 import { useState } from "react";
 
+// ASSETS 
+import CardPhoto from "../../img/logo.png"
+
 
 const CardBody = styled("div")`
     background-color: #314455;
@@ -121,12 +124,13 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
     const handleDelete = () => {
         setIsDeleted(true);
         Category.prototype.delete(catId);
+        console.log(img)
     }
 
     if (!isDeleted) {
         return (
             <CardBody>
-                <CardImg src={img} />
+                <CardImg src={CardPhoto} />
                 <CardCount>{count}</CardCount>
                 <CardContent>
                     <h2>{name ? name : "No Name"}</h2>

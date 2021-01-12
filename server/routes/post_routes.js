@@ -10,8 +10,7 @@ import express from "express";
 import Post from "../models/post_model";
 import Category from "../models/category_model";
 
-//MIDDLEWARE
-import upload from "../middlewares/uploadMiddleware";
+
 
 const router = express.Router();
 

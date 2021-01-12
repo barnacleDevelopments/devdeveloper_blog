@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 // CONTROLLERS
 import Post from "../controllers/post_controller";
 
+// ASSETS
+import CardPhoto from "../../img/logo.png"
+
 // INTERFACES
 import { UserComponentData } from "../interfaces/user_interfaces";
 interface PostData {
@@ -52,6 +55,9 @@ const PostSnipBody = styled("div")`
         padding: 6px;
         border-radius: 30px;
         color: #f5f5f5;
+    }
+    img {
+        width: 100%;
     }
 
 `
@@ -104,7 +110,7 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
     if (!isDeleted) {
         return (
             <PostSnipBody>
-                <img src="./" />
+                <img src={CardPhoto} />
                 <PostSnipContent>
                     <h2>{title ? title : "No Title"}</h2>
                     <p>{content ? content : "This post has no content."}</p>
