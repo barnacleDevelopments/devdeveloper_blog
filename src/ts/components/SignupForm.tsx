@@ -6,6 +6,10 @@ FILE: SignupForm.tsx
 
 import React from "react";
 import styled from "@emotion/styled";
+import { useForm } from "react-hook-form";
+
+/// CONTROLLERS
+import User from "../controllers/user_controllers";
 
 const Form = styled("form")`
     background-color: #314455;
@@ -34,24 +38,66 @@ const Form = styled("form")`
         color: #f5f5f5;
         font-weight: bold;
     }
+    p {
+        margin-bottom: 13px;
+    }
 
 
 `;
 
 
 const SignupForm: React.FunctionComponent = () => {
+    const { register, getValues, handleSubmit, errors } = useForm();
+
+    const onSubmit = (data: NewUserFormData) => {
+        User.prototype.signup(data.username, data.password)
+            .then(data => console.log(data))
+    }
 
     return (
-        <Form action="/signup" method="post">
+        <Form action="/signup" method="post" onSubmit={handleSubmit(onSubmit)}>
             <h1>SIGN UP</h1>
             <div>
-                <input type="text" name="username" placeholder="Enter username..." />
+                <input aria-invalid={errors.name ? "true" : "false"} type="text" name="username" placeholder="Enter username..." ref={register({ required: true, minLength: 6, maxLength: 20 })} />
+                {/* ERROR MESSAGES */}
+                {errors.username && (
+                    <p>Field required.</p>
+                )}
+                {errors.username && errors.username.type === "maxLength" && (
+                    <p>Max username length exeeded.</p>
+                )}
+                {errors.username && errors.username.type === "minLength" && (
+                    <p>Username length is too short.</p>
+                )}
             </div>
             <div>
-                <input type="text" name="password" placeholder="Enter password..." />
+                <input aria-invalid={errors.name ? "true" : "false"} type="text" name="password" placeholder="Enter password..." ref={register({
+                    required: true, minLength: 8, maxLength: 20, validate: {
+                        passMatch: () => getValues("password") === getValues("repeatPassword")
+                    }
+                })} />
+                {/* ERROR MESSAGES */}
+                {errors.password && (
+                    <p>Field required.</p>
+                )}
+                {errors.password && errors.password.type === "maxLength" && (
+                    <p>Max password length exeeded.</p>
+                )}
+                {errors.password && errors.password.type === "minLength" && (
+                    <p>Password length too short.</p>
+                )}
             </div>
             <div>
-                <input type="text" placeholder="Enter password..." />
+                <input aria-invalid={errors.name ? "true" : "false"} type="text" name="repeatPassword" placeholder="Enter password..." ref={register({
+                    required: true, minLength: 8, maxLength: 20, validate: {
+                        passMatch: () => getValues("password") === getValues("repeatPassword")
+                    }
+                })} />
+                {/* ERROR MESSAGES */}
+
+                {errors.password && errors.password.type === "passMatch" && (
+                    <p>Passwords must match</p>
+                )}
             </div>
             <div>
                 <button type="submit">Sign Up</button>

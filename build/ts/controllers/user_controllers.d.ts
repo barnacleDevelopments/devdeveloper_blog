@@ -10,6 +10,7 @@ declare type ResponseStatus = {
 };
 declare class User {
     constructor();
+    signup(username: string, password: string): Promise<ResponseStatus>;
     login(username: string, password: string): Promise<ResponseStatus>;
     logout(): Promise<ResponseStatus>;
     get(): Promise<UserData>;

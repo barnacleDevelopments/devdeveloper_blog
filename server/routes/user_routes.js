@@ -23,8 +23,7 @@ router.post('/login', passport.authenticate('local-login', { failureRedirect: '/
 });
 
 router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/' }), (req, res) => {
-    console.log("hit")
-    res.redirect("/");
+    res.json({ status: "success" })
 
 });
 
@@ -54,7 +53,5 @@ router.get("/isloggedin", isLoggedIn, (req, res) => {
         res.json({ status: "failure", message: "User successfully logged out." })
     }
 })
-
-
 
 export default router

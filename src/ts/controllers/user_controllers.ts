@@ -13,13 +13,34 @@ type ResponseStatus = { status: "success", message?: "" } | { status: "failure",
 class User {
     constructor() { }
 
-    async login(username: string, password: string): Promise<ResponseStatus> {
+    async signup(username: string, password: string): Promise<ResponseStatus> {
         let recievedData: ResponseStatus = { status: "pending" }
 
         const searchParams = new URLSearchParams()
         searchParams.append("username", username)
         searchParams.append("password", password)
 
+        await fetch(`http://localhost:5000/signup`, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Accept: "application/x-www-form-urlencoded"
+            },
+            body: searchParams
+        }).then(response => response.json())
+            .then(data => recievedData = data)
+            .catch(err => console.log(err))
+
+        return recievedData;
+    }
+
+    async login(username: string, password: string): Promise<ResponseStatus> {
+        let recievedData: ResponseStatus = { status: "pending" }
+
+        const searchParams = new URLSearchParams()
+        searchParams.append("username", username)
+        searchParams.append("password", password)
 
         await fetch(`http://localhost:5000/login`, {
             method: "POST",

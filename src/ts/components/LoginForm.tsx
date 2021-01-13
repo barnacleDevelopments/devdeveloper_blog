@@ -24,6 +24,7 @@ const Form = styled("form")`
     color: #f5f5f5;
     border-radius: 4px;
     text-align: center;
+    margin-top: 240px;
     h1 {
         font-size: 2.2em;
         margin-bottom: 16px;
@@ -59,12 +60,15 @@ const Form = styled("form")`
         font-weight: bold;
         text-decoration: none;
     }
+    p {
+        padding-bottom: 13px;
+    }
 
 
 `;
 
 const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ user }) => {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, errors } = useForm();
     const [formSuccess, setFormSucess] = useState<Boolean>(false);
 
     const onSubmit = (data: UserFormData) => {
@@ -79,11 +83,14 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ user }) => {
             <h1>LOGIN</h1>
             {user.status ? <Redirect to="/categories" /> : null}
             <div>
-                <input placeholder="Username..." type="text" name="username" ref={register({ required: true, maxLength: 3 })} />
+                <input placeholder="Username..." type="text" name="username" ref={register({ required: true, minLength: 6, maxLength: 20 })} />
             </div>
             <div>
-                <input placeholder="Password..." type="password" name="password" ref={register({ required: true })} />
+                <input placeholder="Password..." type="password" name="password" ref={register({ required: true, minLength: 8, maxLength: 20 })} />
             </div>
+            {(errors.username || errors.password) && (
+                <p>Password or username incorrect</p>
+            )}
             <div>
                 <button type="submit">Login</button>
                 <button><Link to="/signup">Sign up</Link></button>

@@ -31,4 +31,10 @@ interface UserFormData {
     password: string
 }
 
+interface NewUserFormData {
+    username: string,
+    password: string,
+    password: string
+}
+
 type UserStatus = boolean
