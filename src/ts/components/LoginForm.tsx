@@ -4,24 +4,18 @@ DATE: January 6th, 2021
 FILE: LoginForm.tsx
 */
 
-import React from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
-
-
-
-// INTERFACES
-import { UserComponentData } from "../interfaces/user_interfaces";
-
+// CONTROLLERS
+import User from "../controllers/user_controllers";
 
 interface LoginFormComponent {
     user: UserComponentData;
 }
-
-
-
 
 // STYLES
 const Form = styled("form")`
@@ -70,17 +64,25 @@ const Form = styled("form")`
 `;
 
 const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ user }) => {
+    const { register, handleSubmit } = useForm();
+    const [formSuccess, setFormSucess] = useState<Boolean>(false);
+
+    const onSubmit = (data: UserFormData) => {
+        User.prototype.login(data.username, data.password)
+            .then(() => setFormSucess(true))
+    }
 
 
     return (
-        <Form action="/login" method="post">
+        <Form action="/login" method="post" onSubmit={handleSubmit(onSubmit)}>
+            {formSuccess ? <Redirect to="/categories" /> : null}
             <h1>LOGIN</h1>
             {user.status ? <Redirect to="/categories" /> : null}
             <div>
-                <input placeholder="Username..." type="text" name="username" />
+                <input placeholder="Username..." type="text" name="username" ref={register({ required: true, maxLength: 3 })} />
             </div>
             <div>
-                <input placeholder="Password..." type="password" name="password" />
+                <input placeholder="Password..." type="password" name="password" ref={register({ required: true })} />
             </div>
             <div>
                 <button type="submit">Login</button>

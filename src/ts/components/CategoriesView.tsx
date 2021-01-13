@@ -20,9 +20,6 @@ const Body = styled("section")`
 `;
 
 // INTERFACES
-import { CategoryData } from "../interfaces/category_interfaces";
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 interface CategoriesViewComponent {
     user: UserComponentData;
 }

@@ -12,8 +12,6 @@ import styled from "@emotion/styled";
 import Comment from "../controllers/comment_controler";
 
 // INTERFACES 
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 interface CommentComponent {
     commentId: string,
     postId: string,

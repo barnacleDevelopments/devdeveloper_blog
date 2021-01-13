@@ -1,4 +1,3 @@
-import { UserData, UserComponentData } from "../interfaces/user_interfaces";
 declare type ResponseStatus = {
     status: "success";
     message?: "";
@@ -11,6 +10,7 @@ declare type ResponseStatus = {
 };
 declare class User {
     constructor();
+    login(username: string, password: string): Promise<ResponseStatus>;
     logout(): Promise<ResponseStatus>;
     get(): Promise<UserData>;
     isAuthenticated(): Promise<UserComponentData>;

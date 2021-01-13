@@ -14,14 +14,10 @@ import CategoryForm from "./CategoryForm";
 import Category from "../controllers/category_controller";
 
 // INTERFACES 
-import { NewCategoryData } from "../interfaces/category_interfaces";
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 interface ParamTypes {
     catId: string
 }
 
-// INTERFACES 
 interface CategoryEditViewComponent {
     user: UserComponentData;
 }

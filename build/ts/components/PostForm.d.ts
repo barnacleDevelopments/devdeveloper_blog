@@ -1,5 +1,4 @@
 import * as React from "react";
-import { PostFormData } from "../interfaces/post_interfaces";
 interface PostFormComponent {
     postId?: string;
     title: string;

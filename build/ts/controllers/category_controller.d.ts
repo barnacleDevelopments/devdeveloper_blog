@@ -1,4 +1,3 @@
-import { CategoryData, NewCategoryData } from "../interfaces/category_interfaces";
 declare class Category {
     constructor();
     getAll(): Promise<CategoryData[]>;

@@ -5,7 +5,7 @@ FILE: comment_interfaces.ts
 */
 
 // INTERFACES
-export interface CommentData {
+interface CommentData {
     _id: string,
     content: string,
     date: string,
@@ -13,13 +13,13 @@ export interface CommentData {
     postId: string,
 }
 
-export interface NewCommentData {
+interface NewCommentData {
     _id: string,
     content: string,
     date: string
 }
 
-export interface CommentFormData {
+interface CommentFormData {
     content: string,
     date: string
 }

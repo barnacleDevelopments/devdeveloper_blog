@@ -13,17 +13,12 @@ import PostForm from "./PostForm";
 // CONTROLERS
 import Post from "../controllers/post_controller";
 
-
 // INTERFACES 
-import { UserComponentData } from "../interfaces/user_interfaces";
-import { EditPostData } from "../interfaces/post_interfaces";
-
 interface Params {
     postId: string,
     catId: string
 }
 
-// INTERFACES 
 interface EditViewComponent {
     user: UserComponentData
 }

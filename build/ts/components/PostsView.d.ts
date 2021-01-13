@@ -1,5 +1,4 @@
 import * as React from "react";
-import { UserComponentData } from "../interfaces/user_interfaces";
 interface PostsViewComponent {
     user: UserComponentData;
 }

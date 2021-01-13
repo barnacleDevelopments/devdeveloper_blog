@@ -5,7 +5,7 @@ FILE: user_interfaces.ts
 */
 
 // INTERFACES
-export interface UserData {
+interface UserData {
     _id: string,
     username: string,
     password: string,
@@ -13,22 +13,22 @@ export interface UserData {
     comments: []
 }
 
-export interface UserComponentData {
+interface UserComponentData {
     _id: string,
     status: boolean,
     role: string,
     username: string
 }
 
-export interface NewUserData {
+interface NewUserData {
     username: string,
     password: string
 }
 
-export interface UserFormData {
+interface UserFormData {
     [index: string]: string,
     username: string,
     password: string
 }
 
-export type UserStatus = boolean
+type UserStatus = boolean

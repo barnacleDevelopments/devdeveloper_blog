@@ -11,8 +11,6 @@ import styled from "@emotion/styled";
 import EasyDate from "../classes/EasyDate";
 
 // INTERFACES
-import { CommentFormData } from "../interfaces/comment_interfaces";
-
 interface CommentFormComponent {
     createComment(comment: CommentFormData): void
 }

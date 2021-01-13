@@ -10,8 +10,6 @@ import styled from "@emotion/styled";
 import { Redirect } from "react-router-dom";
 
 // INTERFACES
-import { NewCategoryData, CategoryFormData } from "../interfaces/category_interfaces";
-
 interface CategoryFormComponent {
     name: string,
     desc: string,
@@ -19,9 +17,6 @@ interface CategoryFormComponent {
     isSubmited: boolean,
     submitFunc(data: NewCategoryData): void
 }
-
-
-
 
 const Body = styled("form")`
     padding: 10px;

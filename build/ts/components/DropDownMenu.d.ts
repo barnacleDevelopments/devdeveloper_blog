@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import { UserComponentData } from "../interfaces/user_interfaces";
 interface MenuItem {
     link: string;
     name: string;

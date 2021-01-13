@@ -7,9 +7,7 @@ FILE: post_controller.ts
 // ENV VARIABLES
 const PORT = 5000;
 
-// INTERFACES / TYPES
-import { PostData, NewPostData, EditPostData } from "../interfaces/post_interfaces";
-
+// INTERFACES
 type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
 
 class Post {

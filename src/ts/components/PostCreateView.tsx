@@ -12,10 +12,6 @@ import { Redirect, useParams } from "react-router-dom";
 // CONTROLERS
 import Post from "../controllers/post_controller";
 
-// INTERFACES
-import { NewPostData } from "../interfaces/post_interfaces";
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 // INTERFACES 
 interface PostCreateViewComponent {
     user: UserComponentData;

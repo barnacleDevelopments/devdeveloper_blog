@@ -1,4 +1,3 @@
-import { PostData, NewPostData, EditPostData } from "../interfaces/post_interfaces";
 declare type ResponseStatus = {
     status: "success";
     message?: "";

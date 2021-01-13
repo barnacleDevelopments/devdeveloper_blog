@@ -15,9 +15,6 @@ import Category from "../controllers/category_controller";
 import { Redirect } from "react-router-dom";
 
 // INTERFACES 
-import { NewCategoryData } from "../interfaces/category_interfaces";
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 interface CategoryCreateViewComponent {
     user: UserComponentData
 }

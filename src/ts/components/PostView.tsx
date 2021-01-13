@@ -21,20 +21,14 @@ import Title from "./Title";
 import CommentForm from "./CommentForm";
 
 // INTERFACES 
-import { UserComponentData } from "../interfaces/user_interfaces";
-import { NewCommentData } from "../interfaces/comment_interfaces";
-import { NewPostData } from "../interfaces/post_interfaces";
-
 interface ParamTypes {
     postId: string,
     catId: string
 }
 
-// INTERFACES 
 interface PostView {
     user: UserComponentData;
 }
-
 
 // STYLES
 const Body = styled("section")`

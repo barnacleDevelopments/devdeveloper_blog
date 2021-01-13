@@ -16,8 +16,6 @@ import useNav from "../hooks/useNav";
 import User from "../controllers/user_controllers";
 
 // INTERFACES
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 interface NavComponent {
     user: UserComponentData
 }

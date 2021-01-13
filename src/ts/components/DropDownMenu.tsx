@@ -7,9 +7,6 @@ FILE: DropDownMenu.tsx
 import React, { FunctionComponent, useState } from "react";
 import styled from "@emotion/styled";
 
-// INTERFACES
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 const Body = styled("div")`
     position: relative;
     height: 100%;

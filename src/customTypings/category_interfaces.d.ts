@@ -4,10 +4,10 @@ DATE: January 7th, 2021
 FILE: category_interfaces.ts
 */
 
-import { PostData } from "../interfaces/post_interfaces";
+
 
 // INTERFACES
-export interface CategoryData {
+interface CategoryData {
     _id: string,
     name: string,
     desc: string,
@@ -16,12 +16,12 @@ export interface CategoryData {
     posts: PostData[]
 }
 
-export interface NewCategoryData {
+interface NewCategoryData {
     name: string,
     desc: string,
 }
 
-export interface CategoryFormData {
+interface CategoryFormData {
     [index: string]: string,
     name: string,
     desc: string

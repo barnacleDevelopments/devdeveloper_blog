@@ -11,9 +11,6 @@ import { Redirect } from "react-router-dom";
 // COMPONENTS
 import LoginForm from "./LoginForm"
 
-// INTERFACES
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 // INTERFACES 
 interface LoginViewComponent {
     user: UserComponentData;

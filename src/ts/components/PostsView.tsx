@@ -19,9 +19,6 @@ import CreateBtn from "./CreateBtn";
 import Category from "../controllers/category_controller";
 
 // INTERFACES
-import { PostData } from "../interfaces/post_interfaces"
-import { UserComponentData } from "../interfaces/user_interfaces";
-
 interface ParamTypes {
     catId: string
 }

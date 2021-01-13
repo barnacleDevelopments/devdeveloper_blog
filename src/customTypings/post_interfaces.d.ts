@@ -5,7 +5,7 @@ FILE: post_interfaces.ts
 */
 
 // INTERFACES
-export interface PostData {
+interface PostData {
     _id: string,
     title: string,
     subTitle: string,
@@ -14,18 +14,18 @@ export interface PostData {
     date: string
 }
 
-export interface NewPostData {
+interface NewPostData {
     title: string,
     content: string
 }
 
-export interface PostFormData {
+interface PostFormData {
     [index: string]: string,
     title: string,
     content: string,
 }
 
-export interface EditPostData {
+interface EditPostData {
     title: string,
     content: string
 }

@@ -17,7 +17,6 @@ import Post from "../controllers/post_controller";
 import CardPhoto from "../../img/logo.png"
 
 // INTERFACES
-import { UserComponentData } from "../interfaces/user_interfaces";
 interface PostData {
     postId: string,
     title: string,

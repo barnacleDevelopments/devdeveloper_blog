@@ -7,9 +7,6 @@ FILE: category_controller.ts
 // ENV VARIABLES
 const PORT = 5000;
 
-// INTERFACES
-import { CategoryData, NewCategoryData } from "../interfaces/category_interfaces";
-
 class Category {
     constructor() { }
 

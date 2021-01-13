@@ -1,5 +1,4 @@
 import * as React from "react";
-import { NewCategoryData } from "../interfaces/category_interfaces";
 interface CategoryFormComponent {
     name: string;
     desc: string;

@@ -1,4 +1,3 @@
-import { CommentData, NewCommentData } from "../interfaces/comment_interfaces";
 declare type ResponseStatus = {
     status: "success";
     message?: "";

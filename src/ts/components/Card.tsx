@@ -16,6 +16,15 @@ import { useState } from "react";
 // ASSETS 
 import CardPhoto from "../../img/logo.png"
 
+// INTERFACES
+interface CategoryComponentData {
+    catId: string,
+    name: string,
+    desc: string,
+    count: number,
+    img: string,
+    user: UserComponentData
+}
 
 const CardBody = styled("div")`
     background-color: #314455;
@@ -106,17 +115,6 @@ const CardCount = styled("div")`
     vertical-align: middle;
     display: table-cell;
 `;
-
-import { UserComponentData } from "../interfaces/user_interfaces";
-
-interface CategoryComponentData {
-    catId: string,
-    name: string,
-    desc: string,
-    count: number,
-    img: string,
-    user: UserComponentData
-}
 
 const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { UserComponentData } from "../interfaces/user_interfaces";
-export interface PostComponent {
+interface PostComponent {
     postId: string;
     catId: string;
     title: string;

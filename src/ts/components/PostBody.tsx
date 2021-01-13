@@ -70,9 +70,7 @@ const Content = styled("div")`
 import CardPhoto from "../../img/logo.png"
 
 // INTERFACES
-import { UserComponentData } from "../interfaces/user_interfaces";
-
-export interface PostComponent {
+interface PostComponent {
     postId: string,
     catId: string,
     title: string,

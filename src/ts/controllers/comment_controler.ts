@@ -7,11 +7,7 @@
 // ENV VARIABLES
 const PORT = 5000;
 
-// INTERFACES
-import { CommentData, NewCommentData } from "../interfaces/comment_interfaces";
 type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
-
-
 
 class Comment {
     constructor() { }

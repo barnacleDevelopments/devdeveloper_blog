@@ -18,7 +18,7 @@ export function isLoggedIn(req, res, next) {
 }
 
 router.post('/login', passport.authenticate('local-login', { failureRedirect: '/' }), (req, res) => {
-    res.redirect("/");
+    res.json({ status: "success" })
 
 });
 

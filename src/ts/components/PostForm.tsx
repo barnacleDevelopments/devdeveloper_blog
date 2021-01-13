@@ -10,8 +10,6 @@ import styled from "@emotion/styled";
 import { Redirect } from "react-router-dom";
 
 // INTERFACES 
-import { PostFormData } from "../interfaces/post_interfaces";
-
 interface PostFormComponent {
     postId?: string,
     title: string,

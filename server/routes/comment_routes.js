@@ -74,7 +74,6 @@ router.post("/create/:userId/:postId", (req, res) => {
                                                 console.log(err)
                                             }
                                         })
-
                                 } else {
                                     console.log(err);
                                 }
