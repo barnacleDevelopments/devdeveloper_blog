@@ -17,21 +17,18 @@ const Body = styled("section")`
 
 // INTERFACES 
 interface SignupViewComponent {
-    user: UserComponentData;
+    user: UserComponentData,
+    checkAuth(): void
 }
 
 
-const SignupView: React.FunctionComponent<SignupViewComponent> = ({ user }) => {
-
-
-
-
+const SignupView: React.FunctionComponent<SignupViewComponent> = ({ checkAuth, user }) => {
 
     return (
         <Body>
             {user.status ?
                 <Redirect to="/categories" /> : null}
-            <SignupForm />
+            <SignupForm checkAuth={checkAuth} />
         </Body>
     )
 }

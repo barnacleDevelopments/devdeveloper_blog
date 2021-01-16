@@ -11,4 +11,4 @@ const userValSchema = yup.object().shape({
     password: yup.string().required().trim().min(8).max(20)
 })
 
-export default userValSchema
+export default userValSchema;

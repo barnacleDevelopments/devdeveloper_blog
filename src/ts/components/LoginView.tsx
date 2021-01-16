@@ -13,7 +13,8 @@ import LoginForm from "./LoginForm"
 
 // INTERFACES 
 interface LoginViewComponent {
-    user: UserComponentData;
+    user: UserComponentData,
+    checkAuth(): void
 }
 
 const Body = styled("section")`
@@ -21,12 +22,12 @@ const Body = styled("section")`
 `;
 
 
-const LoginView: React.FunctionComponent<LoginViewComponent> = ({ user }) => {
+const LoginView: React.FunctionComponent<LoginViewComponent> = ({ checkAuth, user }) => {
 
     return (
         <Body>
             {user.status ? <Redirect to="/categories" /> : null}
-            <LoginForm user={user} />
+            <LoginForm checkAuth={checkAuth} user={user} />
         </Body>
     )
 }

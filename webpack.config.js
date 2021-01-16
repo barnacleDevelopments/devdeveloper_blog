@@ -7,7 +7,7 @@ module.exports = {
   target: "web",
   mode: "development",
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "server", "build"),
     filename: "bundle.js",
   },
   resolve: {

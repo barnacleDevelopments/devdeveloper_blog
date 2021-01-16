@@ -17,7 +17,8 @@ import User from "../controllers/user_controllers";
 
 // INTERFACES
 interface NavComponent {
-    user: UserComponentData
+    user: UserComponentData,
+    checkAuth(): void
 }
 
 // COMPONENTS
@@ -68,17 +69,18 @@ const MediaLinks = styled("div")`
 `;
 
 const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
-    const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false)
+    const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false);
     const { backBtnParams, backBtnStatus } = useNav();
 
 
     const handleLogout = () => {
         User.prototype.logout()
-            .then(() => {
-                setIsLoggedOut(true)
-                window.location.reload()
+            .then((data) => {
+                if (data.status === "success") {
+                    setIsLoggedOut(true)
+                    window.location.reload()
+                }
             })
-
     }
 
     return (

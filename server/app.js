@@ -76,7 +76,7 @@ passport.deserializeUser(function (id, done) {
 // initialize strategies
 useStrategies();
 
-// User.create({ username: "dev", password: "grape", role: "administrator" }, () => {
+// User.create({ username: "devin1984", password: "grapeness", role: "administrator" }, () => {
 
 // })
 
@@ -88,9 +88,9 @@ app.use("/comments", commentRoutes)
 
 
 app
-  .use(express.static(path.join(__dirname, '../build')))
+  .use(express.static(path.join(__dirname, './build')))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'));
+  res.sendFile(path.join(__dirname, './build/index.html'));
 });

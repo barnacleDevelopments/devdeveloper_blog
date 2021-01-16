@@ -14,7 +14,8 @@ import { useForm } from "react-hook-form";
 import User from "../controllers/user_controllers";
 
 interface LoginFormComponent {
-    user: UserComponentData;
+    user: UserComponentData,
+    checkAuth(): void
 }
 
 // STYLES
@@ -67,13 +68,20 @@ const Form = styled("form")`
 
 `;
 
-const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ user }) => {
+const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, user }) => {
     const { register, handleSubmit, errors } = useForm();
     const [formSuccess, setFormSucess] = useState<Boolean>(false);
 
     const onSubmit = (data: UserFormData) => {
         User.prototype.login(data.username, data.password)
-            .then(() => setFormSucess(true))
+            .then((data) => {
+                if (data.status === "success") {
+                    checkAuth();
+                    setFormSucess(true);
+                } else {
+
+                }
+            })
     }
 
 

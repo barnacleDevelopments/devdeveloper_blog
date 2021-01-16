@@ -1,3 +1,6 @@
 import React from "react";
-declare const SignupForm: React.FunctionComponent;
+interface SignupFormComponent {
+    checkAuth(): void;
+}
+declare const SignupForm: React.FunctionComponent<SignupFormComponent>;
 export default SignupForm;

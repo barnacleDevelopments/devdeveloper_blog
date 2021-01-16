@@ -1,7 +1,5 @@
 declare const _default: () => {
-    _id: string;
-    username: string;
-    status: boolean;
-    role: string;
+    user: UserComponentData;
+    checkIsLoggedIn: () => void;
 };
 export default _default;

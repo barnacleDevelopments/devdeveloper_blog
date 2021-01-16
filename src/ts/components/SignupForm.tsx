@@ -4,10 +4,10 @@ DATE: January 7th, 2021
 FILE: SignupForm.tsx
 */
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
-
+import { Redirect } from "react-router-dom";
 /// CONTROLLERS
 import User from "../controllers/user_controllers";
 
@@ -45,17 +45,30 @@ const Form = styled("form")`
 
 `;
 
+interface SignupFormComponent {
+    checkAuth(): void;
+}
 
-const SignupForm: React.FunctionComponent = () => {
+const SignupForm: React.FunctionComponent<SignupFormComponent> = ({ checkAuth }) => {
     const { register, getValues, handleSubmit, errors } = useForm();
+    const [formSuccess, setFormSucess] = useState<Boolean>(false);
 
     const onSubmit = (data: NewUserFormData) => {
         User.prototype.signup(data.username, data.password)
-            .then(data => console.log(data))
+            .then(data => {
+                if (data.status === "success") {
+                    setFormSucess(true);
+                    checkAuth();
+                } else {
+
+                }
+                console.log(data)
+            })
     }
 
     return (
         <Form action="/signup" method="post" onSubmit={handleSubmit(onSubmit)}>
+            {formSuccess ? <Redirect to="/categories" /> : null}
             <h1>SIGN UP</h1>
             <div>
                 <input aria-invalid={errors.name ? "true" : "false"} type="text" name="username" placeholder="Enter username..." ref={register({ required: true, minLength: 6, maxLength: 20 })} />

@@ -11,18 +11,22 @@ import { useState, useEffect } from "react";
 import User from "../controllers/user_controllers";
 
 export default () => {
-    const [user, setUser] = useState({
+    const [user, setUser] = useState<UserComponentData>({
         _id: "",
         username: "",
         status: false,
         role: ""
     });
 
-    useEffect(() => {
+    const checkIsLoggedIn = () => {
         User.prototype.isAuthenticated()
             .then(data => setUser(data))
             .catch(err => console.log(err))
+    }
+
+    useEffect(() => {
+        checkIsLoggedIn()
     }, [])
 
-    return user;
+    return { user, checkIsLoggedIn };
 }
