@@ -12,7 +12,9 @@ import EasyDate from "../classes/EasyDate";
 
 // INTERFACES
 interface CommentFormComponent {
-    createComment(comment: CommentFormData): void
+    createComment(comment: CommentFormData): void,
+    userId: string,
+    postId: string
 }
 
 const Body = styled("article")`
@@ -73,13 +75,15 @@ const Content = styled("div")`
     align-items: flex-start;
 `;
 
-const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment }) => {
+const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment, userId, postId }) => {
     const [commentData, setCommentData] = React.useState<CommentFormData>({ content: "", date: "" })
 
     const handleFormData = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         let comment = {
             content: e.target.value,
-            date: EasyDate.prototype.getRegDate()
+            date: EasyDate.prototype.getRegDate(),
+            userId: userId,
+            postId: postId
         }
         setCommentData(comment)
     }

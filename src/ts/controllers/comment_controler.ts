@@ -13,13 +13,12 @@ class Comment {
     constructor() { }
 
     async getFromPost(id: string) {
-        let recievedData: CommentData[] = [
+        let recievedData: CommentComponentData[] = [
             {
                 _id: "",
                 content: "",
                 date: "",
-                userId: "",
-                postId: "",
+                username: "",
             }
         ];
 
@@ -35,42 +34,20 @@ class Comment {
             .then(data => {
                 recievedData = data;
             });
+
         return recievedData;
     }
 
-    async getOne(id: string) {
-        let recievedData: CommentData = {
+    async create(userId: string, postId: string, newComment: NewCommentData): Promise<CommentComponentData> {
+        let recievedData: CommentComponentData = {
             _id: "",
             content: "",
             date: "",
-            userId: "",
-            postId: "",
-        }
+            username: ""
+        };
 
-        await fetch(`http://localhost:${PORT}/categories/${id}`, {
-            method: "GET",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                recievedData = data;
-            });
-        return recievedData;
-    }
+        console.log(newComment)
 
-
-    async create(userId: string, postId: string, newComment: NewCommentData): Promise<CommentData[]> {
-        let recievedData: CommentData[] = [{
-            _id: "",
-            content: "",
-            date: "",
-            userId: "",
-            postId: "",
-        }];
         await fetch(`http://localhost:${PORT}/comments/create/${userId}/${postId}`, {
             method: "POST",
             mode: "cors",

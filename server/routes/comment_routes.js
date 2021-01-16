@@ -17,7 +17,21 @@ import User from "../models/user_model";
 // retrieve all comments
 router.get("/", (req, res) => {
     Comment.find({}, (err, coms) => {
-        err ? console.log(err) : res.json(coms)
+        if (!err) {
+            const commentList = coms
+            let newCommentList = commentList.map((com) => {
+                return {
+                    _id: com._id,
+                    username: username,
+                    date: com.date,
+                    content: com.content
+                }
+            })
+            res.send(newCommentList)
+        } else {
+            console.log(err)
+        }
+
     })
 });
 
@@ -33,10 +47,26 @@ router.get("/:id", (req, res) => {
 router.get("/post/:id", (req, res) => {
     let postId = req.params.id
     Post.findById(postId)
-        .populate({ path: "comments", populate: { path: "userId" } })
+        .populate({ path: "comments" })
         .exec((err, post) => {
-
-            res.json(post.comments.reverse())
+            (async () => {
+                // wait for usernames to be added to each comment
+                await Promise.all(post.comments.map(async (com) => {
+                    let username
+                    // wait to retrieve user
+                    await User.findById(com.userId, (err, user) => {
+                        if (!err) {
+                            username = user.username
+                        }
+                    })
+                    return {
+                        _id: com._id,
+                        username: username,
+                        date: com.date,
+                        content: com.content
+                    }
+                })).then(comments => res.json(comments))
+            })()
         })
 })
 
@@ -45,6 +75,7 @@ router.post("/create/:userId/:postId", (req, res) => {
     const body = req.body;
     const userId = req.params.userId;
     const postId = req.params.postId;
+    console.log(body)
     // create new comment 
     Comment.create(body, (err, com) => {
         if (!err) {
@@ -68,7 +99,12 @@ router.post("/create/:userId/:postId", (req, res) => {
                                                 Post.findById(postId)
                                                     .populate("comments")
                                                     .exec((err, post) => {
-                                                        !err ? res.json(post.comments) : console.log(err)
+                                                        !err ? res.json({
+                                                            _id: com._id,
+                                                            username: user.username,
+                                                            date: com.date,
+                                                            content: com.content
+                                                        }) : console.log(err)
                                                     })
                                             } else {
                                                 console.log(err)

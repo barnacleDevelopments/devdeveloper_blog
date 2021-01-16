@@ -5,12 +5,11 @@ FILE: comment_interfaces.ts
 */
 
 // INTERFACES
-interface CommentData {
+interface CommentComponentData {
     _id: string,
     content: string,
     date: string,
-    userId: string,
-    postId: string,
+    username: string,
 }
 
 interface NewCommentData {

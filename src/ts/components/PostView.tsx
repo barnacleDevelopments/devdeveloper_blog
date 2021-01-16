@@ -83,14 +83,14 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
     }, []);
 
 
-    const [comments, setComments] = useState<NewCommentData[]>([])
+    const [comments, setComments] = useState<CommentComponentData[]>([])
 
     // create new comment on post
     const createComment = (comment: NewCommentData) => {
         Comment.prototype.create(user._id, postId, comment)
             .then(data => {
-                console.log(data)
-                setComments(data)
+                let newCommentList: CommentComponentData[] = comments
+                setComments([data, ...newCommentList])
             })
     }
 
@@ -98,14 +98,15 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
     useEffect(() => {
         Comment.prototype.getFromPost(postId)
             .then(data => setComments(data))
+
     }, [])
 
-
+    console.log(comments)
     return (
         <Body>
             <PostBody user={user} postId={postId} catId={catId} title={post.title} content={post.content} subTitle={""} />
             <Title title="COMMENTS" />
-            {user.status ? <CommentForm createComment={createComment} /> : null}
+            {user.status ? <CommentForm createComment={createComment} userId={user._id} postId={postId} /> : null}
             {user.status ? null : <Link to="/login">Login</Link>}
             {comments.length <= 0 ?
                 <Fallback>
@@ -113,7 +114,8 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
                 </Fallback>
 
                 : comments.map((comment) => {
-                    return <CommentBody username="" key={comment._id} user={user} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
+                    console.log(comment.username)
+                    return <CommentBody username={comment.username} key={comment._id} user={user} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
                 })}
 
         </Body>
