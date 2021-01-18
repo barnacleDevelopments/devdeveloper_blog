@@ -12,8 +12,7 @@ import cors from "cors";
 import path from "path";
 import session from "express-session";
 import passport from 'passport';
-
-import cookieParser from "cookie-parser";
+import helmet from "helmet";
 
 // LOCAL STRATEGIES
 import useStrategies from "./config/passport_strategies";
@@ -44,19 +43,31 @@ db.once('open', function () {
 });
 
 // MIDDLEWARE 
+// app.use(helmet()); // set HTTP headers
 app.use(cors());
-
-// CONFIGURE PASSPORT 
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// EXPRESS SESSION
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 app.use(session({
-  secret: 'keyboard monkey',
-  resave: true,
-  saveUninitialized: true
-}));
+  name: "session",
+  secret: '4t@fy',
+  resave: false,
+  saveUninitialized: false,
+  // cookie: {
+  //   secure: true,
+  //   httpOnly: true,
+  //   domain: 'example.com',
+  //   path: 'foo/bar',
+  //   expires: expiryDate
+  // }
+})); //
 
+// STRATEGIES
+passport.use(User.createStrategy())
+
+// CONFIGURE PASSPORT 
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -72,9 +83,6 @@ passport.deserializeUser(function (id, done) {
 
   });
 });
-
-// initialize strategies
-useStrategies();
 
 // User.create({ username: "devin1984", password: "grapeness", role: "administrator" }, () => {
 

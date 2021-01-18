@@ -5,6 +5,7 @@ FILE: user_model.js
 */
 
 import mongoose from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = new mongoose.Schema({
     username: String,
@@ -20,9 +21,11 @@ const userSchema = new mongoose.Schema({
     }],
 });
 
-userSchema.methods.validPassword = function (pwd) {
-    return (this.password === pwd);
-};
+userSchema.plugin(passportLocalMongoose);
+
+// userSchema.methods.validPassword = function (pwd) {
+//     return (this.password === pwd);
+// };
 
 const User = mongoose.model("User", userSchema);
 

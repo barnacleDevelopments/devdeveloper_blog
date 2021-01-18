@@ -5,8 +5,10 @@ FILE: post_routes.js
 */
 
 import express from "express";
-import User from "../models/user_model";
 import passport from 'passport';
+
+// MODELS
+import User from "../models/user_model";
 
 const router = express.Router();
 
@@ -17,14 +19,21 @@ export function isLoggedIn(req, res, next) {
     res.sendStatus(401);
 }
 
-router.post('/login', passport.authenticate('local-login', { failureRedirect: '/' }), (req, res) => {
+router.post('/login', passport.authenticate("local"), (req, res) => {
     res.json({ status: "success" })
-
 });
 
-router.post('/signup', passport.authenticate('local-signup', { failureRedirect: '/' }), (req, res) => {
-    res.json({ status: "success" })
-
+router.post('/signup', (req, res) => {
+    User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
+        if (!err) {
+            passport.authenticate("local")(req, res, () => {
+                res.json({ status: "success" })
+            })
+        } else {
+            res.json({ status: "failure" })
+            console.log(err)
+        }
+    })
 });
 
 router.post("/logout", (req, res) => {
