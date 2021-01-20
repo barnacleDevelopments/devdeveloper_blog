@@ -24,16 +24,16 @@ router.post('/login', passport.authenticate("local"), (req, res) => {
 });
 
 router.post('/signup', (req, res) => {
-    User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
+    User.register(new User({ username: req.body.username, role: "administrator" }), req.body.password, (err, user) => {
         if (!err) {
             passport.authenticate("local")(req, res, () => {
                 res.json({ status: "success" })
             })
         } else {
-            res.json({ status: "failure" })
-            console.log(err)
+            res.json({ status: "failure", message: err.message })
         }
     })
+
 });
 
 router.post("/logout", (req, res) => {

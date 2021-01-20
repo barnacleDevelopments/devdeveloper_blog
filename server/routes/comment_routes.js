@@ -49,25 +49,28 @@ router.get("/post/:id", (req, res) => {
     Post.findById(postId)
         .populate({ path: "comments" })
         .exec((err, post) => {
-            (async () => {
-                // wait for usernames to be added to each comment
-                await Promise.all(post.comments.map(async (com) => {
-                    let username
-                    // wait to retrieve user
-                    await User.findById(com.userId, (err, user) => {
-                        if (!err) {
-                            username = user.username
+            console.log(post.comments)
+            if (post.comments.length > 0) {
+                (async () => {
+                    // wait for usernames to be added to each comment
+                    await Promise.all(post.comments.map(async (com) => {
+                        let username
+                        // wait to retrieve user
+                        await User.findById(com.userId, (err, user) => {
+                            if (!err) {
+                                username = user.username
+                            }
+                        })
+                        return {
+                            _id: com._id,
+                            username: username,
+                            date: com.date,
+                            content: com.content
                         }
-                    })
-                    return {
-                        _id: com._id,
-                        username: username,
-                        date: com.date,
-                        content: com.content
-                    }
-                })).then(comments => res.json(comments))
-            })()
-        })
+                    })).then(comments => res.json(comments))
+                })()
+            }
+        });
 })
 
 // create one comment

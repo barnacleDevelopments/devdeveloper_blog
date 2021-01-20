@@ -96,7 +96,7 @@ app.use("/comments", commentRoutes)
 
 
 app
-  .use(express.static(path.join(__dirname, './build')))
+  .use(express.static(path.join(__dirname, '../build')))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 app.get('/', (req, res) => {

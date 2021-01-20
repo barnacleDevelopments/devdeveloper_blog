@@ -21,7 +21,11 @@ const userSchema = new mongoose.Schema({
     }],
 });
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, {
+    maxAttempts: 5,
+    usernameUnique: true,
+    usernameField: "username"
+});
 
 // userSchema.methods.validPassword = function (pwd) {
 //     return (this.password === pwd);

@@ -71,6 +71,7 @@ const Form = styled("form")`
 const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, user }) => {
     const { register, handleSubmit, errors } = useForm();
     const [formSuccess, setFormSucess] = useState<Boolean>(false);
+    const [databaseErr, setDatabaseErr] = useState<String>()
 
     const onSubmit = (data: UserFormData) => {
         User.prototype.login(data.username, data.password)
@@ -79,12 +80,10 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, use
                     checkAuth();
                     setFormSucess(true);
                 } else {
-
+                    setDatabaseErr(data.message)
                 }
             })
     }
-
-
     return (
         <Form action="/login" method="post" onSubmit={handleSubmit(onSubmit)}>
             {formSuccess ? <Redirect to="/categories" /> : null}
@@ -97,8 +96,12 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, use
                 <input placeholder="Password..." type="password" name="password" ref={register({ required: true, minLength: 8, maxLength: 20 })} />
             </div>
             {(errors.username || errors.password) && (
-                <p>Password or username incorrect</p>
+                <p>*Password or username incorrect</p>
             )}
+            {databaseErr && (
+                databaseErr
+            )}
+
             <div>
                 <button type="submit">Login</button>
                 <button><Link to="/signup">Sign up</Link></button>
