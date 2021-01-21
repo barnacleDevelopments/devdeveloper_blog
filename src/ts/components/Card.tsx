@@ -15,6 +15,7 @@ import { useState } from "react";
 
 // ASSETS 
 import CardPhoto from "../../img/logo.png"
+import ConfirmForm from "./ConfirmForm";
 
 // INTERFACES
 interface CategoryComponentData {
@@ -118,6 +119,7 @@ const CardCount = styled("div")`
 
 const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);
+    const [formVisible, setFormVisible] = useState<boolean>(false)
 
     const handleDelete = () => {
         setIsDeleted(true);
@@ -125,9 +127,15 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
         console.log(img)
     }
 
+    const toggleDeleteForm = () => {
+        formVisible ?
+            setFormVisible(false) : setFormVisible(true)
+    }
+
     if (!isDeleted) {
         return (
             <CardBody>
+                {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={handleDelete} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
                 <CardImg src={CardPhoto} />
                 <CardCount>{count}</CardCount>
                 <CardContent>
@@ -140,7 +148,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
                     <Link to={`/categories/edit/${catId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
 
                 {user.role === "administrator" ?
-                    <a onClick={handleDelete} ><i className="far fa-trash-alt"></i></a> : null}
+                    <a onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></a> : null}
             </CardBody>
         )
     } else {

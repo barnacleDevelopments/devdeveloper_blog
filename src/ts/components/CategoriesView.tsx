@@ -48,6 +48,7 @@ const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user
 
     return (
         <Body>
+
             { user.role === "administrator" ? <CreateBtn link="/categories/create" /> : null}
             <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
             {categories.map((cat) => {
