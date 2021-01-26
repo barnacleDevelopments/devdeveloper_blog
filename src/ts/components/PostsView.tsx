@@ -47,7 +47,7 @@ const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
     return (
         <Body>
             {user.role === "administrator" ? <CreateBtn link={`/posts/create/${catId}`} /> : null}
-            <Title title={catTitle} />
+            <Title title={catTitle ? catTitle : "No title..."} />
             {
                 posts.length <= 0 ? <PostSnipFallback /> :
                     posts.map(post => {

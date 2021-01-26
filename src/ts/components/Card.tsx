@@ -119,19 +119,22 @@ const CardCount = styled("div")`
 
 const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, img }) => {
     const [isDeleted, setIsDeleted] = useState(false);
-    const [formVisible, setFormVisible] = useState<boolean>(false)
+    const [formVisible, setFormVisible] = useState<boolean>(false);
 
+    // send request to delete category
     const handleDelete = () => {
         setIsDeleted(true);
         Category.prototype.delete(catId);
-        console.log(img)
+        console.log(img);
     }
 
+    // toggle delete form visibility
     const toggleDeleteForm = () => {
         formVisible ?
-            setFormVisible(false) : setFormVisible(true)
+            setFormVisible(false) : setFormVisible(true);
     }
 
+    // if form is deleted remove card element
     if (!isDeleted) {
         return (
             <CardBody>
@@ -143,7 +146,6 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
                     {<p>{desc ? desc : "This category has no description."}</p>}
                     <Link to={`/categories/posts/${catId}`}>VIEW</Link>
                 </CardContent>
-
                 {user.role === "administrator" ?
                     <Link to={`/categories/edit/${catId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
 

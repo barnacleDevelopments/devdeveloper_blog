@@ -24,13 +24,15 @@ const Form = styled("form")`
         margin-bottom: 16px;
         font-weight: bold;
     }
+
     input {
         padding-left: 14px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         border-radius: 4px;
         height: 40px;
         width: 100%;
     }
+
     button {
         border-radius: 4px;
         border: none;
@@ -40,6 +42,7 @@ const Form = styled("form")`
         color: #f5f5f5;
         font-weight: bold;
     }
+
     p {
         margin-bottom: 13px;
     }
@@ -47,10 +50,10 @@ const Form = styled("form")`
 
 // INTERFACES
 interface SignupFormComponent {
-    checkAuth(): void;
+
 }
 
-const SignupForm: React.FunctionComponent<SignupFormComponent> = ({ checkAuth }) => {
+const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
     // Client Side form validation hook
     const { register, getValues, handleSubmit, errors } = useForm();
     // Form submit status state
@@ -65,13 +68,8 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = ({ checkAuth })
             .then(data => {
                 if (data.status === "success") {
                     setFormSucess(true);
-                    checkAuth();
                 } else if (data.status === "failure") {
-                    console.log("yup failed!")
                     setDatabaseErr(data.message)
-
-                } else {
-                    console.log("WTF")
                 }
             })
     }
@@ -94,7 +92,7 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = ({ checkAuth })
                         }
                     })} />
 
-                {/* ERROR MESSAGES DISPLAY */}
+                {/* USERNAME ERROR MESSAGES DISPLAY */}
                 {errors.username && errors.username.type === "maxLength" && (
                     <p>*Max username length exeeded.</p>
                 )}
@@ -121,14 +119,6 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = ({ checkAuth })
                             }
                         }
                     })} />
-
-                {/* ERROR MESSAGES DISPLAY */}
-                {errors.password && errors.password.type === "maxLength" && (
-                    <p>*Max password length exeeded.</p>
-                )}
-                {errors.password && errors.password.type === "minLength" && (
-                    <p>*Password length too short.</p>
-                )}
             </div>
             <div>
                 <input
@@ -144,6 +134,12 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = ({ checkAuth })
                     })} />
 
                 {/* ERROR MESSAGE DISPLAY */}
+                {errors.password && errors.password.type === "maxLength" && (
+                    <p>*Max password length exeeded.</p>
+                )}
+                {errors.password && errors.password.type === "minLength" && (
+                    <p>*Password length too short.</p>
+                )}
                 {errors.password && errors.password.type === "passMatch" && (
                     <p>*Passwords must match.</p>
                 )}

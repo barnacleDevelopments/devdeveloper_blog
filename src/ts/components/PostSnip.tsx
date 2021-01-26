@@ -14,7 +14,10 @@ import { Link } from "react-router-dom";
 import Post from "../controllers/post_controller";
 
 // ASSETS
-import CardPhoto from "../../img/logo.png"
+import CardPhoto from "../../img/logo.png";
+
+// COMPONENTS
+import ConfirmForm from "./ConfirmForm";
 
 // INTERFACES
 interface PostData {
@@ -99,16 +102,23 @@ const PostSnipContent = styled("div")`
 
 const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, title, content }) => {
     const [isDeleted, setIsDeleted] = useState(false);
+    const [formVisible, setFormVisible] = useState<boolean>(false)
 
 
-    const deletePost = () => {
+    const handleDelete = () => {
         setIsDeleted(true);
         Post.prototype.delete(postId, catId)
+    }
+
+    const toggleDeleteForm = () => {
+        formVisible ?
+            setFormVisible(false) : setFormVisible(true)
     }
 
     if (!isDeleted) {
         return (
             <PostSnipBody>
+
                 <img src={CardPhoto} />
                 <PostSnipContent>
                     <h2>{title ? title : "No Title"}</h2>
@@ -117,8 +127,10 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
                         <Link to={`/posts/${catId}/${postId}`}>READ</Link>
                     </div>
                 </PostSnipContent>
+                {/* ADMIN COMPONENTS */}
+                {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={handleDelete} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
                 {user.role === "administrator" ? <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
-                {user.role === "administrator" ? <a onClick={deletePost}><i className="far fa-trash-alt"></i></a> : null}
+                {user.role === "administrator" ? <a onClick={toggleDeleteForm}><i className="far fa-trash-alt"></i></a> : null}
             </PostSnipBody>
         )
     } else {

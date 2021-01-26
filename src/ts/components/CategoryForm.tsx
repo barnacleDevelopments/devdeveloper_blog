@@ -79,8 +79,8 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
     return (
         <Body>
             {isSubmited ? <Redirect to={`/categories`} /> : null}
-            <input name="name" onChange={handleFormData} placeholder={name} type="text" />
-            <textarea name="desc" onChange={handleFormData} placeholder={desc} />
+            <input name="name" defaultValue={name} onChange={handleFormData} placeholder={name} type="text" />
+            <textarea name="desc" defaultValue={desc} onChange={handleFormData} placeholder={desc} />
             <a onClick={handleSubmit}>{btnText}</a>
         </Body>
     )

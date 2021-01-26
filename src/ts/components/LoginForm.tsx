@@ -4,7 +4,7 @@ DATE: January 6th, 2021
 FILE: LoginForm.tsx
 */
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Redirect } from "react-router";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
@@ -13,10 +13,17 @@ import { useForm } from "react-hook-form";
 // CONTROLLERS
 import User from "../controllers/user_controllers";
 
+// CONTEXTS
+import { UserContext } from "../contexts/UserContext";
+
 interface LoginFormComponent {
-    user: UserComponentData,
-    checkAuth(): void
+    user: UserComponentData
 }
+
+const BtnGroup = styled("div")`
+    margin-top: 10px;
+
+`
 
 // STYLES
 const Form = styled("form")`
@@ -25,22 +32,25 @@ const Form = styled("form")`
     color: #f5f5f5;
     border-radius: 4px;
     text-align: center;
-    margin-top: 240px;
+
     h1 {
         font-size: 2.2em;
         margin-bottom: 16px;
         font-weight: bold;
     }
+
     input {
         padding-left: 14px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         border-radius: 4px;
         height: 40px;
         width: 100%;
     }
+
     button:nth-of-type(1) {
-        margin-right: 10px;
+        margin-right: 15px;
     }
+
     button {
         border-radius: 4px;
         border: none;
@@ -49,8 +59,8 @@ const Form = styled("form")`
         background-color: #9e5a63;
         color: #f5f5f5;
         font-weight: bold;
-     
     }
+
     a {
         border-radius: 4px;
         border: none;
@@ -61,23 +71,27 @@ const Form = styled("form")`
         font-weight: bold;
         text-decoration: none;
     }
+
     p {
         padding-bottom: 13px;
     }
-
-
 `;
 
-const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, user }) => {
+const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ user }) => {
     const { register, handleSubmit, errors } = useForm();
     const [formSuccess, setFormSucess] = useState<Boolean>(false);
-    const [databaseErr, setDatabaseErr] = useState<String>()
+    const [databaseErr, setDatabaseErr] = useState<String>();
 
+
+    // user context
+    const { auth } = useContext(UserContext);
+
+    // submit user credentials
     const onSubmit = (data: UserFormData) => {
         User.prototype.login(data.username, data.password)
             .then((data) => {
                 if (data.status === "success") {
-                    checkAuth();
+                    auth();
                     setFormSucess(true);
                 } else {
                     setDatabaseErr(data.message)
@@ -86,15 +100,15 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, use
     }
     return (
         <Form action="/login" method="post" onSubmit={handleSubmit(onSubmit)}>
-            {formSuccess ? <Redirect to="/categories" /> : null}
             <h1>LOGIN</h1>
-            {user.status ? <Redirect to="/categories" /> : null}
             <div>
                 <input placeholder="Username..." type="text" name="username" ref={register({ required: true, minLength: 6, maxLength: 20 })} />
             </div>
             <div>
                 <input placeholder="Password..." type="password" name="password" ref={register({ required: true, minLength: 8, maxLength: 20 })} />
             </div>
+
+            {/* ERROR ELEMENTS */}
             {(errors.username || errors.password) && (
                 <p>*Password or username incorrect</p>
             )}
@@ -102,10 +116,12 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ checkAuth, use
                 databaseErr
             )}
 
-            <div>
-                <button type="submit">Login</button>
+            {/* REDIRECTS */}
+            {formSuccess || user.status ? <Redirect to="/categories" /> : null}
+            <BtnGroup>
+                <button type="submit"><a href="/" onClick={(e) => e.preventDefault()}>Login</a></button>
                 <button><Link to="/signup">Sign up</Link></button>
-            </div>
+            </BtnGroup>
         </Form>
     )
 }

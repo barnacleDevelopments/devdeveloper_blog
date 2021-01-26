@@ -13,10 +13,15 @@ import Category from "../controllers/category_controller";
 // COMPONENTS
 import Card from "./Card";
 import CreateBtn from "./CreateBtn";
+import FallbackMessage from "./FallbackMessage";
+
 
 // STYLES 
 const Body = styled("section")`
-
+    h2 {
+        margin-bottom: 20px;
+        margin-top: 14px;
+    }
 `;
 
 // INTERFACES
@@ -40,17 +45,22 @@ const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user
             date: ""
         }]
     }]);
+    const [fetchStatus, setFetchStatus] = useState<Boolean>(false);
 
+    // retrive all the categories
     useEffect(() => {
         Category.prototype.getAll()
             .then(data => setCategories(data))
+            .catch(() => {
+                setFetchStatus(true);
+            })
     }, []);
 
     return (
         <Body>
-
             { user.role === "administrator" ? <CreateBtn link="/categories/create" /> : null}
             <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
+            {fetchStatus && <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." />}
             {categories.map((cat) => {
                 let postCount = cat.posts.length;
                 return <Card user={user} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />

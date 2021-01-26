@@ -80,6 +80,7 @@ interface PostComponent {
 }
 
 const Post: React.FunctionComponent<PostComponent> = ({ user, postId, catId, title, subTitle, content }) => {
+
     return (
         <Body>
             <img src={CardPhoto} />

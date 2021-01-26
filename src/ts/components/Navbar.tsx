@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: Navbar.tsx
 */
 
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import { Link, Redirect } from "react-router-dom";
 import * as logoImage from "../../img/logo_3.png";
@@ -12,17 +12,16 @@ import * as logoImage from "../../img/logo_3.png";
 // HOOKS
 import useNav from "../hooks/useNav";
 
-// CONTROLLERS 
-import User from "../controllers/user_controllers";
-
 // INTERFACES
 interface NavComponent {
-    user: UserComponentData,
-    checkAuth(): void
+    user: UserComponentData
 }
 
 // COMPONENTS
 import DropDownMenu from "../components/DropDownMenu";
+
+// CONTEXTS
+import { UserContext } from "../contexts/UserContext";
 
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -34,7 +33,15 @@ const Navbody = styled("nav")`
     display: flex;
     justify-content: space-between;
     box-shadow: 0px 3px 30px -20px black;
-    z-index: 10000
+    z-index: 100000;
+    align-items: center;
+    a {
+        i {
+            color: #f5f5f5;
+            font-size: 2.1em;
+            margin-right: 5px;
+        } 
+    }
 `;
 
 const Logo = styled("div")`
@@ -43,63 +50,33 @@ const Logo = styled("div")`
     background-image: url("${logoImage.default}");
     background-repeat: no-repeat;
     background-size: 50px;
-    background-position: center
+    background-position: center;
 `;
 
-const BackBtn = styled("a")`
-    i {
-        color: #f5f5f5;
-        font-size: 2.4em;
-        margin-left: 5px;
-    }
-`;
 
-const MediaLinks = styled("div")`
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-right: 20px;
-    text-decoration: none;
-    i {
-        color: #f5f5f5;
-        font-size: 30px;
-    }
-`;
-
-const Navbar: React.FunctionComponent<NavComponent> = ({ user }) => {
-    const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false);
+const Navbar: React.FunctionComponent<NavComponent> = () => {
     const { backBtnParams, backBtnStatus } = useNav();
 
+    // User Context
+    const { logout, user } = useContext(UserContext);
 
+    // logs the user out
     const handleLogout = () => {
-        User.prototype.logout()
-            .then((data) => {
-                if (data.status === "success") {
-                    setIsLoggedOut(true)
-                    window.location.reload()
-                }
-            })
+        logout();
     }
 
     return (
         <Navbody>
-            {isLoggedOut ? <Redirect to="/" /> : null}
-            {backBtnStatus ? <Link to={backBtnParams}><BackBtn>
+            {user.status ? <Redirect to="/categories" /> : null}
+            {backBtnStatus ? <Link to={backBtnParams}>
                 <i className="fas fa-arrow-left fa-3x"></i>
-            </BackBtn></Link> : <Logo />}
+            </Link> : <Logo />}
 
-            <MediaLinks>
-                <a href="https://www.linkedin.com/in/devin-dev-davis-63008412b"><i className="fab fa-linkedin fa-2x"></i></a>
-                <a href="https://github.com/barnacleDevelopments"><i className="fab fa-github-alt fa-2x"></i></a>
-
-                {user.status ? <DropDownMenu user={user} menuItems={[
-                    { name: "Loggout", link: "/", func: handleLogout },
-                    { name: "Settings", link: "/" }
-                ]} /> :
-                    <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
-            </MediaLinks>
+            {user.status ? <DropDownMenu user={user} menuItems={[
+                { name: "Loggout", link: "/", func: handleLogout },
+                { name: "Settings", link: "/" }
+            ]} /> :
+                <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
         </Navbody>
     )
 }

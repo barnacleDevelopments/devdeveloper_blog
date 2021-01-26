@@ -10,9 +10,10 @@ import styled from "@emotion/styled";
 const Body = styled("div")`
     position: relative;
     height: 100%;
-    width: 100%;
+    width: 60px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 `;
 
 const List = styled("ul")`
@@ -42,6 +43,12 @@ const Shadow = styled("div")`
     left: 0px;
 `;
 
+const UserLogo = styled("i")`
+    color: #f5f5f5;
+    font-size: 2.1em;
+    margin-right: 5px;
+`;
+
 interface MenuItem {
     link: string,
     name: string,
@@ -62,10 +69,14 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems, use
 
     return (
         <Body>
-            {isOpen ? <Shadow onClick={toggleDropdown} /> : null}
             {user.status ? (
-                user.role === "administrator" ? <i onClick={toggleDropdown} className="fas fa-user-tie"></i> : <i onClick={toggleDropdown} className="fas fa-user"></i>
+                user.role === "administrator" ?
+                    <UserLogo onClick={toggleDropdown} className="fas fa-user-tie" />
+                    :
+                    <UserLogo onClick={toggleDropdown} className="fas fa-user" />
             ) : null}
+            {/* Display dropdown menu and display shadow on open */}
+            {isOpen ? <Shadow onClick={toggleDropdown} /> : null}
             {isOpen ?
                 <List>
                     {menuItems.map(item => {

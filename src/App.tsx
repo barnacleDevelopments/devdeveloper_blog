@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: index.tsx
 */
 
-import * as React from "react";
+import React from "react";
 import * as  ReactDOM from "react-dom";
 import styled from "@emotion/styled";
 import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
@@ -28,9 +28,9 @@ import { UserContext } from "./ts/contexts/UserContext";
 //GLOBAL STYLES
 import "./css/reset.css";
 import "./css/global.css";
-
-// HOOKS 
 import useAuth from "./ts/hooks/useAuth";
+
+
 // import "./img/logo.png";
 
 
@@ -40,47 +40,42 @@ const Body = styled("div")`
 `
 
 const App = () => {
-    const { user, checkIsLoggedIn } = useAuth();
-
-    const handleUser = () => {
-        checkIsLoggedIn();
-    }
+    const UserContextData = useAuth();
 
     return (
         <Body>
-            <UserContext.Provider value={user}>
-                {user.status ? console.log("User must authenticate") : <Redirect to="/categories" />}
-                <Navbar user={user} checkAuth={handleUser} />
+            {UserContextData.isAuthenticated ? null : <Redirect to="/categories" />}
+            <UserContext.Provider value={UserContextData}>
+                <Navbar user={UserContextData.user} />
                 <Container>
                     <Switch>
                         <Route exact path="/signup">
-                            <SignupView user={user} checkAuth={handleUser} />
+                            <SignupView user={UserContextData.user} />
                         </Route>
                         <Route exact path="/login" >
-                            <LoginView user={user} checkAuth={handleUser} />
+                            <LoginView user={UserContextData.user} />
                         </Route>
                         <Route exact path="/categories" >
-                            <CategoriesView user={user} />
+                            <CategoriesView user={UserContextData.user} />
                         </Route>
                         <Route path="/categories/create">
-                            <CategoryCreateView user={user} />
+                            <CategoryCreateView user={UserContextData.user} />
                         </Route>
                         <Route path="/categories/edit/:catId">
-                            <CategoryEditView user={user} />
+                            <CategoryEditView user={UserContextData.user} />
                         </Route>
                         <Route path="/categories/posts/:catId">
-                            <PostsView user={user} />
+                            <PostsView user={UserContextData.user} />
                         </Route>
                         <Route exact path="/posts/edit/:catId/:postId">
-                            <PostEditView user={user} />
+                            <PostEditView user={UserContextData.user} />
                         </Route>
                         <Route path="/posts/create/:catId">
-                            <PostCreateView user={user} />
+                            <PostCreateView user={UserContextData.user} />
                         </Route>
                         <Route exact path="/posts/:catId/:postId" >
-                            <PostView user={user} />
+                            <PostView user={UserContextData.user} />
                         </Route>
-
                     </Switch>
                 </Container>
             </UserContext.Provider>
