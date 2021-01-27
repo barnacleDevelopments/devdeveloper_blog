@@ -10,6 +10,7 @@ interface UserContextData {
     auth: () => void;
     isAuthenticated: Boolean;
     logout: () => void;
+    login: (username: string, password: string) => void;
 }
 export declare const UserContextDefaultValue: UserContextData;
 export declare const UserContext: import("react").Context<UserContextData>;

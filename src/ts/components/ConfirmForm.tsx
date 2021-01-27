@@ -42,7 +42,7 @@ grid-column: 1 / span 2;
 `;
 
 const Shadow = styled("div")`
-    z-index: 10001;
+z-index: 1000000;
     position: fixed;
     display: flex;
     justify-content: center;

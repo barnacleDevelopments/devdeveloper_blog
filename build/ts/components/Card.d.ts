@@ -4,8 +4,9 @@ interface CategoryComponentData {
     name: string;
     desc: string;
     count: number;
-    img: string;
+    img?: string;
     user: UserComponentData;
+    deleteCategory(catId: string): void;
 }
 declare const Card: React.FunctionComponent<CategoryComponentData>;
 export default Card;

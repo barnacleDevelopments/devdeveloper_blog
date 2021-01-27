@@ -10,7 +10,6 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
 // CONTROLLERS
-import Category from "../controllers/category_controller";
 import { useState } from "react";
 
 // ASSETS 
@@ -23,8 +22,9 @@ interface CategoryComponentData {
     name: string,
     desc: string,
     count: number,
-    img: string,
-    user: UserComponentData
+    img?: string,
+    user: UserComponentData,
+    deleteCategory(catId: string): void
 }
 
 const CardBody = styled("div")`
@@ -66,12 +66,14 @@ const CardContent = styled("div")`
     display: grid;
     grid-template-columns: 3fr 1fr;
     padding: 15px 17px;
+    column-gap: 15px;
+
     h2 {
         font-size: 2em;
-        grid-column: 1 / span 2 ;
-        margin-bottom: 5px;
+        grid-column: 1 / span 2;
         text-transform: capitalize;
-        margin-bottom: 10px
+        margin-bottom: 9.5px;
+        margin-top: 5px;
     }
 
     p {
@@ -80,6 +82,9 @@ const CardContent = styled("div")`
         text-align: left;
         font-weight: 100;
         line-height: 1.5;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     a {
@@ -98,6 +103,7 @@ const CardContent = styled("div")`
         color: #f5f5f5;
         box-shadow: 3px 3px 30px -10px black;
         margin-top: 9px;
+        height: 40px;
     }
 `;
 
@@ -105,28 +111,22 @@ const CardCount = styled("div")`
     background-color: #9E5A63;
     font-size: 2em;
     color: #f5f5f5;
-    padding-top: 3px;
     width: 40px;
     height: 40px;
     position: absolute;
-    bottom: 130px;
-    right: 10px;
+    bottom: 137px;
+    right: 12px;
     border-radius: 30px;
     text-align: center;
     vertical-align: middle;
-    display: table-cell;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 `;
 
-const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, img }) => {
-    const [isDeleted, setIsDeleted] = useState(false);
+const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, deleteCategory }) => {
     const [formVisible, setFormVisible] = useState<boolean>(false);
-
-    // send request to delete category
-    const handleDelete = () => {
-        setIsDeleted(true);
-        Category.prototype.delete(catId);
-        console.log(img);
-    }
 
     // toggle delete form visibility
     const toggleDeleteForm = () => {
@@ -135,27 +135,26 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
     }
 
     // if form is deleted remove card element
-    if (!isDeleted) {
-        return (
-            <CardBody>
-                {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={handleDelete} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
-                <CardImg src={CardPhoto} />
-                <CardCount>{count}</CardCount>
-                <CardContent>
-                    <h2>{name ? name : "No Name"}</h2>
-                    {<p>{desc ? desc : "This category has no description."}</p>}
-                    <Link to={`/categories/posts/${catId}`}>VIEW</Link>
-                </CardContent>
-                {user.role === "administrator" ?
-                    <Link to={`/categories/edit/${catId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
+    return (
+        <CardBody>
+            {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={() => {
+                deleteCategory(catId);
+                toggleDeleteForm();
+            }} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
+            <CardImg src={CardPhoto} />
+            <CardCount>{count}</CardCount>
+            <CardContent>
+                <h2>{name ? name : "No Name"}</h2>
+                {<p>{desc ? desc : "This category has no description."}</p>}
+                <Link to={`/categories/posts/${catId}`}>VIEW</Link>
+            </CardContent>
+            {user.role === "administrator" ?
+                <Link to={`/categories/edit/${catId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
 
-                {user.role === "administrator" ?
-                    <a onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></a> : null}
-            </CardBody>
-        )
-    } else {
-        return null;
-    }
+            {user.role === "administrator" ?
+                <a onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></a> : null}
+        </CardBody>
+    )
 }
 
 export default Card;

@@ -11,6 +11,9 @@ const Body = styled("div")`
     color: #f5f5f5;
     text-align: center;
     font-size: 2em;
+    h2 {
+        margin-top: 30px;
+    }
 `;
 
 interface FallbackComponent {

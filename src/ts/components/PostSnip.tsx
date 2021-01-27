@@ -10,9 +10,6 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
-// CONTROLLERS
-import Post from "../controllers/post_controller";
-
 // ASSETS
 import CardPhoto from "../../img/logo.png";
 
@@ -25,9 +22,9 @@ interface PostData {
     title: string,
     content: string,
     user: UserComponentData,
-    catId: string
+    catId: string,
+    deletePost(postId: string, catId: string): void
 }
-
 
 const PostSnipBody = styled("div")`
     background-color: #314455;
@@ -68,7 +65,8 @@ const PostSnipContent = styled("div")`
     display: grid;
     aligh-items: end;
     grid-template-columns: 3fr 1fr;
-    padding: 10px 10px 5px 10px;;
+    padding: 10px 10px 5px 10px;
+    column-gap: 15px;
     h2 {
         font-size: 1.8em;
         grid-column: 1 / span 2;
@@ -77,6 +75,9 @@ const PostSnipContent = styled("div")`
     }
     p {
         grid-column: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     a {
         background-color: #9E5A63;
@@ -97,45 +98,37 @@ const PostSnipContent = styled("div")`
     div {
         display: flex;
         align-items: end;
+        justify-content: flex-end;
     }
 `;
 
-const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, title, content }) => {
-    const [isDeleted, setIsDeleted] = useState(false);
+const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, title, content, deletePost }) => {
     const [formVisible, setFormVisible] = useState<boolean>(false)
-
-
-    const handleDelete = () => {
-        setIsDeleted(true);
-        Post.prototype.delete(postId, catId)
-    }
 
     const toggleDeleteForm = () => {
         formVisible ?
             setFormVisible(false) : setFormVisible(true)
     }
 
-    if (!isDeleted) {
-        return (
-            <PostSnipBody>
-
-                <img src={CardPhoto} />
-                <PostSnipContent>
-                    <h2>{title ? title : "No Title"}</h2>
-                    <p>{content ? content : "This post has no content."}</p>
-                    <div>
-                        <Link to={`/posts/${catId}/${postId}`}>READ</Link>
-                    </div>
-                </PostSnipContent>
-                {/* ADMIN COMPONENTS */}
-                {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={handleDelete} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
-                {user.role === "administrator" ? <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
-                {user.role === "administrator" ? <a onClick={toggleDeleteForm}><i className="far fa-trash-alt"></i></a> : null}
-            </PostSnipBody>
-        )
-    } else {
-        return null
-    }
+    return (
+        <PostSnipBody>
+            <img src={CardPhoto} />
+            <PostSnipContent>
+                <h2>{title ? title : "No Title"}</h2>
+                <p>{content ? content : "This post has no content."}</p>
+                <div>
+                    <Link to={`/posts/${catId}/${postId}`}>READ</Link>
+                </div>
+            </PostSnipContent>
+            {/* ADMIN COMPONENTS */}
+            {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={() => {
+                toggleDeleteForm()
+                deletePost(postId, catId)
+            }} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
+            {user.role === "administrator" ? <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
+            {user.role === "administrator" ? <a onClick={toggleDeleteForm}><i className="far fa-trash-alt"></i></a> : null}
+        </PostSnipBody>
+    )
 }
 
 export default PostSnip;

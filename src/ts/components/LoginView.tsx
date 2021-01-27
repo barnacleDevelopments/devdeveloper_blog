@@ -26,7 +26,7 @@ const LoginView: React.FunctionComponent<LoginViewComponent> = ({ user }) => {
     return (
         <Body>
             {user.status ? <Redirect to="/categories" /> : null}
-            <LoginForm user={user} />
+            <LoginForm />
         </Body>
     )
 }

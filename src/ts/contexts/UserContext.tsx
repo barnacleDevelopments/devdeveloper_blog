@@ -7,25 +7,25 @@ interface UserComponentData {
     role: string
 }
 
-
 interface UserContextData {
     user: UserComponentData,
     auth: () => void,
     isAuthenticated: Boolean,
-    logout: () => void
+    logout: () => void,
+    login: (username: string, password: string) => void
 }
 
-
 export const UserContextDefaultValue: UserContextData = {
+    auth: () => null,
+    isAuthenticated: false,
+    logout: () => null,
+    login: () => null,
     user: {
         _id: "",
         username: "",
         status: false,
         role: ""
-    },
-    auth: () => null,
-    isAuthenticated: false,
-    logout: () => null
+    }
 }
 
 export const UserContext = createContext(UserContextDefaultValue);

@@ -68,7 +68,7 @@ router.put("/update/:id", (req, res) => {
 
 });
 
-// delete one post
+// delete one category
 router.delete("/delete/:id", (req, res) => {
     const id = req.params.id;
     Category.findOneAndDelete({ _id: id }, (err, cat) => {
@@ -76,7 +76,7 @@ router.delete("/delete/:id", (req, res) => {
             Category.findOne({ _id: id }, (err, cat) => {
                 if (!err) {
                     Post.deleteMany({ catId: id }, (err, cat) => {
-                        err ? console.log(err) : console.log()
+                        err ? console.log(err) : res.json({ status: "success" })
                     })
                 }
             })

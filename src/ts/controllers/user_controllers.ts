@@ -54,8 +54,11 @@ class User {
             },
             body: searchParams
         }).then(response => response.json())
-            .then(data => recievedData = data)
+            .then(data => {
+                recievedData = data
+            })
             .catch(err => console.log(err))
+
 
         return recievedData;
     }

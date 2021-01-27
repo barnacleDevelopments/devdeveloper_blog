@@ -30,9 +30,7 @@ import "./css/reset.css";
 import "./css/global.css";
 import useAuth from "./ts/hooks/useAuth";
 
-
 // import "./img/logo.png";
-
 
 //STYLES
 const Body = styled("div")`

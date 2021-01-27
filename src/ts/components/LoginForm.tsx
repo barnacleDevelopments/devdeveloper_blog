@@ -10,14 +10,11 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-// CONTROLLERS
-import User from "../controllers/user_controllers";
-
 // CONTEXTS
 import { UserContext } from "../contexts/UserContext";
 
 interface LoginFormComponent {
-    user: UserComponentData
+
 }
 
 const BtnGroup = styled("div")`
@@ -77,26 +74,24 @@ const Form = styled("form")`
     }
 `;
 
-const LoginForm: React.FunctionComponent<LoginFormComponent> = ({ user }) => {
+const LoginForm: React.FunctionComponent<LoginFormComponent> = () => {
     const { register, handleSubmit, errors } = useForm();
     const [formSuccess, setFormSucess] = useState<Boolean>(false);
-    const [databaseErr, setDatabaseErr] = useState<String>();
+    const [databaseErr, setDatabaseErr] = useState<String>("");
 
 
     // user context
-    const { auth } = useContext(UserContext);
+    const { login, user, isAuthenticated } = useContext(UserContext);
 
     // submit user credentials
     const onSubmit = (data: UserFormData) => {
-        User.prototype.login(data.username, data.password)
-            .then((data) => {
-                if (data.status === "success") {
-                    auth();
-                    setFormSucess(true);
-                } else {
-                    setDatabaseErr(data.message)
-                }
-            })
+        login(data.username, data.password)
+        if (isAuthenticated) {
+            setFormSucess(true);
+        }
+        if (databaseErr) {
+            setDatabaseErr(databaseErr)
+        }
     }
     return (
         <Form action="/login" method="post" onSubmit={handleSubmit(onSubmit)}>

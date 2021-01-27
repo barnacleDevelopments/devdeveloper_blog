@@ -5,6 +5,7 @@ FILE: post_routes.js
 */
 
 import express from "express";
+import * as yup from "yup";
 
 // MODELS
 import Post from "../models/post_model";
@@ -54,6 +55,13 @@ router.get("/:id", (req, res) => {
 router.post("/create/:catId", (req, res) => {
     const body = req.body;
     const catId = req.params.catId;
+
+    let newCategorySchema = yup.object().shape({
+        title: yup.string().required().min().max(),
+        desc: yup.string().required().min().max()
+    });
+
+
     Post.create(body, (err, post) => {
         if (!err) {
             Category.findOne({ _id: catId }, (err, cat) => {

@@ -18,7 +18,7 @@ interface CategoryFormComponent {
     submitFunc(data: NewCategoryData): void
 }
 
-const Body = styled("form")`
+const Form = styled("form")`
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -77,12 +77,15 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
     }
 
     return (
-        <Body>
+        <Form>
+            {/* REDIRECTS */}
             {isSubmited ? <Redirect to={`/categories`} /> : null}
-            <input name="name" defaultValue={name} onChange={handleFormData} placeholder={name} type="text" />
-            <textarea name="desc" defaultValue={desc} onChange={handleFormData} placeholder={desc} />
+
+            {/* FORM INPUTS */}
+            <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
+            <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
             <a onClick={handleSubmit}>{btnText}</a>
-        </Body>
+        </Form>
     )
 }
 

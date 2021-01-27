@@ -17,6 +17,8 @@ export default () => {
         status: false,
         role: ""
     });
+    const [errMessage, setErrMessage] = useState<String>("");
+
     const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
 
     const auth = () => {
@@ -25,9 +27,18 @@ export default () => {
                 setIsAuthenticated(true);
                 setUser(data);
             })
-            .catch(err => {
-                setIsAuthenticated(false);
-                console.log(err);
+    }
+
+    const login = (username: string, password: string) => {
+        User.prototype.login(username, password)
+            .then(data => {
+                console.log(data.message)
+                if (data.status === "success") {
+                    auth();
+                }
+                if (data.status === "failure") {
+                    setErrMessage(errMessage);
+                }
             })
     }
 
@@ -43,13 +54,18 @@ export default () => {
                         role: "",
                     });
                 }
-            }).catch(() => setIsAuthenticated(true))
+                if (data.status === "failure") {
+                    setErrMessage(errMessage);
+                }
+            })
     }
 
     return {
         user,
         auth,
         isAuthenticated,
-        logout
+        logout,
+        login,
+        errMessage
     };
 }

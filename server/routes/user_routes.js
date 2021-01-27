@@ -6,6 +6,7 @@ FILE: post_routes.js
 
 import express from "express";
 import passport from 'passport';
+import * as yup from "yup";
 
 // MODELS
 import User from "../models/user_model";
@@ -20,20 +21,52 @@ export function isLoggedIn(req, res, next) {
 }
 
 router.post('/login', passport.authenticate("local"), (req, res) => {
-    res.json({ status: "success" })
+    let user = {}
+    user.username = req.body.username;
+    user.password = req.body.password;
+    console.log(user)
+    let userSchema = yup.object().shape({
+        username: yup.string().required().min(6).max(20),
+        password: yup.string().required().min(8).max(20)
+    })
+
+    userSchema.validate(user)
+        .then(() => {
+            res.json({ status: "success" });
+        })
+        .catch((err) => {
+            console.log("Validaton error")
+            res.json({ status: "failure", message: err.message })
+        })
+
 });
 
 router.post('/signup', (req, res) => {
-    User.register(new User({ username: req.body.username, role: "administrator" }), req.body.password, (err, user) => {
-        if (!err) {
-            passport.authenticate("local")(req, res, () => {
-                res.json({ status: "success" })
-            })
-        } else {
-            res.json({ status: "failure", message: err.message })
-        }
+    let newUser = {}
+    newUser.username = req.body.username;
+    newUser.password = req.body.password;
+
+    let userSchema = yup.object().shape({
+        username: yup.string().required().min(6).max(20),
+        password: yup.string().required().min(8).max(20)
     })
 
+    userSchema.validate(newUser)
+        .then(() => {
+            User.register(new User({ username: newUser.username, role: "administrator" }), newUser.password, (err, user) => {
+                if (!err) {
+                    passport.authenticate("local")(req, res, () => {
+                        res.json({ status: "success" })
+                    })
+                } else {
+                    res.json({ status: "failure", message: err.message })
+                }
+            })
+        })
+        .catch((err) => {
+            console.log("Validaton error")
+            res.json({ status: "failure", message: err.message })
+        })
 });
 
 router.post("/logout", (req, res) => {

@@ -7,6 +7,9 @@ FILE: category_controller.ts
 // ENV VARIABLES
 const PORT = 5000;
 
+type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
+
+
 class Category {
     constructor() { }
 
@@ -74,22 +77,15 @@ class Category {
         return recievedData;
     }
 
-    async getPosts(id: string): Promise<CategoryData> {
-        let recievedData: CategoryData = {
+    async getPosts(id: string): Promise<PostData[]> {
+        let recievedData: PostData[] = [{
             _id: "",
-            name: "",
-            desc: "",
-            count: 0,
-            img: "",
-            posts: [{
-                _id: "",
-                title: "",
-                subTitle: "",
-                content: "",
-                catId: "",
-                date: ""
-            }]
-        }
+            title: "",
+            subTitle: "",
+            content: "",
+            catId: "",
+            date: ""
+        }]
 
         await fetch(`http://localhost:${PORT}/categories/posts/${id}`, {
             method: "GET",
@@ -142,7 +138,10 @@ class Category {
         })
     }
 
-    async delete(id: string) {
+    async delete(id: string): Promise<ResponseStatus> {
+
+        let recievedData: ResponseStatus = { status: "pending" }
+
         await fetch(`http://localhost:${PORT}/categories/delete/${id}`, {
             method: "DELETE",
             mode: "cors",
@@ -151,6 +150,11 @@ class Category {
                 Accept: "application/json"
             }
         })
+            .then(response => response.json())
+            .then(data => recievedData = data)
+
+
+        return recievedData;
     }
 }
 

@@ -41,6 +41,7 @@ const Shadow = styled("div")`
     position: fixed; 
     top: 0px;
     left: 0px;
+
 `;
 
 const UserLogo = styled("i")`
