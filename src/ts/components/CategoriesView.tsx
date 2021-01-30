@@ -4,7 +4,7 @@ DATE: January 2st, 2021
 FILE: CategoryView.tsx
 */
 
-import * as React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import TextArea from "./TextArea";
 
@@ -15,6 +15,7 @@ import FallbackMessage from "./FallbackMessage";
 
 // HOOKS 
 import useCategories from "../hooks/useCategories";
+import CategoryForm from "./CategoryForm";
 
 // STYLES 
 const Body = styled("section")`
@@ -27,11 +28,18 @@ interface CategoriesViewComponent {
 }
 
 const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user }) => {
-    const { categories, deleteCategory } = useCategories();
+    const { categories, deleteCategory, addCategory } = useCategories();
+    const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
+
+    const toggleCreateForm = () => {
+        createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true)
+    }
 
     return (
         <Body>
-            { user.role === "administrator" ? <CreateBtn link="/categories/create" /> : null}
+            {/* CREATE FORM */}
+            {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancleFunc={toggleCreateForm} /> : null}
+            { user.role === "administrator" ? <CreateBtn func={toggleCreateForm} /> : null}
             <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
             {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
                 categories.map((cat) => {

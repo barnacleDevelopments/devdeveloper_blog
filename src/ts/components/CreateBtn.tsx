@@ -6,7 +6,6 @@ FILE: CreateBtn.tsx
 
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
 
 const Button = styled("a")`
     position: fixed;
@@ -26,16 +25,14 @@ const Button = styled("a")`
 `;
 
 interface CreateBtnData {
-    link: string
+    func(): void
 }
 
-const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ link }) => {
+const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ func }) => {
     return (
-        <Link to={link}>
-            <Button>
-                <i className="fas fa-plus fa-2x"></i>
-            </Button>
-        </Link>
+        <Button onClick={func}>
+            <i className="fas fa-plus fa-2x"></i>
+        </Button>
     )
 }
 

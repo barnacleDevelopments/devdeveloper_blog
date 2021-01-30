@@ -7,16 +7,30 @@ FILE: TextProcessor.tsx
 import * as React from "react";
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { Redirect } from "react-router-dom";
 
 // INTERFACES
 interface CategoryFormComponent {
     name: string,
     desc: string,
     btnText: string,
-    isSubmited: boolean,
     submitFunc(data: NewCategoryData): void
+    cancleFunc(): void
 }
+
+const Shadow = styled("div")`
+    z-index: 1000000;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.500);
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+`;
+
+
 
 const Form = styled("form")`
     padding: 10px;
@@ -60,7 +74,7 @@ const Form = styled("form")`
 
 
 
-const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, isSubmited }) => {
+const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancleFunc }) => {
     const [formData, setFormData] = useState<CategoryFormData>({
         name: "",
         desc: ""
@@ -74,18 +88,20 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
 
     const handleSubmit = () => {
         submitFunc(formData)
+        cancleFunc()
     }
 
     return (
-        <Form>
-            {/* REDIRECTS */}
-            {isSubmited ? <Redirect to={`/categories`} /> : null}
+        <Shadow>
+            <Form>
+                {/* FORM INPUTS */}
+                <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
+                <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
+                <a onClick={handleSubmit}>{btnText}</a>
+                <a onClick={cancleFunc}>Cancle</a>
+            </Form>
+        </Shadow>
 
-            {/* FORM INPUTS */}
-            <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
-            <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
-            <a onClick={handleSubmit}>{btnText}</a>
-        </Form>
     )
 }
 

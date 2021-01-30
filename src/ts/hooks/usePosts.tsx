@@ -9,21 +9,28 @@ import Post from "../controllers/post_controller";
 import Category from "../controllers/category_controller";
 
 const usePosts = () => {
-    const [posts, setPosts] = useState<PostData[]>([]);
+    const [posts, setPosts] = useState<PostData[]>([{
+        _id: "",
+        title: "",
+        subTitle: "",
+        content: "",
+        date: "",
+    }]);
 
     // retrive all the posts
-    const addPost = (newPost: PostData) => {
+    const addPost = (title: string, content: string, catId: string) => {
         let adjustedPostsList = posts;
-        adjustedPostsList.push(newPost);
-        setPosts(adjustedPostsList);
+        Post.prototype.create(title, content, catId)
+            .then((post) => {
+                console.log(post)
+                adjustedPostsList = [post, ...adjustedPostsList]
+                setPosts(adjustedPostsList);
+            });
     }
 
     const getCategoryPosts = (catId: string) => {
         Category.prototype.getPosts(catId)
             .then(data => setPosts(data))
-            .catch(() => {
-
-            })
     }
 
     const deletePost = (postId: string, catId: string) => {
@@ -34,8 +41,22 @@ const usePosts = () => {
             });
     }
 
-    const getPost = () => {
-
+    const updatePost = (postId: string, title: string, content: string) => {
+        Post.prototype.update(postId, {
+            title: title,
+            content: content,
+        }).then((updatedPost) => {
+            let newPostList: PostData[] = posts.map(post => {
+                console.log(post._id, updatedPost._id)
+                if (post._id === updatedPost._id) {
+                    console.log(post, updatedPost)
+                    return updatedPost;
+                } else {
+                    return post;
+                }
+            });
+            setPosts(newPostList);
+        })
     }
 
     const getAllPosts = () => {
@@ -47,7 +68,7 @@ const usePosts = () => {
         addPost,
         deletePost,
         getCategoryPosts,
-        getPost,
+        updatePost,
         getAllPosts
     }
 }

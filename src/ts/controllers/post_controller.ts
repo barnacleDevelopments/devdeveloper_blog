@@ -19,8 +19,7 @@ class Post {
             title: "",
             subTitle: "",
             content: "",
-            date: "",
-            catId: ""
+            date: ""
         };
         await fetch(`http://localhost:${PORT}/posts/${id}`, {
             method: "GET",
@@ -35,9 +34,13 @@ class Post {
         return recievedData
     }
 
-    async create(newPost: NewPostData, catId: string): Promise<ResponseStatus> {
-        let recievedData: ResponseStatus = {
-            status: "pending"
+    async create(title: string, content: string, catId: string): Promise<PostData> {
+        let recievedData: PostData = {
+            _id: "",
+            title: "",
+            subTitle: "",
+            content: "",
+            date: ""
         }
         await fetch(`http://localhost:${PORT}/posts/create/${catId}`, {
             method: "POST",
@@ -46,21 +49,21 @@ class Post {
                 "Content-Type": "application/json",
                 Accept: "application/json"
             },
-            body: JSON.stringify(newPost)
+            body: JSON.stringify({ title, content })
         })
             .then(response => response.json())
             .then(data => recievedData = data)
-            .catch(err => {
-                console.log(err)
-                recievedData = { status: "failure" }
-            })
 
         return recievedData;
     }
 
-    async update(id: string, newPost: EditPostData): Promise<ResponseStatus> {
-        let recievedData: ResponseStatus = {
-            status: "pending"
+    async update(id: string, newPost: EditPostData): Promise<PostData> {
+        let recievedData: PostData = {
+            _id: "",
+            title: "",
+            subTitle: "",
+            content: "",
+            date: ""
         }
         await fetch(`http://localhost:${PORT}/posts/update/${id}`, {
             method: "PUT",
@@ -73,10 +76,7 @@ class Post {
         })
             .then(response => response.json())
             .then(data => recievedData = data)
-            .catch(err => {
-                console.log(err)
-                recievedData = { status: "failure" }
-            })
+            .catch(err => console.log(err))
         return recievedData;
     }
 
@@ -84,7 +84,6 @@ class Post {
         let recievedData: ResponseStatus = {
             status: "pending"
         }
-        console.log(catId, id)
         await fetch(`http://localhost:${PORT}/posts/delete/${id}/${catId}`, {
             method: "DELETE",
             mode: "cors",

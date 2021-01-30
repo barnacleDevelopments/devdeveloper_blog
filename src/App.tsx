@@ -15,10 +15,6 @@ import Navbar from "./ts/components/Navbar";
 import CategoriesView from "./ts/components/CategoriesView";
 import PostsView from "./ts/components/PostsView";
 import PostView from "./ts/components/PostView";
-import CategoryEditView from "./ts/components/CategoryEditView";
-import CategoryCreateView from "./ts/components/CategoryCreateView";
-import PostEditView from "./ts/components/PostEditView";
-import PostCreateView from "./ts/components/PostCreateView";
 import LoginView from "./ts/components/LoginView";
 import SignupView from "./ts/components/SignupView";
 
@@ -56,20 +52,8 @@ const App = () => {
                         <Route exact path="/categories" >
                             <CategoriesView user={UserContextData.user} />
                         </Route>
-                        <Route path="/categories/create">
-                            <CategoryCreateView user={UserContextData.user} />
-                        </Route>
-                        <Route path="/categories/edit/:catId">
-                            <CategoryEditView user={UserContextData.user} />
-                        </Route>
                         <Route path="/categories/posts/:catId">
                             <PostsView user={UserContextData.user} />
-                        </Route>
-                        <Route exact path="/posts/edit/:catId/:postId">
-                            <PostEditView user={UserContextData.user} />
-                        </Route>
-                        <Route path="/posts/create/:catId">
-                            <PostCreateView user={UserContextData.user} />
                         </Route>
                         <Route exact path="/posts/:catId/:postId" >
                             <PostView user={UserContextData.user} />

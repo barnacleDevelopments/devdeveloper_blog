@@ -13,7 +13,7 @@ declare class Category {
     getAll(): Promise<CategoryData[]>;
     getOne(id: string): Promise<CategoryData>;
     getPosts(id: string): Promise<PostData[]>;
-    create(newCategory: NewCategoryData): Promise<NewCategoryData>;
+    create(name: string, desc: string): Promise<CategoryData>;
     update(id: string, newCategory: NewCategoryData): Promise<void>;
     delete(id: string): Promise<ResponseStatus>;
 }

@@ -10,7 +10,6 @@ interface PostData {
     title: string,
     subTitle: string,
     content: string,
-    catId: string,
     date: string
 }
 

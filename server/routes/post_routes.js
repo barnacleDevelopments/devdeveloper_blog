@@ -71,10 +71,8 @@ router.post("/create/:catId", (req, res) => {
                     Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
                         if (!err) {
                             console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
-                            res.send({
-                                status: "success",
-                                message: "Added item to database."
-                            })
+                            console.log(post)
+                            res.json(post)
                         } else {
                             console.log(err)
                             res.send({
@@ -106,13 +104,13 @@ router.post("/create/:catId", (req, res) => {
 router.put("/update/:id", (req, res) => {
     const body = req.body;
     const id = req.params.id;
-    Post.findOneAndUpdate({ _id: id }, body, (err, post) => {
+    Post.findByIdAndUpdate(id, body, {
+        new: true
+    }, (err, post) => {
         if (!err) {
             console.log(`Post updated! It's id is: ${post._id}`)
-            res.send({
-                status: "success",
-                message: "Updated item in database"
-            })
+            console.log(post)
+            res.json(post)
         } else {
             console.log(err)
             res.send({

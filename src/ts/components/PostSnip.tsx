@@ -5,8 +5,8 @@ FILE: PostSnip.tsx
 */
 
 // DEPENDENCIES
-import * as React from "react";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -15,6 +15,8 @@ import CardPhoto from "../../img/logo.png";
 
 // COMPONENTS
 import ConfirmForm from "./ConfirmForm";
+import PostContext from "../contexts/PostContext";
+import PostForm from "./PostForm";
 
 // INTERFACES
 interface PostData {
@@ -22,11 +24,10 @@ interface PostData {
     title: string,
     content: string,
     user: UserComponentData,
-    catId: string,
-    deletePost(postId: string, catId: string): void
+    catId: string
 }
 
-const PostSnipBody = styled("div")`
+const Body = styled("div")`
     background-color: #314455;
     color: #f5f5f5;
     display: grid;
@@ -102,16 +103,22 @@ const PostSnipContent = styled("div")`
     }
 `;
 
-const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, title, content, deletePost }) => {
-    const [formVisible, setFormVisible] = useState<boolean>(false)
+const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, title, content }) => {
+    const [editFormVisible, setEditFormVisible] = useState<boolean>(false);
+    const [deleteFormVisible, setDeleteFormVisible] = useState<boolean>(false);
+    const { deletePost, updatePost } = useContext(PostContext);
 
     const toggleDeleteForm = () => {
-        formVisible ?
-            setFormVisible(false) : setFormVisible(true)
+        deleteFormVisible ?
+            setDeleteFormVisible(false) : setDeleteFormVisible(true)
+    }
+    const toggleEditForm = () => {
+        editFormVisible ?
+            setEditFormVisible(false) : setEditFormVisible(true)
     }
 
     return (
-        <PostSnipBody>
+        <Body>
             <img src={CardPhoto} />
             <PostSnipContent>
                 <h2>{title ? title : "No Title"}</h2>
@@ -120,14 +127,23 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
                     <Link to={`/posts/${catId}/${postId}`}>READ</Link>
                 </div>
             </PostSnipContent>
+
+            {/* POST EDIT FORM */}
+            {editFormVisible ? <PostForm title={title} content={content} btnText="Update" cancleFunc={toggleEditForm} submitFunc={(postData: PostFormData) => updatePost(postId, postData.title, postData.content)} /> : null}
+
             {/* ADMIN COMPONENTS */}
-            {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={() => {
-                toggleDeleteForm()
-                deletePost(postId, catId)
+            {deleteFormVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={() => {
+                toggleDeleteForm();
+                deletePost(postId, catId);
+
             }} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
-            {user.role === "administrator" ? <Link to={`/posts/edit/${catId}/${postId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
-            {user.role === "administrator" ? <a onClick={toggleDeleteForm}><i className="far fa-trash-alt"></i></a> : null}
-        </PostSnipBody>
+
+            {/* EDIT FORM BUTTON */}
+            {user.role === "administrator" ? <a onClick={() => toggleEditForm()}><i className="fas fa-pen fa-1x"></i></a> : null}
+
+            {/* DELETE FORM BUTTON */}
+            {user.role === "administrator" ? <a onClick={() => toggleDeleteForm()}><i className="far fa-trash-alt"></i></a> : null}
+        </Body>
     )
 }
 

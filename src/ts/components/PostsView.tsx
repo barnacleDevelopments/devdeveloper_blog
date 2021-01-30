@@ -4,9 +4,12 @@ DATE: January 2st, 2021
 FILE: PostsView.tsx
 */
 
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useParams } from "react-router-dom";
+
+// CONTEXTS 
+import PostContext from "../contexts/PostContext";
 
 //COMPONENTS
 import PostSnip from "./PostSnip"
@@ -14,6 +17,7 @@ import PostSnip from "./PostSnip"
 import PostSnipFallback from "./PostSnipFallback";
 import CreateBtn from "./CreateBtn";
 import usePosts from "../hooks/usePosts";
+import PostForm from "./PostForm";
 
 // INTERFACES
 interface ParamTypes {
@@ -30,21 +34,34 @@ const Body = styled("section")`
 `;
 const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
     const { catId } = useParams<ParamTypes>();
-    const { posts, deletePost } = usePosts();
+    const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
+    const PostContextData = usePosts();
 
+    useEffect(() => {
+        PostContextData.getCategoryPosts(catId);
+    }, []);
+
+    const toggleCreateForm = () => {
+        createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true);
+    }
 
     return (
         <Body>
-            {user.role === "administrator" ? <CreateBtn link={`/posts/create/${catId}`} /> : null}
+            <PostContext.Provider value={PostContextData}>
+                {/* CREATE FORM */}
+                {createFormVisible ? <PostForm title="" content="" btnText="Create" cancleFunc={toggleCreateForm} submitFunc={(postData: PostFormData) => PostContextData.addPost(postData.title, postData.content, catId)} /> : null}
 
-            {
-                posts.length <= 0 ? <PostSnipFallback /> :
-                    posts.map(post => {
+                {/* if admin is logged in display create btn */}
+                {user.role === "administrator" ? <CreateBtn func={toggleCreateForm} /> : null}
+
+                {/* if posts exists display them */}
+                {PostContextData.posts.length <= 0 ? <PostSnipFallback /> :
+                    PostContextData.posts.map(post => {
                         return (
-                            <PostSnip deletePost={deletePost} user={user} key={post._id} postId={post._id} catId={catId} title={post.title} content={post.content} />
+                            <PostSnip user={user} key={post._id} postId={post._id} catId={catId} title={post.title} content={post.content} />
                         );
-                    })
-            }
+                    })}
+            </PostContext.Provider>
         </Body>
     )
 }

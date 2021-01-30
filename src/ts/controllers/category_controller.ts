@@ -25,7 +25,6 @@ class Category {
                 title: "",
                 subTitle: "",
                 content: "",
-                catId: "",
                 date: ""
             }]
         }];
@@ -57,7 +56,6 @@ class Category {
                 title: "",
                 subTitle: "",
                 content: "",
-                catId: "",
                 date: ""
             }]
         }
@@ -83,7 +81,6 @@ class Category {
             title: "",
             subTitle: "",
             content: "",
-            catId: "",
             date: ""
         }]
 
@@ -97,16 +94,25 @@ class Category {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 recievedData = data;
             });
         return recievedData
     }
 
-    async create(newCategory: NewCategoryData) {
-        let recievedData: NewCategoryData = {
+    async create(name: string, desc: string): Promise<CategoryData> {
+        let recievedData: CategoryData = {
+            _id: "",
             name: "",
             desc: "",
+            count: 0,
+            img: "",
+            posts: [{
+                _id: "",
+                title: "",
+                subTitle: "",
+                content: "",
+                date: ""
+            }]
         }
 
         await fetch(`http://localhost:${PORT}/categories/create`, {
@@ -116,7 +122,7 @@ class Category {
                 "Content-Type": "application/json;charset=UTF-8",
                 Accept: "application/json"
             },
-            body: JSON.stringify(newCategory)
+            body: JSON.stringify({ name, desc })
         })
             .then(response => response.json())
             .then(data => {

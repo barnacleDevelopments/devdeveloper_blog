@@ -29,13 +29,13 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// retrieve blogs of category
+// retrieve posts of category
 router.get("/posts/:id", (req, res) => {
     const catId = req.params.id;
     Category.findById(catId)
         .populate("posts")
         .exec((err, cat) => {
-            err ? console.log(err) : res.json(cat)
+            err ? console.log(err) : res.json(cat.posts)
         })
 });
 

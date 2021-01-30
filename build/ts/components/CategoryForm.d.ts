@@ -3,8 +3,8 @@ interface CategoryFormComponent {
     name: string;
     desc: string;
     btnText: string;
-    isSubmited: boolean;
     submitFunc(data: NewCategoryData): void;
+    cancleFunc(): void;
 }
 declare const CategoryForm: React.FunctionComponent<CategoryFormComponent>;
 export default CategoryForm;

@@ -19,10 +19,13 @@ const useCategories = () => {
             })
     }, []);
 
-    const addCategory = (newCat: CategoryData) => {
+    const addCategory = (name: string, desc: string) => {
         let adjustedCatList = categories;
-        adjustedCatList.push(newCat);
-        setCategories(adjustedCatList);
+        Category.prototype.create(name, desc)
+            .then(category => {
+                adjustedCatList = [category, ...adjustedCatList]
+                setCategories(adjustedCatList);
+            })
     }
 
     const deleteCategory = (catId: string) => {

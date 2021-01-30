@@ -4,25 +4,34 @@ DATE: January 4th, 2021
 FILE: TextProcessor.tsx
 */
 
-import * as React from "react";
+import React from "react";
 import { useState } from 'react';
 import styled from "@emotion/styled";
-import { Redirect } from "react-router-dom";
 
 // INTERFACES 
 interface PostFormComponent {
-    postId?: string,
     title: string,
-    subTitle: string,
     content: string,
     btnText: string,
-    catId?: string,
-    isSubmited: boolean,
-    submitFunc(data: PostFormData): void
+    submitFunc(postData: PostFormData): void,
+    cancleFunc(): void
 }
 
+const Shadow = styled("div")`
+    z-index: 1000000;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.500);
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+`;
 
-const Body = styled("article")`
+
+const Form = styled("form")`
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -62,8 +71,8 @@ const Body = styled("article")`
 `;
 
 
-const PostForm: React.FunctionComponent<PostFormComponent> = ({ catId, title, subTitle, content, btnText, submitFunc, isSubmited }) => {
 
+const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
 
     const [formData, setFormData] = useState<PostFormData>({
         title: title,
@@ -77,17 +86,20 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ catId, title, su
     }
 
     const handleSubmit = () => {
-        submitFunc(formData);
+        submitFunc(formData)
+        cancleFunc();
     }
 
     return (
-        <Body>
-            {isSubmited ? <Redirect to={`/categories/posts/${catId}`} /> : null}
-            <input name="title" onChange={handleFormData} defaultValue={title} type="text" />
-            {subTitle ? <input defaultValue={subTitle} type="text" /> : null}
-            <textarea name="content" onChange={handleFormData} defaultValue={content} />
-            <a onClick={handleSubmit}>{btnText}</a>
-        </Body>
+        <Shadow>
+            <Form>
+                <input name="title" onChange={handleFormData} defaultValue={title} type="text" />
+                <textarea name="content" onChange={handleFormData} defaultValue={content} />
+                <a onClick={handleSubmit}>{btnText}</a>
+                <a onClick={cancleFunc} >Cancle</a>
+            </Form>
+        </Shadow>
+
     )
 }
 
