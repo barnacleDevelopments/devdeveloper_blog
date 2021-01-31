@@ -15,6 +15,7 @@ import { useState } from "react";
 // ASSETS 
 import CardPhoto from "../../img/logo.png"
 import ConfirmForm from "./ConfirmForm";
+import CategoryForm from "./CategoryForm";
 
 // INTERFACES
 interface CategoryComponentData {
@@ -24,7 +25,8 @@ interface CategoryComponentData {
     count: number,
     img?: string,
     user: UserComponentData,
-    deleteCategory(catId: string): void
+    deleteCategory(catId: string): void,
+    updateCategory(catId: string, name: string, desc: string): void
 }
 
 const CardBody = styled("div")`
@@ -125,22 +127,21 @@ const CardCount = styled("div")`
 
 `;
 
-const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, deleteCategory }) => {
-    const [formVisible, setFormVisible] = useState<boolean>(false);
+const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, deleteCategory, updateCategory }) => {
+    const [deleteFormVisible, setDeleteFormVisible] = useState<boolean>(false);
+    const [editFormVisible, setEditFormVisible] = useState<Boolean>(false);
 
-    // toggle delete form visibility
     const toggleDeleteForm = () => {
-        formVisible ?
-            setFormVisible(false) : setFormVisible(true);
+        deleteFormVisible ?
+            setDeleteFormVisible(false) : setDeleteFormVisible(true);
     }
 
-    // if form is deleted remove card element
+    const toggleEditForm = () => {
+        editFormVisible ? setEditFormVisible(false) : setEditFormVisible(true)
+    }
+
     return (
         <CardBody>
-            {formVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={() => {
-                deleteCategory(catId);
-                toggleDeleteForm();
-            }} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
             <CardImg src={CardPhoto} />
             <CardCount>{count}</CardCount>
             <CardContent>
@@ -148,9 +149,36 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
                 {<p>{desc ? desc : "This category has no description."}</p>}
                 <Link to={`/categories/posts/${catId}`}>VIEW</Link>
             </CardContent>
-            {user.role === "administrator" ?
-                <Link to={`/categories/edit/${catId}`}><i className="fas fa-pen fa-1x"></i></Link> : null}
 
+            {/* DELETE FORM */}
+            {deleteFormVisible ?
+                <ConfirmForm
+                    cancleHandler={toggleDeleteForm}
+                    confirmHandler={() => {
+                        deleteCategory(catId);
+                        toggleDeleteForm();
+                    }}
+                    btnText="Confirm"
+                    message="You sure you want to delete this thing?" /> : null}
+
+            {/* EDIT FORM */}
+            {editFormVisible ?
+                <CategoryForm
+                    cancleFunc={toggleEditForm}
+                    submitFunc={(data: CategoryFormData) => {
+                        updateCategory(catId, data.name, data.desc)
+                        toggleEditForm();
+                    }}
+                    btnText="Confirm"
+                    name={name}
+                    desc={desc}
+                /> : null}
+
+            {/* EDIT BUTTON */}
+            {user.role === "administrator" ?
+                <a onClick={toggleEditForm}><i className="fas fa-pen fa-1x"></i></a> : null}
+
+            {/* DELETE BUTTON */}
             {user.role === "administrator" ?
                 <a onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></a> : null}
         </CardBody>

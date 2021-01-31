@@ -3,7 +3,6 @@ interface PostComponent {
     postId: string;
     catId: string;
     title: string;
-    subTitle: string;
     content: string;
     user: UserComponentData;
 }

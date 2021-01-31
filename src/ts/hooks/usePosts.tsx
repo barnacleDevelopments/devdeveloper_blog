@@ -12,32 +12,45 @@ const usePosts = () => {
     const [posts, setPosts] = useState<PostData[]>([{
         _id: "",
         title: "",
-        subTitle: "",
         content: "",
         date: "",
     }]);
 
-    // retrive all the posts
+    const [errorMessage, setErrorMessage] = useState<String>()
+
     const addPost = (title: string, content: string, catId: string) => {
         let adjustedPostsList = posts;
         Post.prototype.create(title, content, catId)
-            .then((post) => {
-                console.log(post)
-                adjustedPostsList = [post, ...adjustedPostsList]
-                setPosts(adjustedPostsList);
+            .then((data) => {
+                if (data.status === "error") {
+                    setErrorMessage(data.message)
+                } else {
+                    adjustedPostsList = [data.data, ...adjustedPostsList];
+                    setPosts(adjustedPostsList);
+                }
             });
     }
 
     const getCategoryPosts = (catId: string) => {
         Category.prototype.getPosts(catId)
-            .then(data => setPosts(data))
+            .then(data => {
+                if (data.status === "error") {
+                    setErrorMessage(data.message);
+                } else {
+                    setPosts(data.data);
+                }
+            })
     }
 
     const deletePost = (postId: string, catId: string) => {
         Post.prototype.delete(postId, catId)
-            .then(() => {
-                let newCatList = posts.filter(post => post._id === postId ? false : true);
-                setPosts(newCatList);
+            .then(data => {
+                if (data.status === "error") {
+                    setErrorMessage(data.message);
+                } else {
+                    let newCatList = posts.filter(post => post._id === postId ? false : true);
+                    setPosts(newCatList);
+                }
             });
     }
 
@@ -45,17 +58,19 @@ const usePosts = () => {
         Post.prototype.update(postId, {
             title: title,
             content: content,
-        }).then((updatedPost) => {
-            let newPostList: PostData[] = posts.map(post => {
-                console.log(post._id, updatedPost._id)
-                if (post._id === updatedPost._id) {
-                    console.log(post, updatedPost)
-                    return updatedPost;
-                } else {
-                    return post;
-                }
-            });
-            setPosts(newPostList);
+        }).then((data) => {
+            if (data.status === "error") {
+                setErrorMessage(data.message);
+            } else {
+                let newPostList: PostData[] = posts.map(post => {
+                    if (post._id === data.data._id) {
+                        return data.data;
+                    } else {
+                        return post;
+                    }
+                });
+                setPosts(newPostList);
+            }
         })
     }
 
@@ -69,7 +84,9 @@ const usePosts = () => {
         deletePost,
         getCategoryPosts,
         updatePost,
-        getAllPosts
+        getAllPosts,
+        errorMessage
+
     }
 }
 

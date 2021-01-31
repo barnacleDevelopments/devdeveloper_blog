@@ -129,20 +129,34 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
             </PostSnipContent>
 
             {/* POST EDIT FORM */}
-            {editFormVisible ? <PostForm title={title} content={content} btnText="Update" cancleFunc={toggleEditForm} submitFunc={(postData: PostFormData) => updatePost(postId, postData.title, postData.content)} /> : null}
+            {editFormVisible ?
+                <PostForm
+                    title={title}
+                    content={content}
+                    btnText="Update"
+                    cancleFunc={toggleEditForm}
+                    submitFunc={(postData: PostFormData) =>
+                        updatePost(postId, postData.title, postData.content)} /> : null}
+
 
             {/* ADMIN COMPONENTS */}
-            {deleteFormVisible ? <ConfirmForm cancleHandler={toggleDeleteForm} confirmHandler={() => {
-                toggleDeleteForm();
-                deletePost(postId, catId);
-
-            }} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
+            {deleteFormVisible ?
+                <ConfirmForm
+                    cancleHandler={toggleDeleteForm}
+                    confirmHandler={() => {
+                        toggleDeleteForm();
+                        deletePost(postId, catId);
+                    }} btnText="Confirm" message="You sure you want to delete this thing?" /> : null}
 
             {/* EDIT FORM BUTTON */}
-            {user.role === "administrator" ? <a onClick={() => toggleEditForm()}><i className="fas fa-pen fa-1x"></i></a> : null}
+            {user.role === "administrator" ? <a onClick={
+                () => toggleEditForm()
+            }><i className="fas fa-pen fa-1x"></i></a> : null}
 
             {/* DELETE FORM BUTTON */}
-            {user.role === "administrator" ? <a onClick={() => toggleDeleteForm()}><i className="far fa-trash-alt"></i></a> : null}
+            {user.role === "administrator" ? <a onClick={
+                () => toggleDeleteForm()
+            }><i className="far fa-trash-alt"></i></a> : null}
         </Body>
     )
 }

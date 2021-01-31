@@ -30,8 +30,6 @@ const Shadow = styled("div")`
     left: 0px;
 `;
 
-
-
 const Form = styled("form")`
     padding: 10px;
     display: flex;
@@ -40,6 +38,7 @@ const Form = styled("form")`
     background-color: #314455;
     gap: 10px;
     border-radius: 4px;
+    width: 90%;
     input {
         font-size: 1.2em;
         padding-left: 16px;
@@ -60,7 +59,6 @@ const Form = styled("form")`
         border: none;
         padding-left: 16px;
         font-family: 'Chivo', sans-serif;
-        border-radius: 4px;
     }
 
     a {
@@ -70,6 +68,15 @@ const Form = styled("form")`
         border-radius: 4px;
         text-decoration: none;
     }
+`;
+
+
+const ButtonContainer = styled("div")`
+    padding: 10px 0px 10px;
+    a {
+        margin-left: 10px;
+    }
+
 `;
 
 
@@ -97,8 +104,10 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                 {/* FORM INPUTS */}
                 <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
                 <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
-                <a onClick={handleSubmit}>{btnText}</a>
-                <a onClick={cancleFunc}>Cancle</a>
+                <ButtonContainer>
+                    <a onClick={cancleFunc}>Cancel</a>
+                    <a onClick={handleSubmit}>{btnText}</a>
+                </ButtonContainer>
             </Form>
         </Shadow>
 

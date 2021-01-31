@@ -7,6 +7,7 @@ interface CategoryComponentData {
     img?: string;
     user: UserComponentData;
     deleteCategory(catId: string): void;
+    updateCategory(catId: string, name: string, desc: string): void;
 }
 declare const Card: React.FunctionComponent<CategoryComponentData>;
 export default Card;

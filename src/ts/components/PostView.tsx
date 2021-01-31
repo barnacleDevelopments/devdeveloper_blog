@@ -11,14 +11,15 @@ import styled from "@emotion/styled";
 import { Link, useParams } from "react-router-dom";
 
 // CONTROLLERS
-import Post from "../controllers/post_controller";
 import Comment from "../controllers/comment_controler";
+import Post from "../controllers/post_controller";
 
 //COMPONENTS
 import PostBody from "./PostBody";
 import CommentBody from "./CommentBody";
 import Title from "./Title";
 import CommentForm from "./CommentForm";
+
 
 // INTERFACES 
 interface ParamTypes {
@@ -64,24 +65,22 @@ const Fallback = styled("div")`
 `;
 
 const PostView: React.FunctionComponent<PostView> = ({ user }) => {
-    const [post, setPost] = useState<NewPostData>({
-        title: "",
-        content: ""
-    });
-
     // Retrieve post id from url
     const { postId, catId } = useParams<ParamTypes>();
+    const [post, setPost] = useState<PostData>();
 
-    // retrieve post
+
     useEffect(() => {
         Post.prototype.getOne(postId)
-            .then((post) => {
-                setPost(post);
-            }).catch((err) => {
-                console.log(err)
-            })
-    }, []);
+            .then((data: PostResponse) => {
+                if (data.status === "error") {
+                    console.log(data.message)
+                } else {
+                    setPost(data.data)
+                }
 
+            })
+    }, [])
 
     const [comments, setComments] = useState<CommentComponentData[]>([])
 
@@ -101,10 +100,11 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
 
     }, [])
 
-    console.log(comments)
     return (
         <Body>
-            <PostBody user={user} postId={postId} catId={catId} title={post.title} content={post.content} subTitle={""} />
+            {post ?
+                <PostBody user={user} postId={postId} catId={catId} title={post.title} content={post.content} />
+                : null}
             <Title title="COMMENTS" />
             {user.status ? <CommentForm createComment={createComment} userId={user._id} postId={postId} /> : null}
             {user.status ? null : <Link to="/login">Login</Link>}

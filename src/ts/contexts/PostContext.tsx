@@ -14,7 +14,6 @@ export const PostContextDefaultValue: PostContextData = {
     posts: [{
         _id: "",
         title: "",
-        subTitle: "",
         content: "",
         date: ""
     }],
@@ -23,6 +22,7 @@ export const PostContextDefaultValue: PostContextData = {
     getCategoryPosts: () => null,
     updatePost: () => null,
     getAllPosts: () => null
+
 }
 
 export default createContext(PostContextDefaultValue);

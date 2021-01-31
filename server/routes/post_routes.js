@@ -23,11 +23,11 @@ POST ROUTES
 router.get("/", (req, res) => {
     Post.find({}, (err, blogs) => {
         if (!err) {
-            res.json(blogs)
+            res.json({ data: blogs, status: "success" })
         } else {
             console.log(err)
             res.send({
-                status: "failure",
+                status: "error",
                 message: "Failed to find items in database."
             })
         }
@@ -40,11 +40,11 @@ router.get("/:id", (req, res) => {
     const blogId = req.params.id  // retrieve url information 
     Post.findOne({ _id: blogId }, (err, blog) => {  // retrieve post
         if (!err) {
-            res.json(blog);
+            res.json({ data: blog, status: "success" });
         } else {
             console.log(err)
             res.send({
-                status: "failure",
+                status: "error",
                 message: "Failed to find item in database."
             })
         }
@@ -56,48 +56,54 @@ router.post("/create/:catId", (req, res) => {
     const body = req.body;
     const catId = req.params.catId;
 
-    let newCategorySchema = yup.object().shape({
-        title: yup.string().required().min().max(),
-        desc: yup.string().required().min().max()
+    let newPostSchema = yup.object().shape({
+        title: yup.string().required().min(5).max(15),
+        content: yup.string().required().min(50).max(1000)
     });
 
-
-    Post.create(body, (err, post) => {
-        if (!err) {
-            Category.findOne({ _id: catId }, (err, cat) => {
+    newPostSchema.validate(body)
+        .then(() => {
+            Post.create(body, (err, post) => {
                 if (!err) {
-                    let newPostArr = cat.posts
-                    newPostArr.push(post._id)
-                    Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
+                    Category.findOne({ _id: catId }, (err, cat) => {
                         if (!err) {
-                            console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
-                            console.log(post)
-                            res.json(post)
+                            let newPostArr = cat.posts
+                            newPostArr.push(post._id)
+                            Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
+                                if (!err) {
+                                    res.json({ data: post, status: "success" })
+                                    console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
+                                } else {
+                                    console.log(err)
+                                    res.json({
+                                        status: "error",
+                                        message: "Failed to update item in database."
+                                    })
+                                }
+                            })
                         } else {
                             console.log(err)
-                            res.send({
-                                status: "failure",
-                                message: "Failed to update item in database."
+                            res.json({
+                                status: "error",
+                                message: "Failed to find item in database."
                             })
                         }
                     })
+                    console.log(`Post created! It's id is: ${post._id}`)
                 } else {
                     console.log(err)
-                    res.send({
-                        status: "failure",
-                        message: "Failed to find item in database."
+                    res.json({
+                        status: "error",
+                        message: "Failed to add item to database."
                     })
                 }
             })
-            console.log(`Post created! It's id is: ${post._id}`)
-        } else {
-            console.log(err)
-            res.send({
-                status: "failure",
-                message: "Failed to add item to database."
-            })
-        }
-    })
+        }).catch((err) => {
+            console.log(err.errors[0])
+            res.json({ status: "error", message: err.errors[0] })
+        })
+
+
 });
 
 // update one post
@@ -109,8 +115,7 @@ router.put("/update/:id", (req, res) => {
     }, (err, post) => {
         if (!err) {
             console.log(`Post updated! It's id is: ${post._id}`)
-            console.log(post)
-            res.json(post)
+            res.json({ data: post, status: "success" })
         } else {
             console.log(err)
             res.send({
@@ -139,13 +144,13 @@ router.delete("/delete/:postId/:catId", (req, res) => {
                     Category.findByIdAndUpdate(catId, { posts: posts }, (err, cat) => {
                         if (!err) {
                             console.log(`Category with id: ${cat._id} posts updated!`)
-                            res.send({
+                            res.json({
                                 status: "success",
                                 message: "Removed item from database."
                             })
                         } else {
                             console.log(err)
-                            res.send({
+                            res.json({
                                 status: "failure",
                                 message: "Failed to update item in database."
                             })
@@ -153,7 +158,7 @@ router.delete("/delete/:postId/:catId", (req, res) => {
                     })
                 } else {
                     console.log(err)
-                    res.send({
+                    res.json({
                         status: "failure",
                         message: "Failed to find item in database."
                     })
@@ -161,7 +166,7 @@ router.delete("/delete/:postId/:catId", (req, res) => {
             })
         } else {
             console.log(err)
-            res.send({
+            res.json({
                 status: "failure",
                 message: "Failed to delete item in database."
             })

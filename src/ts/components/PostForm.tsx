@@ -39,6 +39,7 @@ const Form = styled("form")`
     background-color: #314455;
     gap: 10px;
     border-radius: 4px;
+    width: 90%;
     input {
         font-size: 1.2em;
         padding-left: 16px;
@@ -71,6 +72,15 @@ const Form = styled("form")`
 `;
 
 
+const ButtonContainer = styled("div")`
+    padding: 10px 0px 10px;
+    a {
+        margin-left: 10px;
+    }
+
+`;
+
+
 
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
 
@@ -95,8 +105,11 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
             <Form>
                 <input name="title" onChange={handleFormData} defaultValue={title} type="text" />
                 <textarea name="content" onChange={handleFormData} defaultValue={content} />
-                <a onClick={handleSubmit}>{btnText}</a>
-                <a onClick={cancleFunc} >Cancle</a>
+                <ButtonContainer>
+                    <a onClick={handleSubmit}>{btnText}</a>
+                    <a onClick={cancleFunc} >Cancle</a>
+                </ButtonContainer>
+
             </Form>
         </Shadow>
 

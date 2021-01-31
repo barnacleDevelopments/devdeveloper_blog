@@ -5,7 +5,8 @@ FILE: category_routes.js
 */
 
 import express from "express";
-import bodyParser from "body-parser";
+import * as yup from "yup"
+
 const router = express.Router();
 
 // MODELS
@@ -17,7 +18,7 @@ import Post from "../models/post_model";
 // retrieve all categories
 router.get("/", (req, res) => {
     Category.find({}, (err, cats) => {
-        err ? console.log(err) : res.json(cats)
+        err ? res.json({ status: "error", message: err }) : res.json({ data: cats, status: "success" })
     })
 });
 
@@ -25,7 +26,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     const catId = req.params.id;
     Category.findOne({ _id: catId }, (err, cat) => {
-        err ? console.log(err) : res.json(cat);
+        err ? res.json({ status: "error", message: err }) : res.json({ data: cat, status: "success" });
     });
 });
 
@@ -35,36 +36,68 @@ router.get("/posts/:id", (req, res) => {
     Category.findById(catId)
         .populate("posts")
         .exec((err, cat) => {
-            err ? console.log(err) : res.json(cat.posts)
-        })
-});
+            if (!err) {
+                res.json({ data: cat.posts, status: "success" });
+                console.log(`Posts retrieved from category with id: ${cat._id}`)
+            } else {
+                res.json({
+                    status: "error",
+                    message: err
+                })
+            }
+        });
+})
 
 // create one category
 router.post("/create", (req, res) => {
     const body = req.body;
-    Category.create(body, (err, cat) => {
-        if (!err) {
-            res.json(cat);
-            console.log(`Category created! It's id is: ${cat._id}`)
-        } else {
-            console.log(err)
-        }
 
+    const categorySchema = yup.object().shape({
+        name: yup.string().required().min(4).max(10),
+        desc: yup.string().required().min(16).max(40)
     })
-});
+
+    categorySchema.validate(body)
+        .then(() => {
+            Category.create(body, (err, cat) => {
+                if (!err) {
+                    res.json({ data: cat, status: "success" });
+                    console.log(`Category created! It's id is: ${cat._id}`)
+                } else {
+                    res.json({
+                        status: "error",
+                        message: err
+                    })
+                }
+
+            })
+        }).catch(err => res.json({ status: "error", message: err }))
+
+})
 
 // update one category
 router.put("/update/:id", (req, res) => {
     const body = req.body;
     const id = req.params.id;
-    Category.findOneAndUpdate({ _id: id }, body, (err, cat) => {
-        if (!err) {
-            res.json(cat)
-            console.log(`Category with id: ${cat._id} updated!`)
-        } else {
-            console.log(err)
-        }
+
+    const categorySchema = yup.object().shape({
+        name: yup.string().required().min(4).max(10),
+        desc: yup.string().required().min(16).max(40)
     })
+
+    categorySchema.validate(body)
+        .then(() => {
+            Category.findByIdAndUpdate(id, body, {
+                new: true
+            }, (err, cat) => {
+                if (!err) {
+                    res.json({ data: cat, status: "success" })
+                    console.log(`Category with id: ${cat._id} updated!`)
+                } else {
+                    res.json({ status: "error" })
+                }
+            })
+        }).catch(err => res.json({ status: "error", message: err }))
 
 });
 
@@ -77,11 +110,11 @@ router.delete("/delete/:id", (req, res) => {
                 if (!err) {
                     Post.deleteMany({ catId: id }, (err, cat) => {
                         err ? console.log(err) : res.json({ status: "success" })
+                        console.log(`Category with id: ${cat._id} deleted!`)
                     })
                 }
             })
         }
-        err ? console.log(err) : console.log(`Category with id: ${cat._id} deleted!`)
     })
 })
 

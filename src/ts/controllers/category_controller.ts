@@ -7,27 +7,24 @@ FILE: category_controller.ts
 // ENV VARIABLES
 const PORT = 5000;
 
-type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
 
 
 class Category {
     constructor() { }
 
     async getAll() {
-        let recievedData: CategoryData[] = [{
-            _id: "",
-            name: "",
-            desc: "",
-            count: 0,
-            img: "",
-            posts: [{
+        let recievedData: CategoriesResponse = {
+            data: [{
                 _id: "",
-                title: "",
-                subTitle: "",
-                content: "",
-                date: ""
-            }]
-        }];
+                name: "",
+                desc: "",
+                count: 0,
+                img: "",
+                posts: []
+            }],
+            status: "pending",
+            message: ""
+        };
 
         await fetch(`http://localhost:${PORT}/categories`, {
             method: "GET",
@@ -44,20 +41,19 @@ class Category {
         return recievedData
     }
 
-    async getOne(id: string): Promise<CategoryData> {
-        let recievedData: CategoryData = {
-            _id: "",
-            name: "",
-            desc: "",
-            count: 0,
-            img: "",
-            posts: [{
+    async getOne(id: string): Promise<CategoryResponse> {
+        let recievedData: CategoryResponse = {
+            data: {
                 _id: "",
-                title: "",
-                subTitle: "",
-                content: "",
-                date: ""
-            }]
+                name: "",
+                desc: "",
+                count: 0,
+                img: "",
+                posts: []
+            },
+            status: "pending",
+            message: ""
+
         }
 
         await fetch(`http://localhost:${PORT}/categories/${id}`, {
@@ -75,14 +71,17 @@ class Category {
         return recievedData;
     }
 
-    async getPosts(id: string): Promise<PostData[]> {
-        let recievedData: PostData[] = [{
-            _id: "",
-            title: "",
-            subTitle: "",
-            content: "",
-            date: ""
-        }]
+    async getPosts(id: string): Promise<PostsResponse> {
+        let recievedData: PostsResponse = {
+            data: [{
+                _id: "",
+                title: "",
+                content: "",
+                date: "",
+            }],
+            status: "pending",
+            message: ""
+        }
 
         await fetch(`http://localhost:${PORT}/categories/posts/${id}`, {
             method: "GET",
@@ -99,20 +98,24 @@ class Category {
         return recievedData
     }
 
-    async create(name: string, desc: string): Promise<CategoryData> {
-        let recievedData: CategoryData = {
-            _id: "",
-            name: "",
-            desc: "",
-            count: 0,
-            img: "",
-            posts: [{
+    async create(name: string, desc: string): Promise<CategoryResponse> {
+        let recievedData: CategoryResponse = {
+            data: {
                 _id: "",
-                title: "",
-                subTitle: "",
-                content: "",
-                date: ""
-            }]
+                name: "",
+                desc: "",
+                count: 0,
+                img: "",
+                posts: [{
+                    _id: "",
+                    title: "",
+                    content: "",
+                    date: ""
+                }]
+            },
+            status: "pending",
+            message: ""
+
         }
 
         await fetch(`http://localhost:${PORT}/categories/create`, {
@@ -132,7 +135,19 @@ class Category {
         return recievedData;
     }
 
-    async update(id: string, newCategory: NewCategoryData) {
+    async update(id: string, name: string, desc: string): Promise<CategoryResponse> {
+        let recievedData: CategoryResponse = {
+            data: {
+                _id: "",
+                name: "",
+                desc: "",
+                count: 0,
+                img: "",
+                posts: []
+            },
+            status: "pending",
+            message: ""
+        }
         await fetch(`http://localhost:${PORT}/categories/update/${id}`, {
             method: "PUT",
             mode: "cors",
@@ -140,13 +155,17 @@ class Category {
                 "Content-Type": "application/json",
                 Accept: "application/json"
             },
-            body: JSON.stringify(newCategory)
+            body: JSON.stringify({ name, desc })
         })
+            .then(response => response.json())
+            .then(data => recievedData = data)
+
+        return recievedData;
     }
 
-    async delete(id: string): Promise<ResponseStatus> {
+    async delete(id: string): Promise<BasicResponse> {
 
-        let recievedData: ResponseStatus = { status: "pending" }
+        let recievedData: BasicResponse = { status: "pending" }
 
         await fetch(`http://localhost:${PORT}/categories/delete/${id}`, {
             method: "DELETE",

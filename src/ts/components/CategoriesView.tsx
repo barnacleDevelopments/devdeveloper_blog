@@ -28,7 +28,7 @@ interface CategoriesViewComponent {
 }
 
 const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user }) => {
-    const { categories, deleteCategory, addCategory } = useCategories();
+    const { categories, deleteCategory, addCategory, updateCategory } = useCategories();
     const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
 
     const toggleCreateForm = () => {
@@ -39,12 +39,16 @@ const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user
         <Body>
             {/* CREATE FORM */}
             {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancleFunc={toggleCreateForm} /> : null}
+
+            {/* CREATE BUTTON */}
             { user.role === "administrator" ? <CreateBtn func={toggleCreateForm} /> : null}
             <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
+
+            {/* FALLBACK MESSAGE */}
             {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
                 categories.map((cat) => {
                     let postCount = cat.posts.length;
-                    return <Card deleteCategory={deleteCategory} user={user} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
+                    return <Card deleteCategory={deleteCategory} updateCategory={updateCategory} user={user} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
                 })}
         </Body>
     )

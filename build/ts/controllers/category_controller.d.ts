@@ -1,20 +1,10 @@
-declare type ResponseStatus = {
-    status: "success";
-    message?: "";
-} | {
-    status: "failure";
-    message?: "";
-} | {
-    status: "pending";
-    message?: "";
-};
 declare class Category {
     constructor();
-    getAll(): Promise<CategoryData[]>;
-    getOne(id: string): Promise<CategoryData>;
-    getPosts(id: string): Promise<PostData[]>;
-    create(name: string, desc: string): Promise<CategoryData>;
-    update(id: string, newCategory: NewCategoryData): Promise<void>;
-    delete(id: string): Promise<ResponseStatus>;
+    getAll(): Promise<CategoriesResponse>;
+    getOne(id: string): Promise<CategoryResponse>;
+    getPosts(id: string): Promise<PostsResponse>;
+    create(name: string, desc: string): Promise<CategoryResponse>;
+    update(id: string, name: string, desc: string): Promise<CategoryResponse>;
+    delete(id: string): Promise<BasicResponse>;
 }
 export default Category;

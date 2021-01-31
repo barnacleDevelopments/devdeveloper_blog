@@ -8,7 +8,6 @@ FILE: post_interfaces.ts
 interface PostData {
     _id: string,
     title: string,
-    subTitle: string,
     content: string,
     date: string
 }

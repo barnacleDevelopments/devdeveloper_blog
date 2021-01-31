@@ -7,19 +7,19 @@ FILE: post_controller.ts
 // ENV VARIABLES
 const PORT = 5000;
 
-// INTERFACES
-type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
 
 class Post {
     constructor() { }
-
-    async getOne(id: string): Promise<PostData> {
-        let recievedData: PostData = {
-            _id: "",
-            title: "",
-            subTitle: "",
-            content: "",
-            date: ""
+    async getOne(id: string): Promise<PostResponse> {
+        let recievedData: PostResponse = {
+            data: {
+                _id: "",
+                title: "",
+                content: "",
+                date: ""
+            },
+            status: "pending",
+            message: ""
         };
         await fetch(`http://localhost:${PORT}/posts/${id}`, {
             method: "GET",
@@ -34,14 +34,19 @@ class Post {
         return recievedData
     }
 
-    async create(title: string, content: string, catId: string): Promise<PostData> {
-        let recievedData: PostData = {
-            _id: "",
-            title: "",
-            subTitle: "",
-            content: "",
-            date: ""
+    async create(title: string, content: string, catId: string): Promise<PostResponse> {
+        let recievedData: PostResponse = {
+            data: {
+                _id: "",
+                title: "",
+                content: "",
+                date: "",
+            },
+
+            status: "pending",
+            message: ""
         }
+
         await fetch(`http://localhost:${PORT}/posts/create/${catId}`, {
             method: "POST",
             mode: "cors",
@@ -57,13 +62,16 @@ class Post {
         return recievedData;
     }
 
-    async update(id: string, newPost: EditPostData): Promise<PostData> {
-        let recievedData: PostData = {
-            _id: "",
-            title: "",
-            subTitle: "",
-            content: "",
-            date: ""
+    async update(id: string, newPost: EditPostData): Promise<PostResponse> {
+        let recievedData: PostResponse = {
+            data: {
+                _id: "",
+                title: "",
+                content: "",
+                date: ""
+            },
+            status: "pending",
+            message: ""
         }
         await fetch(`http://localhost:${PORT}/posts/update/${id}`, {
             method: "PUT",
@@ -80,8 +88,8 @@ class Post {
         return recievedData;
     }
 
-    async delete(id: string, catId: string): Promise<ResponseStatus> {
-        let recievedData: ResponseStatus = {
+    async delete(id: string, catId: string): Promise<BasicResponse> {
+        let recievedData: BasicResponse = {
             status: "pending"
         }
         await fetch(`http://localhost:${PORT}/posts/delete/${id}/${catId}`, {
@@ -96,7 +104,7 @@ class Post {
             .then(data => recievedData = data)
             .catch(err => {
                 console.log(err)
-                recievedData = { status: "failure" }
+                recievedData = { status: "error" }
             })
         return recievedData;
     }

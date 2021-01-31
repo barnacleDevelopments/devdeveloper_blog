@@ -74,19 +74,17 @@ interface PostComponent {
     postId: string,
     catId: string,
     title: string,
-    subTitle: string,
     content: string,
     user: UserComponentData
 }
 
-const Post: React.FunctionComponent<PostComponent> = ({ user, postId, catId, title, subTitle, content }) => {
+const Post: React.FunctionComponent<PostComponent> = ({ user, postId, catId, title, content }) => {
 
     return (
         <Body>
             <img src={CardPhoto} />
             <Content>
                 <h1>{title}</h1>
-                <h2>{subTitle}</h2>
                 <p>{content}</p>
             </Content>
 

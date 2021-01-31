@@ -36,6 +36,7 @@ const Body = styled("div")`
 const App = () => {
     const UserContextData = useAuth();
 
+
     return (
         <Body>
             {UserContextData.isAuthenticated ? null : <Redirect to="/categories" />}
