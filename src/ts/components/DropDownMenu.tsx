@@ -4,8 +4,9 @@ DATE: January 1st, 2021
 FILE: DropDownMenu.tsx
 */
 
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 import styled from "@emotion/styled";
+import { UserContext } from "../contexts/UserContext";
 
 const Body = styled("div")`
     position: relative;
@@ -57,12 +58,12 @@ interface MenuItem {
 }
 
 interface DropDownMenuInterface {
-    menuItems: MenuItem[],
-    user: UserComponentData
+    menuItems: MenuItem[]
 }
 
-const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems, user }) => {
+const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { isAuthenticated, user } = useContext(UserContext)
 
     const toggleDropdown = () => {
         isOpen ? setIsOpen(false) : setIsOpen(true);
@@ -70,7 +71,7 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems, use
 
     return (
         <Body>
-            {user.status ? (
+            {isAuthenticated ? (
                 user.role === "administrator" ?
                     <UserLogo onClick={toggleDropdown} className="fas fa-user-tie" />
                     :

@@ -7,6 +7,7 @@ FILE: TextProcessor.tsx
 import * as React from "react";
 import { useState } from "react";
 import styled from "@emotion/styled";
+// import { useForm } from "react-hook-form";
 
 // INTERFACES
 interface CategoryFormComponent {
@@ -17,31 +18,58 @@ interface CategoryFormComponent {
     cancleFunc(): void
 }
 
-const Shadow = styled("div")`
-    z-index: 1000000;
+const Body = styled("div")`
     position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.500);
     width: 100%;
     height: 100%;
     top: 0px;
     left: 0px;
+    z-index: 998;
+`;
+
+const Shadow = styled("div")`
+    z-index: 998;
+    background-color: rgba(0, 0, 0, 0.500);
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
 `;
 
 const Form = styled("form")`
-    padding: 10px;
+    z-index: 999;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     background-color: #314455;
-    gap: 10px;
+    gap: 14px;
     border-radius: 4px;
-    width: 90%;
+    width: 93%;
+    padding: 14px;
+
+    @media (min-width: 576px) {
+        width: 85%;
+    }
+
+    @media (min-width: 768px) {
+        width: 75%;
+    }
+
+    @media (min-width: 992px) {
+        width: 65%;
+    }
+
+    @media (min-width: 1200px) {
+        width: 50%;
+    }
+
     input {
         font-size: 1.2em;
-        padding-left: 16px;
+        padding-left: 14px;
         color: #00000055;
         width: 100%;
         height: 40px;
@@ -59,6 +87,7 @@ const Form = styled("form")`
         border: none;
         padding-left: 16px;
         font-family: 'Chivo', sans-serif;
+        border-radius: 4px;
     }
 
     a {
@@ -70,21 +99,18 @@ const Form = styled("form")`
     }
 `;
 
-
 const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
     a {
         margin-left: 10px;
     }
-
 `;
 
-
-
 const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancleFunc }) => {
+    // const { register, getValues, handleSubmit, errors } = useForm()
     const [formData, setFormData] = useState<CategoryFormData>({
-        name: "",
-        desc: ""
+        name: name,
+        desc: desc
     });
 
     const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -93,24 +119,24 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
         setFormData(data);
     }
 
-    const handleSubmit = () => {
+    const handleFormSubmit = () => {
         submitFunc(formData)
         cancleFunc()
     }
 
     return (
-        <Shadow>
+        <Body>
+            <Shadow onClick={cancleFunc}></Shadow>
             <Form>
                 {/* FORM INPUTS */}
                 <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
                 <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
                 <ButtonContainer>
                     <a onClick={cancleFunc}>Cancel</a>
-                    <a onClick={handleSubmit}>{btnText}</a>
+                    <a onClick={handleFormSubmit}>{btnText}</a>
                 </ButtonContainer>
             </Form>
-        </Shadow>
-
+        </Body>
     )
 }
 

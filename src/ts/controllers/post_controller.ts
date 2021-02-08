@@ -90,7 +90,8 @@ class Post {
 
     async delete(id: string, catId: string): Promise<BasicResponse> {
         let recievedData: BasicResponse = {
-            status: "pending"
+            status: "pending",
+            message: ""
         }
         await fetch(`http://localhost:${PORT}/posts/delete/${id}/${catId}`, {
             method: "DELETE",
@@ -104,7 +105,7 @@ class Post {
             .then(data => recievedData = data)
             .catch(err => {
                 console.log(err)
-                recievedData = { status: "error" }
+                recievedData = { status: "error", message: "" }
             })
         return recievedData;
     }

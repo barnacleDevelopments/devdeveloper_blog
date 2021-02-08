@@ -14,7 +14,7 @@ import useNav from "../hooks/useNav";
 
 // INTERFACES
 interface NavComponent {
-    user: UserComponentData
+
 }
 
 // COMPONENTS
@@ -33,7 +33,7 @@ const Navbody = styled("nav")`
     display: flex;
     justify-content: space-between;
     box-shadow: 0px 3px 30px -20px black;
-    z-index: 100000;
+    z-index: 997;
     align-items: center;
     a {
         i {
@@ -58,7 +58,7 @@ const Navbar: React.FunctionComponent<NavComponent> = () => {
     const { backBtnParams, backBtnStatus } = useNav();
 
     // User Context
-    const { logout, user } = useContext(UserContext);
+    const { logout, isAuthenticated } = useContext(UserContext);
 
     // logs the user out
     const handleLogout = () => {
@@ -67,12 +67,12 @@ const Navbar: React.FunctionComponent<NavComponent> = () => {
 
     return (
         <Navbody>
-            {user.status ? <Redirect to="/categories" /> : null}
+            {isAuthenticated ? <Redirect to="/categories" /> : null}
             {backBtnStatus ? <Link to={backBtnParams}>
                 <i className="fas fa-arrow-left fa-3x"></i>
             </Link> : <Logo />}
 
-            {user.status ? <DropDownMenu user={user} menuItems={[
+            {isAuthenticated ? <DropDownMenu menuItems={[
                 { name: "Loggout", link: "/", func: handleLogout },
                 { name: "Settings", link: "/" }
             ]} /> :

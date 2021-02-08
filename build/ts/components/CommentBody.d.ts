@@ -5,7 +5,6 @@ interface CommentComponent {
     content: string;
     date: string;
     username: string;
-    user: UserComponentData;
 }
 declare const CommentBody: React.FunctionComponent<CommentComponent>;
 export default CommentBody;

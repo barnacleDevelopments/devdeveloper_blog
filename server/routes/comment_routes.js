@@ -12,6 +12,8 @@ import Comment from "../models/comment_model";
 import Post from "../models/post_model";
 import User from "../models/user_model";
 
+import isLoggedIn from "./user_routes"
+
 // CATEGORY ROUTES
 
 // retrieve all comments
@@ -74,7 +76,7 @@ router.get("/post/:id", (req, res) => {
 })
 
 // create one comment
-router.post("/create/:userId/:postId", (req, res) => {
+router.post("/create/:userId/:postId", isLoggedIn, (req, res) => {
     const body = req.body;
     const userId = req.params.userId;
     const postId = req.params.postId;
@@ -132,7 +134,7 @@ router.post("/create/:userId/:postId", (req, res) => {
 });
 
 // update one comment
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", isLoggedIn, (req, res) => {
     const body = req.body;
     const id = req.params.id;
     Comment.findOneAndUpdate({ _id: id }, body, (err, com) => {
@@ -144,52 +146,51 @@ router.put("/update/:id", (req, res) => {
 });
 
 // delete one comment
-router.delete("/delete/:commentId/:userId/:postId", (req, res) => {
-    const commentId = req.params.commentId;
-    const userId = req.params.userId;
-    const postId = req.params.postId;
-    // find comment and delete from database
-    Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
-        if (!err) {
-            // find the comment's associated user
-            User.findById(userId, (err, data) => {
-                if (!err) {
-                    let newUserCommentList = data.comments.filter((id) => {
-                        id === commentId ? false : true;
-                    })
-                    // update the users comments list 
-                    User.findByIdAndUpdate(userId, { comments: newUserCommentList }, (err, data) => {
-                        if (!err) {
-                            // find associated post
-                            Post.findById(postId, (err, data) => {
-                                if (!err) {
-                                    let newPostCommentList = data.comments.filter((id) => {
-                                        id === commentId ? false : true;
-                                    })
-                                    // update post comment list 
-                                    Post.findByIdAndUpdate(postId, { comments: newPostCommentList }, (err, data) => {
-                                        if (!err) {
-                                            console.log(`Comment with id: ${commentId} deleted!`)
-                                            res.json({ status: "success" })
-                                        } else {
-                                            console.log(err)
-                                        }
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }
-            })
-
-        } else {
-
-        }
-
-
-
-
-    })
+router.delete("/delete/:commentId/:userId/:postId", isLoggedIn, (req, res) => {
+    if (req.user.role === "administrator") {
+        const commentId = req.params.commentId;
+        const userId = req.params.userId;
+        const postId = req.params.postId;
+        // find comment and delete from database
+        Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
+            if (!err) {
+                // find the comment's associated user
+                User.findById(userId, (err, data) => {
+                    if (!err) {
+                        let newUserCommentList = data.comments.filter((id) => {
+                            id === commentId ? false : true;
+                        })
+                        // update the users comments list 
+                        User.findByIdAndUpdate(userId, { comments: newUserCommentList }, (err, data) => {
+                            if (!err) {
+                                // find associated post
+                                Post.findById(postId, (err, data) => {
+                                    if (!err) {
+                                        let newPostCommentList = data.comments.filter((id) => {
+                                            id === commentId ? false : true;
+                                        })
+                                        // update post comment list 
+                                        Post.findByIdAndUpdate(postId, { comments: newPostCommentList }, (err, data) => {
+                                            if (!err) {
+                                                console.log(`Comment with id: ${commentId} deleted!`)
+                                                res.json({ status: "success" })
+                                            } else {
+                                                console.log(err)
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            } else {
+                res.json({ status: "error", message: err })
+            }
+        })
+    } else {
+        res.redirect("/")
+    }
 })
 
 export default router;

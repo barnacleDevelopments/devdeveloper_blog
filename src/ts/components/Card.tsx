@@ -70,6 +70,12 @@ const CardContent = styled("div")`
     padding: 15px 17px;
     column-gap: 15px;
 
+    div {
+        display: flex;
+        justify-content: right;
+        align-items: flex-end;
+    }
+
     h2 {
         font-size: 2em;
         grid-column: 1 / span 2;
@@ -147,7 +153,9 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
             <CardContent>
                 <h2>{name ? name : "No Name"}</h2>
                 {<p>{desc ? desc : "This category has no description."}</p>}
-                <Link to={`/categories/posts/${catId}`}>VIEW</Link>
+                <div>
+                    <Link to={`/categories/posts/${catId}`}>VIEW</Link>
+                </div>
             </CardContent>
 
             {/* DELETE FORM */}

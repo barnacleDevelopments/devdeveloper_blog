@@ -4,18 +4,24 @@ DATE: January 27th, 2021
 FILE: useCategories.tsx
 */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Category from "../controllers/category_controller";
+
+// CONTEXTS
+import ErrorContext from "../contexts/ErrorContext";
+
 
 const useCategories = () => {
     const [categories, setCategories] = useState<CategoryData[]>([]);
-    const [errorMessage, setErrorMessage] = useState<String>()
+    const { addError } = useContext(ErrorContext);
+
+
     // retrive all the categories
     useEffect(() => {
         Category.prototype.getAll()
             .then(data => {
                 if (data.status === "error") {
-                    setErrorMessage(data.message);
+                    addError(data.message);
                 } else {
                     setCategories(data.data)
                 }
@@ -27,7 +33,7 @@ const useCategories = () => {
         Category.prototype.create(name, desc)
             .then(data => {
                 if (data.status === "error") {
-                    setErrorMessage(data.message);
+                    addError(data.message);
                 } else {
                     adjustedCatList = [data.data, ...adjustedCatList]
                     setCategories(adjustedCatList);
@@ -39,7 +45,7 @@ const useCategories = () => {
         Category.prototype.delete(catId)
             .then((data) => {
                 if (data.status === "error") {
-                    setErrorMessage(data.message);
+                    addError(data.message || "");
                 } else {
                     let newCatList = categories.filter(category => category._id === catId ? false : true);
                     setCategories(newCatList);
@@ -51,11 +57,10 @@ const useCategories = () => {
         Category.prototype.update(catId, name, desc)
             .then((data) => {
                 if (data.status === "error") {
-                    setErrorMessage(data.message);
+                    addError(data.message);
                 } else {
                     let newCategories = categories.map(category => {
                         if (category._id === data.data._id) {
-                            console.log(data.data)
                             return data.data;
                         } else {
                             return category;
@@ -70,8 +75,7 @@ const useCategories = () => {
         categories,
         addCategory,
         deleteCategory,
-        updateCategory,
-        errorMessage
+        updateCategory
     }
 }
 

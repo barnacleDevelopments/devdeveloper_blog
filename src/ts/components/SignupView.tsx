@@ -9,7 +9,10 @@ import styled from "@emotion/styled";
 import { Redirect } from "react-router-dom";
 
 // COMPONENTS
-import SignupForm from "./SignupForm"
+import SignupForm from "./SignupForm";
+
+//HOOKS
+import useAuth from "../hooks/useAuth";
 
 const Body = styled("section")`
 
@@ -17,15 +20,15 @@ const Body = styled("section")`
 
 // INTERFACES 
 interface SignupViewComponent {
-    user: UserComponentData
+
 }
 
 
-const SignupView: React.FunctionComponent<SignupViewComponent> = ({ user }) => {
-
+const SignupView: React.FunctionComponent<SignupViewComponent> = () => {
+    const { isAuthenticated } = useAuth()
     return (
         <Body>
-            {user.status ?
+            {isAuthenticated ?
                 <Redirect to="/categories" /> : null}
             <SignupForm />
         </Body>

@@ -52,6 +52,7 @@ const Content = styled("div")`
     h1 {
         font-size: 2em;
         font-weight: bold;
+        margin-bottom: 14px;
     }
 
     h2 {

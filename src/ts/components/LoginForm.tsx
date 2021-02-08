@@ -4,7 +4,7 @@ DATE: January 6th, 2021
 FILE: LoginForm.tsx
 */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Redirect } from "react-router";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ interface LoginFormComponent {
 
 const BtnGroup = styled("div")`
     margin-top: 10px;
-
+    
 `
 
 // STYLES
@@ -75,46 +75,46 @@ const Form = styled("form")`
 `;
 
 const LoginForm: React.FunctionComponent<LoginFormComponent> = () => {
-    const { register, handleSubmit, errors } = useForm();
-    const [formSuccess, setFormSucess] = useState<Boolean>(false);
-    const [databaseErr, setDatabaseErr] = useState<String>("");
-
+    const { register, handleSubmit } = useForm();
 
     // user context
-    const { login, user, isAuthenticated } = useContext(UserContext);
+    const { login, isAuthenticated, isError, setIsError } = useContext(UserContext);
 
     // submit user credentials
     const onSubmit = (data: UserFormData) => {
         login(data.username, data.password)
-        if (isAuthenticated) {
-            setFormSucess(true);
-        }
-        if (databaseErr) {
-            setDatabaseErr(databaseErr)
-        }
     }
+
+
+    const usernameRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (usernameRef.current !== null) {
+            register(usernameRef.current, { required: true })
+            usernameRef.current.focus()
+        }
+    }, [])
+
     return (
         <Form action="/login" method="post" onSubmit={handleSubmit(onSubmit)}>
             <h1>LOGIN</h1>
             <div>
-                <input placeholder="Username..." type="text" name="username" ref={register({ required: true, minLength: 6, maxLength: 20 })} />
+                <input onInput={() => setIsError(false)} placeholder="Username..." type="text" name="username" ref={usernameRef} />
             </div>
             <div>
-                <input placeholder="Password..." type="password" name="password" ref={register({ required: true, minLength: 8, maxLength: 20 })} />
+                <input onInput={() => setIsError(false)} placeholder="Password..." type="password" name="password" ref={
+                    register({ required: true })} />
             </div>
 
             {/* ERROR ELEMENTS */}
-            {(errors.username || errors.password) && (
-                <p>*Password or username incorrect</p>
-            )}
-            {databaseErr && (
-                databaseErr
+            {(isError) && (
+                <p>*password or username is incorrect</p>
             )}
 
             {/* REDIRECTS */}
-            {formSuccess || user.status ? <Redirect to="/categories" /> : null}
+            {isAuthenticated ? <Redirect to="/categories" /> : null}
             <BtnGroup>
-                <button type="submit"><a href="/" onClick={(e) => e.preventDefault()}>Login</a></button>
+                <button type="submit">Login</button>
                 <button><Link to="/signup">Sign up</Link></button>
             </BtnGroup>
         </Form>

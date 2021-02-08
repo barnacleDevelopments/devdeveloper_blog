@@ -16,7 +16,7 @@ const Button = styled("a")`
     box-shadow: 3px 3px 30px -10px black;
     bottom: 20px;
     right: 20px;
-    z-index: 9999;
+    z-index: 996;
     height: 70px;
     width: 70px;
     display: flex;

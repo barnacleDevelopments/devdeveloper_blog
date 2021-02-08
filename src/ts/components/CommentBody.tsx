@@ -5,11 +5,12 @@ FILE: Comment.tsx
 */
 
 // DEPENDENCIES
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "@emotion/styled";
 
 // CONTROLLERS
 import Comment from "../controllers/comment_controler";
+import { UserContext } from "../contexts/UserContext";
 
 // INTERFACES 
 interface CommentComponent {
@@ -17,8 +18,7 @@ interface CommentComponent {
     postId: string,
     content: string,
     date: string,
-    username: string,
-    user: UserComponentData
+    username: string
 }
 
 // STYLES
@@ -94,9 +94,9 @@ const Content = styled("div")`
 `;
 
 // COMPONENT
-const CommentBody: React.FunctionComponent<CommentComponent> = ({ user, commentId, content, date, username, postId }) => {
+const CommentBody: React.FunctionComponent<CommentComponent> = ({ commentId, content, date, username, postId }) => {
     const [isDeleted, setIsDeleted] = useState(false)
-
+    const { isAuthenticated, user } = useContext(UserContext);
     // delete comment
     const deleteComment = () => {
         Comment.prototype.delete(commentId, user._id, postId)
@@ -117,7 +117,7 @@ const CommentBody: React.FunctionComponent<CommentComponent> = ({ user, commentI
                     <p>{date}</p>
                 </Content>
                 <div>
-                    {user.role === "administrator" && user.status ?
+                    {user.role === "administrator" && isAuthenticated ?
                         <a onClick={deleteComment}><i className="far fa-trash-alt fa-1x"></i></a> : null}
                 </div>
             </Body>

@@ -1,6 +1,13 @@
+/*
+AUTHOR: Devin Davis
+DATE: January 31st, 2021
+FILE: PostContext.tsx
+*/
+
+
 import { createContext } from "react";
 
-interface PostContextData {
+interface PostsContextData {
     posts: PostData[],
     addPost(title: string, content: string, catId: string): void,
     getCategoryPosts(catId: string): void,
@@ -10,7 +17,7 @@ interface PostContextData {
 
 }
 
-export const PostContextDefaultValue: PostContextData = {
+export const PostsContextDefaultValue: PostsContextData = {
     posts: [{
         _id: "",
         title: "",
@@ -21,8 +28,9 @@ export const PostContextDefaultValue: PostContextData = {
     deletePost: () => null,
     getCategoryPosts: () => null,
     updatePost: () => null,
-    getAllPosts: () => null
+    getAllPosts: () => null,
+
 
 }
 
-export default createContext(PostContextDefaultValue);
+export default createContext(PostsContextDefaultValue);

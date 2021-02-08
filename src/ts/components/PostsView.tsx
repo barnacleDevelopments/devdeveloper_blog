@@ -39,6 +39,7 @@ const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
 
     useEffect(() => {
         PostContextData.getCategoryPosts(catId);
+        console.log(PostContextData.posts)
     }, []);
 
     const toggleCreateForm = () => {

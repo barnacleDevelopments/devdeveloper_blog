@@ -15,7 +15,6 @@ interface UserData {
 
 interface UserComponentData {
     _id: string,
-    status: boolean,
     role: string,
     username: string
 }

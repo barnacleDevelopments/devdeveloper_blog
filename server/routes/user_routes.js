@@ -6,6 +6,7 @@ FILE: post_routes.js
 
 import express from "express";
 import passport from 'passport';
+import { useReducer } from "react";
 import * as yup from "yup";
 
 // MODELS
@@ -13,35 +14,57 @@ import User from "../models/user_model";
 
 const router = express.Router();
 
-export function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
+export const isLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated()) {
         return next();
+    }
+
 
     res.sendStatus(401);
 }
 
-router.post('/login', passport.authenticate("local"), (req, res) => {
-    let user = {}
-    user.username = req.body.username;
-    user.password = req.body.password;
-    console.log(user)
+// login user route
+router.post('/login', (req, res, next) => {
+    console.log("ddd")
+    if (!req.body.username || !req.body.password) {
+        res.json({ status: "error" })
+    }
+
+    let incomingUser = {}
+    incomingUser.username = req.body.username;
+    incomingUser.password = req.body.password;
+
     let userSchema = yup.object().shape({
         username: yup.string().required().min(6).max(20),
         password: yup.string().required().min(8).max(20)
     })
 
-    userSchema.validate(user)
+    userSchema.validate(incomingUser)
         .then(() => {
-            res.json({ status: "success" });
+            passport.authenticate("local", (error, user) => {
+                req.login(user, (err) => {
+                    if (err) {
+                        res.json({ status: "error", message: error })
+
+                    } else {
+                        res.json({
+                            status: "success", data: {
+                                id_: user._id,
+                                username: user.username,
+                                role: user.role
+                            }
+                        })
+                    }
+                })
+            })(req, res, next)
         })
         .catch((err) => {
-            console.log("Validaton error")
-            res.json({ status: "failure", message: err.message })
+            res.json({ status: "error", message: err.message })
         })
-
 });
 
-router.post('/signup', (req, res) => {
+// signup user route
+router.post('/signup', (req, res, next) => {
     let newUser = {}
     newUser.username = req.body.username;
     newUser.password = req.body.password;
@@ -53,10 +76,18 @@ router.post('/signup', (req, res) => {
 
     userSchema.validate(newUser)
         .then(() => {
-            User.register(new User({ username: newUser.username, role: "administrator" }), newUser.password, (err, user) => {
+            User.register(new User({ username: newUser.username }), newUser.password, (err, user) => {
                 if (!err) {
-                    passport.authenticate("local")(req, res, () => {
-                        res.json({ status: "success" })
+                    const authenticate = User.authenticate();
+                    authenticate(user.username, user.password, (error, result) => {
+                        if (err) {
+                            console.log(err)
+                            res.json({ status: "error", message: error })
+                        } else {
+                            res.json({
+                                status: "success"
+                            })
+                        }
                     })
                 } else {
                     res.json({ status: "failure", message: err.message })

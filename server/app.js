@@ -72,17 +72,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // serialize user
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
+passport.serializeUser(User.serializeUser());
 
 // deserialize user 
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    err ? console.log(err) : done(err, user);
-
-  });
-});
+passport.deserializeUser(User.deserializeUser());
 
 // User.create({ username: "devin1984", password: "grapeness", role: "administrator" }, () => {
 

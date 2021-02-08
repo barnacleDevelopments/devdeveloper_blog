@@ -5,7 +5,7 @@ FILE: PostView.tsx
 */
 
 // DEPENDENCIES
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Link, useParams } from "react-router-dom";
@@ -19,6 +19,7 @@ import PostBody from "./PostBody";
 import CommentBody from "./CommentBody";
 import Title from "./Title";
 import CommentForm from "./CommentForm";
+import { UserContext } from "../contexts/UserContext";
 
 
 // INTERFACES 
@@ -28,7 +29,7 @@ interface ParamTypes {
 }
 
 interface PostView {
-    user: UserComponentData;
+
 }
 
 // STYLES
@@ -64,11 +65,12 @@ const Fallback = styled("div")`
     }
 `;
 
-const PostView: React.FunctionComponent<PostView> = ({ user }) => {
+const PostView: React.FunctionComponent<PostView> = () => {
     // Retrieve post id from url
     const { postId, catId } = useParams<ParamTypes>();
     const [post, setPost] = useState<PostData>();
-
+    const [comments, setComments] = useState<CommentComponentData[]>([])
+    const { isAuthenticated, user } = useContext(UserContext);
 
     useEffect(() => {
         Post.prototype.getOne(postId)
@@ -81,8 +83,6 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
 
             })
     }, [])
-
-    const [comments, setComments] = useState<CommentComponentData[]>([])
 
     // create new comment on post
     const createComment = (comment: NewCommentData) => {
@@ -106,8 +106,8 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
                 <PostBody user={user} postId={postId} catId={catId} title={post.title} content={post.content} />
                 : null}
             <Title title="COMMENTS" />
-            {user.status ? <CommentForm createComment={createComment} userId={user._id} postId={postId} /> : null}
-            {user.status ? null : <Link to="/login">Login</Link>}
+            {isAuthenticated ? <CommentForm createComment={createComment} userId={user._id} postId={postId} /> : null}
+            {isAuthenticated ? null : <Link to="/login">Login</Link>}
             {comments.length <= 0 ?
                 <Fallback>
                     <h2>No comments... <br />be the first!</h2>
@@ -115,7 +115,7 @@ const PostView: React.FunctionComponent<PostView> = ({ user }) => {
 
                 : comments.map((comment) => {
                     console.log(comment.username)
-                    return <CommentBody username={comment.username} key={comment._id} user={user} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
+                    return <CommentBody username={comment.username} key={comment._id} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
                 })}
 
         </Body>

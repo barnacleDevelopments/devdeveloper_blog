@@ -165,7 +165,7 @@ class Category {
 
     async delete(id: string): Promise<BasicResponse> {
 
-        let recievedData: BasicResponse = { status: "pending" }
+        let recievedData: BasicResponse = { status: "pending", message: "" }
 
         await fetch(`http://localhost:${PORT}/categories/delete/${id}`, {
             method: "DELETE",

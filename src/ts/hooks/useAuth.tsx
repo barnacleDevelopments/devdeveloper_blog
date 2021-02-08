@@ -11,33 +11,46 @@ import { useState } from "react";
 import User from "../controllers/user_controllers";
 
 export default () => {
+    const [isError, setIsError] = useState<boolean>(false);
+    const [userErrorMessage, setUserErrorMessage] = useState<string>("")
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [user, setUser] = useState<UserComponentData>({
         _id: "",
         username: "",
-        status: false,
         role: ""
     });
-    const [errMessage, setErrMessage] = useState<String>("");
-
-    const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
 
     const auth = () => {
         User.prototype.isAuthenticated()
             .then(data => {
-                setIsAuthenticated(true);
                 setUser(data);
+                setIsAuthenticated(true);
             })
     }
+
+
 
     const login = (username: string, password: string) => {
         User.prototype.login(username, password)
             .then(data => {
-                console.log(data.message)
-                if (data.status === "success") {
-                    auth();
+                if (data.status === "error") {
+                    setIsError(true);
+                } else {
+                    setIsError(false);
+                    setIsAuthenticated(true);
+                    data.data ? setUser(data.data) : null
                 }
-                if (data.status === "failure") {
-                    setErrMessage(errMessage);
+            })
+    }
+
+    const signup = (username: string, password: string) => {
+        User.prototype.signup(username, password)
+            .then(data => {
+                if (data.status === "error") {
+                    setIsError(true);
+                    data.message ? setUserErrorMessage(data.message) : null
+                } else {
+                    setIsAuthenticated(true);
                 }
             })
     }
@@ -50,15 +63,16 @@ export default () => {
                     setUser({
                         _id: "",
                         username: "",
-                        status: false,
                         role: "",
                     });
                 }
-                if (data.status === "failure") {
-                    setErrMessage(errMessage);
+                if (data.status === "error" && data.message !== undefined) {
+                    setIsError(true);
                 }
             })
     }
+
+
 
     return {
         user,
@@ -66,6 +80,10 @@ export default () => {
         isAuthenticated,
         logout,
         login,
-        errMessage
+        isError,
+        setIsError,
+        setUserErrorMessage,
+        userErrorMessage,
+        signup
     };
 }

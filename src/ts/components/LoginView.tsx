@@ -10,10 +10,11 @@ import { Redirect } from "react-router-dom";
 
 // COMPONENTS
 import LoginForm from "./LoginForm"
+import useAuth from "../hooks/useAuth";
 
 // INTERFACES 
 interface LoginViewComponent {
-    user: UserComponentData
+
 }
 
 const Body = styled("section")`
@@ -21,11 +22,11 @@ const Body = styled("section")`
 `;
 
 
-const LoginView: React.FunctionComponent<LoginViewComponent> = ({ user }) => {
-
+const LoginView: React.FunctionComponent<LoginViewComponent> = () => {
+    const { isAuthenticated } = useAuth()
     return (
         <Body>
-            {user.status ? <Redirect to="/categories" /> : null}
+            {isAuthenticated ? <Redirect to="/categories" /> : null}
             <LoginForm />
         </Body>
     )

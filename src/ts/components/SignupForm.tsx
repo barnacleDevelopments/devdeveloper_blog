@@ -5,13 +5,13 @@ FILE: SignupForm.tsx
 */
 
 // DEPENDENCIES
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { Redirect } from "react-router-dom";
 
-/// CONTROLLERS
-import User from "../controllers/user_controllers";
+/// HOOKS
+import useAuth from "../hooks/useAuth";
 
 const Form = styled("form")`
     background-color: #314455;
@@ -56,41 +56,41 @@ interface SignupFormComponent {
 const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
     // Client Side form validation hook
     const { register, getValues, handleSubmit, errors } = useForm();
-    // Form submit status state
-    const [formSuccess, setFormSucess] = useState<Boolean>(false);
-    // Database error state
-    const [databaseErr, setDatabaseErr] = useState<String>();
+
+    // auth state 
+    const { signup, userErrorMessage, isError, isAuthenticated } = useAuth()
+
+    const usernameRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (usernameRef.current !== null) {
+            register(usernameRef.current, {
+                required: true,
+                minLength: 6,
+                maxLength: 20,
+                validate: {
+                    passMatchUser: () => getValues("username") !== getValues("password")
+                }
+            })
+            usernameRef.current.focus()
+        }
+    }, [])
 
     // handle signup submit
     const onSubmit = (data: NewUserFormData) => {
-        setDatabaseErr("");
-        User.prototype.signup(data.username, data.password)
-            .then(data => {
-                if (data.status === "success") {
-                    setFormSucess(true);
-                } else if (data.status === "failure") {
-                    setDatabaseErr(data.message)
-                }
-            })
+        signup(data.username, data.password)
     }
 
     return (
         <Form action="/signup" method="post" onSubmit={handleSubmit(onSubmit)}>
-            {formSuccess ? <Redirect to="/categories" /> : null}
+            {isAuthenticated ? <Redirect to="/login" /> : null}
             <h1>SIGN UP</h1>
             <div>
                 <input
                     aria-invalid={errors.name ? "true" : "false"} type="text"
                     name="username"
                     placeholder="Enter username..."
-                    ref={register({
-                        required: true,
-                        minLength: 6,
-                        maxLength: 20,
-                        validate: {
-                            passMatchUser: () => getValues("username") !== getValues("password")
-                        }
-                    })} />
+                    ref={usernameRef} />
 
                 {/* USERNAME ERROR MESSAGES DISPLAY */}
                 {errors.username && errors.username.type === "maxLength" && (
@@ -114,8 +114,9 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
                             passMatch: () => getValues("password") === getValues("repeatPassword"),
                             passMatchUser: () => getValues("username") !== getValues("password"),
                             hasSpecial: () => {
-                                let passArr = getValues("password").trim().split("");
-                                return passArr.includes("#", "@", "!", "$", "%", "^", "&", "*");
+                                let specialCharecters = ["#", "@", "!", "$", "%", "^", "&", "*"]
+                                let passArr = getValues("password").trim()
+                                return specialCharecters.some(el => passArr.includes(el));
                             }
                         }
                     })} />
@@ -150,7 +151,7 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
                     <p>*Password must include at least one special character.</p>
                 )}
                 {(errors.username || errors.password) && <p>*All fields required.</p>}
-                {databaseErr && (<p>{databaseErr}.</p>)}
+                {isError && (<p>{userErrorMessage}.</p>)}
             </div>
             <div>
                 <button type="submit">Sign Up</button>

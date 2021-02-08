@@ -9,6 +9,8 @@ type ResponseStatus = "success" | "pending" | "error";
 
 type BasicResponse = { status: ResponseStatus, message?: "" };
 
+// USER RESPONSE 
+type UserResponse = { status: ResponseStatus, message?: "", data?: UserComponentData }
 
 // POST REPONSES
 type PostResponse = {

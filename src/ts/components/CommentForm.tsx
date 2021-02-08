@@ -24,8 +24,9 @@ const Body = styled("article")`
     border-radius: 4px;
     color: #f5f5f5;
     display: grid;
-    grid-template-columns: 4fr 1fr;
+    grid-template-rows: 3fr 1fr;
     margin-bottom: 14px;
+    padding:  14px;
     p {
         margin-bottom: 10px;
         font-size: 16px;
@@ -40,6 +41,7 @@ const Body = styled("article")`
     div:nth-of-type(2) {
        display: flex;
        align-items: flex-end;
+       justify-content: flex-end;
     }
     a {
         display: block;
@@ -48,9 +50,6 @@ const Body = styled("article")`
         height: 34px;
         text-align: center;
         border-radius: 4px;
-        margin-bottom: 10px;
-        margin-right: 10px;
-
     }
 `;
 
@@ -64,15 +63,11 @@ const TextArea = styled("textarea")`
     color: #f5f5f5;
     font-family: 'Chivo', sans-serif;
     box-sizing: border-box;
-    
+    height: 100%;
 `;
 
 const Content = styled("div")`
-    padding: 25px 15px 10px 15px;
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    margin-top: 14px;
 `;
 
 const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment, userId, postId }) => {

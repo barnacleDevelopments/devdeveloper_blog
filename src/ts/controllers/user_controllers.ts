@@ -8,13 +8,13 @@ FILE: user_controller.ts
 const PORT = 5000;
 
 // INTERFACES
-type ResponseStatus = { status: "success", message?: "" } | { status: "failure", message?: "" } | { status: "pending", message?: "" };
+
 
 class User {
     constructor() { }
 
-    async signup(username: string, password: string): Promise<ResponseStatus> {
-        let recievedData: ResponseStatus = { status: "pending" }
+    async signup(username: string, password: string): Promise<UserResponse> {
+        let recievedData: UserResponse = { status: "pending" }
 
         const searchParams = new URLSearchParams()
         searchParams.append("username", username)
@@ -29,17 +29,14 @@ class User {
             },
             body: searchParams
         }).then(response => response.json())
-            .then(data => {
-                console.log(data)
-                recievedData = data
-            })
-            .catch(err => console.log(err));
+            .then(data => recievedData = data)
+            .catch(() => recievedData = { status: "error" });
 
         return recievedData;
     }
 
-    async login(username: string, password: string): Promise<ResponseStatus> {
-        let recievedData: ResponseStatus = { status: "pending" }
+    async login(username: string, password: string): Promise<UserResponse> {
+        let recievedData: UserResponse = { status: "pending" }
 
         const searchParams = new URLSearchParams()
         searchParams.append("username", username)
@@ -54,17 +51,15 @@ class User {
             },
             body: searchParams
         }).then(response => response.json())
-            .then(data => {
-                recievedData = data
-            })
-            .catch(err => console.log(err))
+            .then(data => recievedData = data)
+            .catch(() => recievedData = { status: "error" })
 
 
         return recievedData;
     }
 
-    async logout(): Promise<ResponseStatus> {
-        let recievedData: ResponseStatus = { status: "pending" }
+    async logout(): Promise<UserResponse> {
+        let recievedData: UserResponse = { status: "pending" }
 
         await fetch(`http://localhost:${PORT}/logout`, {
             method: "POST",
@@ -76,9 +71,8 @@ class User {
         })
             .then(response => response.json())
             .then(data => recievedData = data)
-            .catch(err => {
-                console.log(err)
-                recievedData = { status: "failure" }
+            .catch(() => {
+                recievedData = { status: "error" }
             })
 
         return recievedData;
@@ -108,9 +102,8 @@ class User {
     }
 
     async isAuthenticated() {
-        let recievedData: UserComponentData | ResponseStatus = {
+        let recievedData: UserComponentData = {
             _id: "",
-            status: false,
             role: "",
             username: ""
         };
