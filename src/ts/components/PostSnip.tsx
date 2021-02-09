@@ -7,6 +7,8 @@ FILE: PostSnip.tsx
 // DEPENDENCIES
 import React, { useState, useContext } from "react";
 
+import { stripHtml } from "string-strip-html";
+
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -33,16 +35,21 @@ const Body = styled("div")`
     display: grid;
     grid-template-columns: 100px 1fr;
     margin-bottom: 14px;
-    box-shadow: 3px 3px 30px -20px black;
+    box-shadow: 1px 1px 5px 0px #00000040;
     border-radius: 4px;
     padding: 10px;
     position: relative;
+    min-width: 270px;
+    > a {
+        box-shadow: 1px 1px 5px 0px #00000030;
+    } 
+
     > a:nth-of-type(1) {
         position: absolute;
-        right: -10px;
+        right: -13px;
         top: -10px;
         background-color: #97aabd; 
-        padding: 6px;
+        padding: 8px;
         border-radius: 30px;
         color: #f5f5f5;
     }
@@ -73,6 +80,9 @@ const PostSnipContent = styled("div")`
         grid-column: 1 / span 2;
         font-weight: bold;
         margin-bottom: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     p {
         grid-column: 1;
@@ -81,20 +91,13 @@ const PostSnipContent = styled("div")`
         white-space: nowrap;
     }
     a {
-        background-color: #9E5A63;
-        border-radius: 4px;
-        padding: 10px 15px;
-        box-shadow: 3px 3px 30px -10px black;
-        display: inline-block;
-        grid-column: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80px;
-        height: 30px;
-        text-decoration: none;
         color: #f5f5f5;
-        margin-top: 9px;
+        background-color: #9e5a63;
+        padding: 9px 14px 9px 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        border: none;
+        box-shadow: 1px 1px 5px 0px #00000040;
     }
     div {
         display: flex;
@@ -122,7 +125,7 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
             <img src={CardPhoto} />
             <PostSnipContent>
                 <h2>{title ? title : "No Title"}</h2>
-                <p>{content ? content : "This post has no content."}</p>
+                <p>{content ? stripHtml(content).result : "This post has no content."}</p>
                 <div>
                     <Link to={`/posts/${catId}/${postId}`}>READ</Link>
                 </div>

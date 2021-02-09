@@ -17,6 +17,7 @@ import PostsView from "./ts/components/PostsView";
 import PostView from "./ts/components/PostView";
 import LoginView from "./ts/components/LoginView";
 import SignupView from "./ts/components/SignupView";
+
 // import ErrorNotification from "./ts/components/ErrorNotification";
 
 // HOOKS
@@ -30,6 +31,7 @@ import ErrorContext from "./ts/contexts/ErrorContext";
 //GLOBAL STYLES
 import "./css/reset.css";
 import "./css/global.css";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // import "./img/logo.png";
 

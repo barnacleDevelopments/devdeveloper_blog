@@ -11,10 +11,11 @@ const TextAreaBody = styled("article")`
     width: 100%;
     color: #f5f5f5;
     background-color: #9E5A63;
-    padding: 15px 15px 15px 20px;
+    padding: 15px 15px 20px 15px;
     margin-bottom: 14px;
     border-radius: 4px;
     box-shadow: 3px 3px 30px -20px black;
+    min-width: 270px;
     h1 {
         font-size: 2em;
         margin: 5px 0px 10px 0px;

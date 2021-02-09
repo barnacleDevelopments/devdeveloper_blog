@@ -4,10 +4,20 @@ DATE: January 4th, 2021
 FILE: TextProcessor.tsx
 */
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import { stateToHTML } from "draft-js-export-html";
 import { useState } from 'react';
 import styled from "@emotion/styled";
+import { stateFromHTML } from "draft-js-import-html"
 
+// STATES 
+import { EditorState } from 'draft-js';
+
+// COMPONENTS 
+import { Editor } from "react-draft-wysiwyg";
+
+// HOOKS 
+import { useForm } from "react-hook-form";
 
 // INTERFACES 
 interface PostFormComponent {
@@ -50,7 +60,7 @@ const Form = styled("form")`
     border-radius: 4px;
     width: 93%;
     padding: 14px;
-
+    box-shadow: 1px 1px 5px 0px #00000030;
     @media (min-width: 576px) {
         width: 85%;
     }
@@ -89,19 +99,24 @@ const Form = styled("form")`
         border-radius: 4px;
     }
 
-    a {
+    button {
         color: #f5f5f5;
         background-color: #9e5a63;
         padding: 9px 14px 9px 14px;
         border-radius: 4px;
         text-decoration: none;
+        border: none;
+        box-shadow: 1px 1px 5px 0px #00000030;
     }
 `;
 
 const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
-    a {
+    button {
         margin-left: 10px;
+    }
+    button:nth-of-type(1) {
+        background-color: #97aabd;
     }
 
 `;
@@ -109,38 +124,71 @@ const ButtonContainer = styled("div")`
 
 
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
-
+    const [editorState, setEditorState] = useState(
+        () => EditorState.createWithContent(stateFromHTML(content)),
+    );
     const [formData, setFormData] = useState<PostFormData>({
         title: title,
         content: content
     });
 
-    const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { register, handleSubmit } = useForm();
+
+
+    const postTitleRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (postTitleRef.current !== null) {
+            register(postTitleRef.current, {
+                required: true,
+                minLength: 6,
+                maxLength: 20,
+            })
+            postTitleRef.current.focus()
+        }
+    }, [])
+
+    const handleTitleData = (event: React.ChangeEvent<HTMLInputElement>) => {
         let data: PostFormData = formData;
-        data[event.target.name] = event.target.value;
+        data.title = event.target.value;
         setFormData(data);
     }
 
-    const handleSubmit = () => {
+    const handleTextData = (event: EditorState) => {
+        setEditorState(event)
+        let data: PostFormData = formData;
+        data.content = stateToHTML(editorState.getCurrentContent())
+        setFormData(data);
+    }
+
+    const handlePostSubmit = () => {
         submitFunc(formData)
         cancleFunc();
     }
 
     return (
-        <Body>
-            <Shadow onClick={cancleFunc}>  </Shadow>
-            <Form>
-                <input name="title" onChange={handleFormData} defaultValue={title} type="text" />
-                <textarea name="content" onChange={handleFormData} defaultValue={content} />
+        <Body style={{ height: "100%" }}>
+            <Shadow onClick={cancleFunc}></Shadow>
+            <Form onSubmit={handleSubmit(handlePostSubmit)} >
+                <input name="title" ref={postTitleRef} onChange={handleTitleData} defaultValue={title} type="text" />
+                {/* <textarea name="content" onChange={handleFormData} defaultValue={content} /> */}
+                <Editor
+                    wrapperStyle={{ width: "100%", backgroundColor: "#f5f5f5", height: "100%" }}
+                    wrapperClassName="post-editor-wrapper"
+                    editorClassName="post-editor"
+                    toolbarClassName="post-toolbar"
+                    editorState={editorState}
+                    onEditorStateChange={handleTextData}
+                    placeholder="Write article here..."
+                    spellCheck={true}
+                    stripPastedStyles={true}
+                />
                 <ButtonContainer>
-                    <a onClick={handleSubmit}>{btnText}</a>
-                    <a onClick={cancleFunc} >Cancle</a>
+                    <button onClick={cancleFunc} >Cancle</button>
+                    <button type="submit">{btnText}</button>
                 </ButtonContainer>
             </Form>
         </Body>
-
-
-
     )
 }
 

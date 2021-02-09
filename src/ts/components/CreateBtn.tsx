@@ -13,7 +13,7 @@ const Button = styled("a")`
     padding: 20px;
     color: #f5f5f5;
     border-radius: 50px;
-    box-shadow: 3px 3px 30px -10px black;
+    box-shadow: 1px 1px 5px 0px #00000040;
     bottom: 20px;
     right: 20px;
     z-index: 996;

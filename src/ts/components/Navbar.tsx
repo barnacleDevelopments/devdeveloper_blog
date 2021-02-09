@@ -32,7 +32,7 @@ const Navbody = styled("nav")`
     padding: 10px;
     display: flex;
     justify-content: space-between;
-    box-shadow: 0px 3px 30px -20px black;
+    box-shadow: 1px 1px 5px 0px #00000040;
     z-index: 997;
     align-items: center;
     a {

@@ -8,7 +8,7 @@ FILE: SignupForm.tsx
 import React, { useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 /// HOOKS
 import useAuth from "../hooks/useAuth";
@@ -19,6 +19,8 @@ const Form = styled("form")`
     color: #f5f5f5;
     border-radius: 4px;
     text-align: center;
+    min-width: 270px;
+    box-shadow: 1px 1px 5px 0px #00000040;
     h1 {
         font-size: 2.2em;
         margin-bottom: 16px;
@@ -43,9 +45,21 @@ const Form = styled("form")`
         font-weight: bold;
     }
 
+    div {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+
+        a > button:nth-of-type(1) {
+            background-color: #97aabd;
+        }
+    }
+
     p {
         margin-bottom: 13px;
     }
+
+ 
 `;
 
 // INTERFACES
@@ -154,6 +168,7 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
                 {isError && (<p>{userErrorMessage}.</p>)}
             </div>
             <div>
+                <Link to="/login"><button>Back</button></Link>
                 <button type="submit">Sign Up</button>
             </div>
         </Form>

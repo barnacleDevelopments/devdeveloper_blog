@@ -36,7 +36,6 @@ interface PostView {
 const Body = styled("section")`
     h2 {
         color: #f5f5f5;
-        text-align: center;
         font-size: 2em;
     }
 `;

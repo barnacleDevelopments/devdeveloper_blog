@@ -37,12 +37,13 @@ const CardBody = styled("div")`
     margin-bottom: 14px;
     box-shadow: 3px 3px 30px -20px black;
     position: relative;
+    min-width: 270px;
     > a:nth-of-type(1) {
         position: absolute;
-        right: -10px;
+        right: -13px;
         top: -10px;
         background-color: #97aabd; 
-        padding: 6px;
+        padding: 8px;
         border-radius: 30px;
         color: #f5f5f5;
     }

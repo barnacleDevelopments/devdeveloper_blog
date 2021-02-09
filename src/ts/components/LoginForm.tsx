@@ -29,7 +29,8 @@ const Form = styled("form")`
     color: #f5f5f5;
     border-radius: 4px;
     text-align: center;
-
+    min-width: 270px;
+    box-shadow: 1px 1px 5px 0px #00000040;
     h1 {
         font-size: 2.2em;
         margin-bottom: 16px;
@@ -44,29 +45,21 @@ const Form = styled("form")`
         width: 100%;
     }
 
-    button:nth-of-type(1) {
-        margin-right: 15px;
+    div {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
     }
 
     button {
-        border-radius: 4px;
-        border: none;
-        box-shadow: 3px 3px 30px -20px black;
-        padding: 9px 14px 9px 14px;
-        background-color: #9e5a63;
         color: #f5f5f5;
-        font-weight: bold;
-    }
-
-    a {
-        border-radius: 4px;
-        border: none;
-        box-shadow: 3px 3px 30px -20px black;
-        padding: 9px 14px 9px 14px;
         background-color: #9e5a63;
-        color: #f5f5f5;
-        font-weight: bold;
+        padding: 9px 14px 9px 14px;
+        border-radius: 4px;
         text-decoration: none;
+        border: none;
+        box-shadow: 1px 1px 5px 0px #00000030;
+        font-weight: bold;
     }
 
     p {
@@ -84,7 +77,6 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = () => {
     const onSubmit = (data: UserFormData) => {
         login(data.username, data.password)
     }
-
 
     const usernameRef = useRef<HTMLInputElement>(null)
 
@@ -115,7 +107,7 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = () => {
             {isAuthenticated ? <Redirect to="/categories" /> : null}
             <BtnGroup>
                 <button type="submit">Login</button>
-                <button><Link to="/signup">Sign up</Link></button>
+                <Link to="/signup"><button>Sign up</button></Link>
             </BtnGroup>
         </Form>
     )

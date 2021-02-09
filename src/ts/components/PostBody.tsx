@@ -7,12 +7,15 @@ FILE: Post.tsx
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 const Body = styled("article")`
     border-radius: 4px;
-    box-shadow: 3px 3px 30px -20px black;
+    box-shadow: 1px 1px 5px 0px #00000040;
     margin-bottom: 14px;
     position: relative;
+    min-width: 270px;
+
     img {
         width: 100%;
         border-top-left-radius: 4px;
@@ -42,7 +45,7 @@ const Body = styled("article")`
 const Content = styled("div")`
     color: #f5f5f5;
     background-color: #9E5A63;
-    padding: 15px 13px 10px 13px;
+    padding: 28px 20px 10px 20px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     margin-bottom: 14px;
@@ -52,18 +55,29 @@ const Content = styled("div")`
     h1 {
         font-size: 2em;
         font-weight: bold;
-        margin-bottom: 14px;
+        margin-bottom: 15px;
+        font-weight: 800;
     }
 
     h2 {
-        font-size: 1.1em;
+        font-size: 1.5em;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    h3 {
+        font-size: 1.3em;
         font-style: italic;
+        font-weight: 600;
+        margin-bottom: 10px;
     }
 
     p {
         font-size: 16px;
         font-weight: 100;
         line-height: 1.5;
+        margin-bottom: 25px;
+        font-weight: 100;
     }
 `;
 
@@ -86,7 +100,7 @@ const Post: React.FunctionComponent<PostComponent> = ({ user, postId, catId, tit
             <img src={CardPhoto} />
             <Content>
                 <h1>{title}</h1>
-                <p>{content}</p>
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></div>
             </Content>
 
             {user.role === "administrator" ?

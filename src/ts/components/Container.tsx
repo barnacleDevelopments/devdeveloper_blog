@@ -8,11 +8,11 @@ import * as React from "react";
 import styled from "@emotion/styled";
 
 const ContainerBody = styled("div")`
-    width: 93%;
+    width: 90%;
     margin: 0 auto;
     margin-top: 74px;
     padding-bottom: 14px;
-
+    
     @media (min-width: 576px) {
         width: 85%;
     }
