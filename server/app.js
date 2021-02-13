@@ -33,7 +33,7 @@ const PORT = 5000;
 const app = express();
 
 // MONGOOOSE CONFIGURATION
-mongoose.connect("mongodb://localhost/blogs", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect("mongodb://mongo:27017/blogs", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 const db = mongoose.connection;
 
@@ -43,8 +43,8 @@ db.once('open', function () {
 });
 
 // MIDDLEWARE 
-// app.use(helmet()); // set HTTP headers
-app.use(cors());
+//app.use(helmet()); // set HTTP headers
+app.use("*", cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
