@@ -1,0 +1,37 @@
+# 1. specify docker-compose version
+version: "3.0"
+
+# 2. Defining the application containers to be run
+services:
+  #  2a. name of the application
+  devdeveloper_blog:
+    # 2b. specify the directory of the application containing of the Dockerfile
+    container_name: devdeveloper_blog
+    image: docker_apps/devdeveloper_blog
+    build: .
+    ports:
+      # 2c.i specify ports mapping
+      - "5000:5000"
+    links:
+      # 2d. link this service to the database service
+      - mongo
+    # 2e. name of the database service
+  mongo:
+# 2f. specify image to build container from mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - /home/user1882/data/db:/data/db  
+    image: mongo
+    ports:
+# 2g. specify port mapping for the database
+      - "27017:27017"
+ # mongo-express:
+   # image: mongo-express
+   # restart: always
+   # ports:
+  #    - "6000:6000"
+ #   volumes: 
+#      - data:/data/db
+   
+
