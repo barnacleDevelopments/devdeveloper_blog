@@ -27,6 +27,10 @@ import commentRoutes from "./routes/comment_routes"
 import User from "./models/user_model";
 import Post from "./models/post_model"
 import Category from "./models/category_model"
+
+// TEST DATA
+// import "./sample_data/sample_index"
+
 // ENV VARIABLES
 const PORT = 5000;
 

@@ -4,44 +4,36 @@ DATE: Febuary 13th, 2021
 FILE: category_tests .js
 */
 
-import {expect} from "chain";
-import request from "request";
+const expect = require("chai").expect;
+const request = require("request");
 
 describe("Category Routes", () => {
-	const url = "http://localhost:3000/"
+    const url = "http://localhost:5000"
 
-	it("Return all categories", (error, response, body) => {
-		request(`${url} categories`, () => {
-			expect(response.status).to.equal(200);		
-		});
-	});
+    it("Return all categories", (done) => {
+        request(`${url}/categories`, (error, response, body) => {
+            expect(response.statusCode).to.equal(200);
+        });
+        done();
+    });
+
+
+    it("Return one category", (done) => {
+        const id = "1"
+        request(`${url}/categories/${id}`, (error, response, body) => {
+            expect(response.status).to.equal(200);
+        });
+        done();
+    });
+
+
+    // it("Return", (done) => {
+    //     request(`${url} categories`, (error, response, body) => {
+    //         expect(response.status).to.equal(200);
+    //     });
+    //     done();
+    // });
 });
-
-/*
-describe("Category Routes", () => {
-	const url = "http://localhost:3000/"
-
-	it("Return all categories", (error, response, body) => {
-		request(`${url} categories`, () => {
-			expect(response.status).to.equal(200);		
-		});
-	});
-});
-
-
-describe("Category Routes", () => {
-	const url = "http://localhost:3000/"
-
-	it("Return all categories", (error, response, body) => {
-		request(`${url} categories`, () => {
-			expect(response.status).to.equal(200);		
-		});
-	});
-*/
-});
-
-
-
 
 
 
