@@ -162,7 +162,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
             {/* DELETE FORM */}
             {deleteFormVisible ?
                 <ConfirmForm
-                    cancleHandler={toggleDeleteForm}
+                    cancelHandler={toggleDeleteForm}
                     confirmHandler={() => {
                         deleteCategory(catId);
                         toggleDeleteForm();
@@ -173,7 +173,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
             {/* EDIT FORM */}
             {editFormVisible ?
                 <CategoryForm
-                    cancleFunc={toggleEditForm}
+                    cancelFunc={toggleEditForm}
                     submitFunc={(data: CategoryFormData) => {
                         updateCategory(catId, data.name, data.desc)
                         toggleEditForm();

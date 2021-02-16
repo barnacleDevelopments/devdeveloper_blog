@@ -4,7 +4,7 @@ interface CategoryFormComponent {
     desc: string;
     btnText: string;
     submitFunc(data: NewCategoryData): void;
-    cancleFunc(): void;
+    cancelFunc(): void;
 }
 declare const CategoryForm: React.FunctionComponent<CategoryFormComponent>;
 export default CategoryForm;

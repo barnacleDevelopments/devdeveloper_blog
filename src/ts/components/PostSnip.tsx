@@ -145,7 +145,7 @@ const PostSnip: React.FunctionComponent<PostData> = ({ user, catId, postId, titl
             {/* ADMIN COMPONENTS */}
             {deleteFormVisible ?
                 <ConfirmForm
-                    cancleHandler={toggleDeleteForm}
+                    cancelHandler={toggleDeleteForm}
                     confirmHandler={() => {
                         toggleDeleteForm();
                         deletePost(postId, catId);

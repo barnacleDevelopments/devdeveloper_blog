@@ -10,5 +10,7 @@ declare const _default: () => {
     setUserErrorMessage: import("react").Dispatch<import("react").SetStateAction<string>>;
     userErrorMessage: string;
     signup: (username: string, password: string) => void;
+    deleteAccount: () => void;
+    changePassword: (oldPass: string, newPass: string) => void;
 };
 export default _default;

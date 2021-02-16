@@ -7,7 +7,7 @@ FILE: index.tsx
 import React from "react";
 import * as  ReactDOM from "react-dom";
 import styled from "@emotion/styled";
-import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 // COMPONENTS
 import Container from "./ts/components/Container";
@@ -17,8 +17,7 @@ import PostsView from "./ts/components/PostsView";
 import PostView from "./ts/components/PostView";
 import LoginView from "./ts/components/LoginView";
 import SignupView from "./ts/components/SignupView";
-
-// import ErrorNotification from "./ts/components/ErrorNotification";
+import ErrorNotification from "./ts/components/ErrorNotification";
 
 // HOOKS
 import useError from "./ts/hooks/useError";
@@ -32,6 +31,8 @@ import ErrorContext from "./ts/contexts/ErrorContext";
 import "./css/reset.css";
 import "./css/global.css";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import UserView from "./ts/components/UserView";
+
 
 // import "./img/logo.png";
 
@@ -56,6 +57,9 @@ const App = () => {
                             <Route exact path="/login" >
                                 <LoginView />
                             </Route>
+                            <Route exact path="/user">
+                                <UserView />
+                            </Route>
                             <Route exact path="/categories" >
                                 <CategoriesView user={UserContextData.user} />
                             </Route>
@@ -68,14 +72,9 @@ const App = () => {
                         </Switch>
                     </Container>
                     {/* ERROR MESSAGES */}
-                    {/* {ErrorContextData.currentError ? <ErrorNotification error={ErrorContextData.currentError} /> : null} */}
+                    {ErrorContextData.currentError ? <ErrorNotification error={ErrorContextData.currentError} /> : null}
                 </UserContext.Provider>
             </ErrorContext.Provider>
-
-            {/* REDIRECTS */}
-            {UserContextData.isAuthenticated ? null : <Redirect to="/categories" />}
-
-
         </Body>
     );
 }

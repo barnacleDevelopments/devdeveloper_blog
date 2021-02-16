@@ -98,6 +98,7 @@ class User {
             .then(data => {
                 recievedData = data;
             });
+
         return recievedData
     }
 
@@ -117,10 +118,55 @@ class User {
             }
         })
             .then(response => response.json())
-            .then(data => {
-                recievedData = data;
-            });
+            .then(data => recievedData = data);
+
         return recievedData
+    }
+
+    async changePassword(oldPass: string, newPass: string): Promise<BasicResponse> {
+        let recievedData: BasicResponse = {
+            status: "pending"
+        }
+
+        const searchParams = new URLSearchParams()
+        searchParams.append("oldPass", oldPass)
+        searchParams.append("newPass", newPass)
+
+        await fetch(`http://localhost:${PORT}/changePassword`, {
+            method: "PUT",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Accept: "application/x-www-form-urlencoded",
+                "Access-Control-Request-Method": "PUT"
+            },
+            body: searchParams
+        })
+            .then(response => response.json())
+            .then(data => recievedData = data)
+
+        return recievedData;
+    }
+
+    async delete(): Promise<BasicResponse> {
+        let recievedData: BasicResponse = {
+            status: "pending"
+        }
+
+        await fetch(`http://localhost:${PORT}/deleteAccount`, {
+            method: "DELETE",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "Access-Control-Request-Method": "DELETE",
+
+            }
+        })
+            .then(response => response.json())
+            .then(data => recievedData = data)
+
+        return recievedData;
     }
 }
 

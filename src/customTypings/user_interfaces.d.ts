@@ -24,6 +24,11 @@ interface NewUserData {
     password: string
 }
 
+interface UserPasswordChangeData {
+    oldPassword: string,
+    newPassword: string
+}
+
 interface UserFormData {
     [index: string]: string,
     username: string,

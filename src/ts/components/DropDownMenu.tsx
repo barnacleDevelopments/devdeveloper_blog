@@ -7,6 +7,7 @@ FILE: DropDownMenu.tsx
 import React, { FunctionComponent, useContext, useState } from "react";
 import styled from "@emotion/styled";
 import { UserContext } from "../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 const Body = styled("div")`
     position: relative;
@@ -32,6 +33,10 @@ const ListItem = styled("li")`
     padding: 10px;
     :nth-of-type(1) {
         border-bottom: 1px solid #f5f5f5;
+    }
+    a {
+        text-decoration: none;
+        color: #f5f5f5;
     }
 `;
 
@@ -82,7 +87,7 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems }) =
             {isOpen ?
                 <List>
                     {menuItems.map(item => {
-                        return <ListItem onClick={item.func}><a>{item.name}</a></ListItem>
+                        return <ListItem onClick={item.func}><Link to={item.link}>{item.name}</Link></ListItem>
                     })}
                 </List> : null}
         </Body>

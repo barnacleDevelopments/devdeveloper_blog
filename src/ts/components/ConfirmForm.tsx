@@ -59,16 +59,16 @@ interface ConfirmFormComponent {
     message: string,
     btnText: string,
     confirmHandler(): void,
-    cancleHandler(): void
+    cancelHandler(): void
 }
 
-const ConfirmForm: FunctionComponent<ConfirmFormComponent> = ({ confirmHandler, cancleHandler, btnText, message }) => {
+const ConfirmForm: FunctionComponent<ConfirmFormComponent> = ({ confirmHandler, cancelHandler, btnText, message }) => {
     return (
         <Shadow>
             <Body>
                 <p>{message}</p>
                 <BtnContainer>
-                    <a onClick={cancleHandler}>Cancle</a>
+                    <a onClick={cancelHandler}>Cancle</a>
                     <a onClick={confirmHandler}>{btnText}</a>
                 </BtnContainer>
 

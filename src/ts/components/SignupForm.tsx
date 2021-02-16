@@ -5,13 +5,13 @@ FILE: SignupForm.tsx
 */
 
 // DEPENDENCIES
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { Redirect, Link } from "react-router-dom";
 
-/// HOOKS
-import useAuth from "../hooks/useAuth";
+/// CONTEXTS
+import { UserContext } from "../contexts/UserContext";
 
 const Form = styled("form")`
     background-color: #314455;
@@ -72,7 +72,7 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
     const { register, getValues, handleSubmit, errors } = useForm();
 
     // auth state 
-    const { signup, userErrorMessage, isError, isAuthenticated } = useAuth()
+    const { signup, userErrorMessage, isError, isAuthenticated } = useContext(UserContext)
 
     const usernameRef = useRef<HTMLInputElement>(null)
 

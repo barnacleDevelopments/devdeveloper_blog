@@ -5,5 +5,7 @@ declare class User {
     logout(): Promise<UserResponse>;
     get(): Promise<UserData>;
     isAuthenticated(): Promise<UserComponentData>;
+    changePassword(oldPass: string, newPass: string): Promise<BasicResponse>;
+    delete(): Promise<BasicResponse>;
 }
 export default User;

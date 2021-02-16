@@ -5,15 +5,19 @@ FILE: useNav.tsx
 */
 
 // DEPENDENTCIES
-import { useState } from "react";
+import { useContext, useState } from "react";
+import ErrorContext from "../contexts/ErrorContext";
 
 // CONTROLERS
 import User from "../controllers/user_controllers";
+
+// CONTEXTS 
 
 export default () => {
     const [isError, setIsError] = useState<boolean>(false);
     const [userErrorMessage, setUserErrorMessage] = useState<string>("")
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const { addError } = useContext(ErrorContext)
     const [user, setUser] = useState<UserComponentData>({
         _id: "",
         username: "",
@@ -28,16 +32,14 @@ export default () => {
             })
     }
 
-
-
     const login = (username: string, password: string) => {
         User.prototype.login(username, password)
             .then(data => {
                 if (data.status === "error") {
                     setIsError(true);
                 } else {
-                    setIsError(false);
                     setIsAuthenticated(true);
+                    console.log(isAuthenticated)
                     data.data ? setUser(data.data) : null
                 }
             })
@@ -47,7 +49,6 @@ export default () => {
         User.prototype.signup(username, password)
             .then(data => {
                 if (data.status === "error") {
-                    setIsError(true);
                     data.message ? setUserErrorMessage(data.message) : null
                 } else {
                     setIsAuthenticated(true);
@@ -67,12 +68,33 @@ export default () => {
                     });
                 }
                 if (data.status === "error" && data.message !== undefined) {
-                    setIsError(true);
+                    data.message ? addError(data.message) : null;
                 }
             })
     }
 
 
+    const changePassword = (oldPass: string, newPass: string) => {
+        User.prototype.changePassword(oldPass, newPass)
+            .then((data) => {
+                if (data.status === "success") {
+
+                } else {
+                    data.message ? addError(data.message) : null;
+                }
+            })
+    }
+
+    const deleteAccount = () => {
+        User.prototype.delete()
+            .then((data) => {
+                if (data.status === "success") {
+                    setIsAuthenticated(false);
+                } else {
+                    data.message ? addError(data.message) : null;
+                }
+            })
+    }
 
     return {
         user,
@@ -84,6 +106,8 @@ export default () => {
         setIsError,
         setUserErrorMessage,
         userErrorMessage,
-        signup
+        signup,
+        deleteAccount,
+        changePassword
     };
 }

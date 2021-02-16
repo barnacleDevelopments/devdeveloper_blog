@@ -16,8 +16,9 @@ interface UserContextData {
     auth: () => void,
     logout: () => void,
     login: (username: string, password: string) => void,
-    signup: (username: string, password: string) => void
-
+    signup: (username: string, password: string) => void,
+    deleteAccount: () => void,
+    changePassword: (oldPass: string, newPass: string) => void
 }
 
 export const UserContextDefaultValue: UserContextData = {
@@ -34,8 +35,9 @@ export const UserContextDefaultValue: UserContextData = {
     auth: () => null,
     logout: () => null,
     login: () => null,
-    signup: () => null
-
+    signup: () => null,
+    deleteAccount: () => null,
+    changePassword: () => null
 }
 
 export const UserContext = createContext(UserContextDefaultValue);

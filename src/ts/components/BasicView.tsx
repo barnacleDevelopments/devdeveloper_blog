@@ -1,39 +1,35 @@
 /*
 AUTHOR: Devin Davis
-DATE: January 7th, 2021
-FILE: AuthenticationView.tsx
+DATE: Febuary 15th, 2021
+FILE: BasicView.tsx
 */
 
 import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import { Redirect } from "react-router-dom";
 
-// COMPONENTS
-import SignupForm from "./SignupForm";
-
-// CONTEXT
+// CONTEXTS
 import { UserContext } from "../contexts/UserContext";
+
 
 const Body = styled("section")`
 
 `;
 
 // INTERFACES 
-interface SignupViewComponent {
-
+interface BasicViewComponent {
+    authRedirect?: string
 }
 
-
-const SignupView: React.FunctionComponent<SignupViewComponent> = () => {
+const BasicView: React.FunctionComponent<BasicViewComponent> = (props) => {
     const { isAuthenticated } = useContext(UserContext)
-
     return (
         <Body>
             {isAuthenticated ?
-                <Redirect to="/categories" /> : null}
-            <SignupForm />
+                <Redirect to={`/${props.authRedirect}`} /> : null}
+            {props.children}
         </Body>
     )
 }
 
-export default SignupView;
+export default BasicView;

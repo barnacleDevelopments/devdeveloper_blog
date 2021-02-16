@@ -3,7 +3,7 @@ interface ConfirmFormComponent {
     message: string;
     btnText: string;
     confirmHandler(): void;
-    cancleHandler(): void;
+    cancelHandler(): void;
 }
 declare const ConfirmForm: FunctionComponent<ConfirmFormComponent>;
 export default ConfirmForm;

@@ -15,7 +15,7 @@ interface CategoryFormComponent {
     desc: string,
     btnText: string,
     submitFunc(data: NewCategoryData): void
-    cancleFunc(): void
+    cancelFunc(): void
 }
 
 const Body = styled("div")`
@@ -106,7 +106,7 @@ const ButtonContainer = styled("div")`
     }
 `;
 
-const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancleFunc }) => {
+const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancelFunc }) => {
     // const { register, getValues, handleSubmit, errors } = useForm()
     const [formData, setFormData] = useState<CategoryFormData>({
         name: name,
@@ -121,18 +121,18 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
 
     const handleFormSubmit = () => {
         submitFunc(formData)
-        cancleFunc()
+        cancelFunc()
     }
 
     return (
         <Body>
-            <Shadow onClick={cancleFunc}></Shadow>
+            <Shadow onClick={cancelFunc}></Shadow>
             <Form>
                 {/* FORM INPUTS */}
                 <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
                 <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
                 <ButtonContainer>
-                    <a onClick={cancleFunc}>Cancel</a>
+                    <a onClick={cancelFunc}>Cancel</a>
                     <a onClick={handleFormSubmit}>{btnText}</a>
                 </ButtonContainer>
             </Form>

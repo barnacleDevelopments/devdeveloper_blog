@@ -74,7 +74,7 @@ const Navbar: React.FunctionComponent<NavComponent> = () => {
 
             {isAuthenticated ? <DropDownMenu menuItems={[
                 { name: "Loggout", link: "/", func: handleLogout },
-                { name: "Settings", link: "/" }
+                { name: "Settings", link: "/user" }
             ]} /> :
                 <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
         </Navbody>

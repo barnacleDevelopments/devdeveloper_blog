@@ -6,7 +6,6 @@ FILE: post_routes.js
 
 import express from "express";
 import passport from 'passport';
-import { useReducer } from "react";
 import * as yup from "yup";
 
 // MODELS
@@ -23,7 +22,7 @@ export const isLoggedIn = (req, res, next) => {
     res.sendStatus(401);
 }
 
-// login user route
+// login user
 router.post('/login', (req, res, next) => {
     console.log("ddd")
     if (!req.body.username || !req.body.password) {
@@ -63,7 +62,7 @@ router.post('/login', (req, res, next) => {
         })
 });
 
-// signup user route
+// sign up user
 router.post('/signup', (req, res, next) => {
     let newUser = {}
     newUser.username = req.body.username;
@@ -100,11 +99,13 @@ router.post('/signup', (req, res, next) => {
         })
 });
 
+// logout user
 router.post("/logout", (req, res) => {
     req.logout();
     res.json({ status: "success", message: "User successfully logged out." })
 })
 
+// get user
 router.get("/user", isLoggedIn, (req, res) => {
     if (req.user) {
         res.json(req.user)
@@ -113,6 +114,7 @@ router.get("/user", isLoggedIn, (req, res) => {
     }
 })
 
+// check if user is authenticated
 router.get("/isloggedin", isLoggedIn, (req, res) => {
     if (req.user) {
         let user = {
@@ -125,6 +127,57 @@ router.get("/isloggedin", isLoggedIn, (req, res) => {
     } else {
         res.json({ status: "failure", message: "User successfully logged out." })
     }
+})
+
+// change user password
+router.put("/changePassword", isLoggedIn, (req, res, next) => {
+    let user = req.user;
+    let oldPassword = req.body.oldPass
+    let newPassword = req.body.newPass;
+
+    console.log(oldPassword)
+    console.log(newPassword)
+
+    User.authenticate()(user.username, oldPassword)
+        .then((user) => {
+            User.findById(user._id, (err, user) => {
+                if (!err) {
+                    user.setPassword(newPassword, () => {
+                        user.save()
+                        res.json({ status: "success" })
+                    })
+
+
+                } else {
+                    res.json({ status: "error", message: err })
+                }
+
+            })
+
+        })
+        .catch(err => {
+            console.log(err)
+            res.json({ status: "error", message: err })
+        })
+});
+
+// delete user account
+router.delete("/deleteAccount", isLoggedIn, (req, res, next) => {
+    let user = req.user;
+
+    User.deleteOne({ _id: user._id }, (err, data) => {
+        if (!err) {
+            res.json({
+                status: "success",
+                message: "User successfuly deleted from database."
+            });
+        } else {
+            res.json({
+                status: "error",
+                message: "An error occured while trying to delete account. Please try again."
+            })
+        }
+    })
 })
 
 export default router

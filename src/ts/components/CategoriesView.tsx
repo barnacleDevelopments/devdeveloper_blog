@@ -38,7 +38,7 @@ const CategoriesView: React.FunctionComponent<CategoriesViewComponent> = ({ user
     return (
         <Body>
             {/* CREATE FORM */}
-            {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancleFunc={toggleCreateForm} /> : null}
+            {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
 
             {/* CREATE BUTTON */}
             { user.role === "administrator" ? <CreateBtn func={toggleCreateForm} /> : null}
