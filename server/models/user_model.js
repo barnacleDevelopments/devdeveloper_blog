@@ -27,10 +27,6 @@ userSchema.plugin(passportLocalMongoose, {
     usernameField: "username"
 });
 
-// userSchema.methods.validPassword = function (pwd) {
-//     return (this.password === pwd);
-// };
-
 const User = mongoose.model("User", userSchema);
 
 export default User;

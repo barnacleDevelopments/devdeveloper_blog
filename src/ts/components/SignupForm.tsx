@@ -148,28 +148,29 @@ const SignupForm: React.FunctionComponent<SignupFormComponent> = () => {
                         }
                     })} />
 
-                {/* ERROR MESSAGE DISPLAY */}
-                {errors.password && errors.password.type === "maxLength" && (
-                    <p>*Max password length exeeded.</p>
-                )}
-                {errors.password && errors.password.type === "minLength" && (
-                    <p>*Password length too short.</p>
-                )}
-                {errors.password && errors.password.type === "passMatch" && (
-                    <p>*Passwords must match.</p>
-                )}
-                {errors.password && errors.password.type === "passMatchUser" && (
-                    <p>*Username & password cannot be the same.</p>
-                )}
-                {errors.password && errors.password.type === "hasSpecial" && (
-                    <p>*Password must include at least one special character.</p>
-                )}
-                {(errors.username || errors.password) && <p>*All fields required.</p>}
-                {isError && (<p>{userErrorMessage}.</p>)}
             </div>
+
+            {/* ERROR MESSAGE DISPLAY */}
+            {errors.password && errors.password.type === "maxLength" && (
+                <p>*Max password length exeeded.</p>
+            )}
+            {errors.password && errors.password.type === "minLength" && (
+                <p>*Password length too short.</p>
+            )}
+            {errors.password && errors.password.type === "passMatch" && (
+                <p>*Passwords must match.</p>
+            )}
+            {errors.password && errors.password.type === "passMatchUser" && (
+                <p>*Username & password cannot be the same.</p>
+            )}
+            {errors.password && errors.password.type === "hasSpecial" && (
+                <p>*Password must include at least one special character.</p>
+            )}
+            {(errors.username || errors.password) && <p>*All fields required.</p>}
+            {isError && (<p>{userErrorMessage}.</p>)}
             <div>
-                <Link to="/login"><button>Back</button></Link>
                 <button type="submit">Sign Up</button>
+                <Link to="/login"><button>Back</button></Link>
             </div>
         </Form>
     )

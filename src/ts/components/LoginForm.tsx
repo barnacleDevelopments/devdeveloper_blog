@@ -19,7 +19,21 @@ interface LoginFormComponent {
 
 const BtnGroup = styled("div")`
     margin-top: 10px;
-    
+    button {
+        color: #f5f5f5;
+        background-color: #9e5a63;
+        padding: 9px 14px 9px 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        border: none;
+        box-shadow: 1px 1px 5px 0px #00000030;
+        font-weight: bold;
+    }
+
+    a > button {
+        background-color: #97aabd;
+    }
+
 `
 
 // STYLES
@@ -49,17 +63,6 @@ const Form = styled("form")`
         display: flex;
         justify-content: center;
         gap: 14px;
-    }
-
-    button {
-        color: #f5f5f5;
-        background-color: #9e5a63;
-        padding: 9px 14px 9px 14px;
-        border-radius: 4px;
-        text-decoration: none;
-        border: none;
-        box-shadow: 1px 1px 5px 0px #00000030;
-        font-weight: bold;
     }
 
     p {

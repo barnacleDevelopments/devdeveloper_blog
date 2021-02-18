@@ -24,7 +24,7 @@ export const isLoggedIn = (req, res, next) => {
 
 // login user
 router.post('/login', (req, res, next) => {
-    console.log("ddd")
+
     if (!req.body.username || !req.body.password) {
         res.json({ status: "error" })
     }
@@ -135,30 +135,16 @@ router.put("/changePassword", isLoggedIn, (req, res, next) => {
     let oldPassword = req.body.oldPass
     let newPassword = req.body.newPass;
 
-    console.log(oldPassword)
-    console.log(newPassword)
-
-    User.authenticate()(user.username, oldPassword)
-        .then((user) => {
-            User.findById(user._id, (err, user) => {
-                if (!err) {
-                    user.setPassword(newPassword, () => {
-                        user.save()
-                        res.json({ status: "success" })
-                    })
-
-
-                } else {
-                    res.json({ status: "error", message: err })
-                }
-
+    User.findById(user._id, (err, user) => {
+        if (!err) {
+            user.changePassword(oldPassword, newPassword, () => {
+                user.save()
+                res.json({ status: "success" })
             })
-
-        })
-        .catch(err => {
-            console.log(err)
+        } else {
             res.json({ status: "error", message: err })
-        })
+        }
+    });
 });
 
 // delete user account
