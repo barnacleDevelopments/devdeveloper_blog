@@ -3,19 +3,21 @@ AUTHOR: Devin Davis
 DATE: January 3st, 2021
 FILE: category_routes.js
 */
-
+// DEPENDENCIES
 import express from "express";
-import passport from "passport";
+import cors from "cors";
 import * as yup from "yup"
-
-const router = express.Router();
 
 // MODELS
 import Category from "../models/category_model";
 import Post from "../models/post_model";
 import { isLoggedIn } from "./user_routes";
 
+// CORS CONFIGURATION
+import { adminCorsOptions, guestCorsOptions } from "../configuration/cors/cors_config"
+
 // CATEGORY ROUTES
+const router = express.Router();
 
 // retrieve all categories
 router.get("/", (req, res) => {

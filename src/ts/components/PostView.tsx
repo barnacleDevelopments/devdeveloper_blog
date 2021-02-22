@@ -20,6 +20,7 @@ import CommentBody from "./CommentBody";
 import Title from "./Title";
 import CommentForm from "./CommentForm";
 import { UserContext } from "../contexts/UserContext";
+import ErrorContext from "../contexts/ErrorContext";
 
 
 // INTERFACES 
@@ -70,12 +71,13 @@ const PostView: React.FunctionComponent<PostView> = () => {
     const [post, setPost] = useState<PostData>();
     const [comments, setComments] = useState<CommentComponentData[]>([])
     const { isAuthenticated, user } = useContext(UserContext);
+    const { addError } = useContext(ErrorContext);
 
     useEffect(() => {
         Post.prototype.getOne(postId)
             .then((data: PostResponse) => {
                 if (data.status === "error") {
-                    console.log(data.message)
+                    addError(data.message)
                 } else {
                     setPost(data.data)
                 }
@@ -113,7 +115,6 @@ const PostView: React.FunctionComponent<PostView> = () => {
                 </Fallback>
 
                 : comments.map((comment) => {
-                    console.log(comment.username)
                     return <CommentBody username={comment.username} key={comment._id} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
                 })}
 

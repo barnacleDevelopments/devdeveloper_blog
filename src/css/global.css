@@ -1,3 +1,15 @@
+@font-face {
+    font-family: "Chivo", sans-serif;
+    src: url("../fonts/Chivo-Black.ttf");
+    src: url("../fonts/Chivo-BlackItalic.ttf");
+    src: url("../fonts/Chivo-Bold.ttf");
+    src: url("../fonts/Chivo-BoldItalic.ttf");
+    src: url("../fonts/Chivo-Italic.ttf");
+    src: url("../fonts/Chivo-Light.ttf");
+    src: url("../fonts/Chivo-LightItalic.ttf");
+    src: url("../fonts/Chivo-Regular.ttf");
+}
+
 body {
     background-color: #C96567;
     font-family: 'Chivo', sans-serif;

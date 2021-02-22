@@ -33,9 +33,6 @@ import "./css/global.css";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import UserView from "./ts/components/UserView";
 
-
-// import "./img/logo.png";
-
 //STYLES
 const Body = styled("div")`
 

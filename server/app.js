@@ -12,10 +12,7 @@ import cors from "cors";
 import path from "path";
 import session from "express-session";
 import passport from 'passport';
-import helmet from "helmet";
-
-// LOCAL STRATEGIES
-import useStrategies from "./config/passport_strategies";
+import helmet, { frameguard } from "helmet";
 
 // ROUTES
 import postRoutes from "./routes/post_routes";
@@ -25,8 +22,7 @@ import commentRoutes from "./routes/comment_routes"
 
 // MODELS
 import User from "./models/user_model";
-import Post from "./models/post_model"
-import Category from "./models/category_model"
+
 // ENV VARIABLES
 const PORT = 5000;
 
@@ -42,9 +38,33 @@ db.once('open', function () {
   console.log("Connected to database!");
 });
 
+// CROSS ORGIN REQUEST SETTINGS
+app.use(cors({
+  origin: "http://localhost:5000",
+}));
+
+// +++++++++++++++
 // MIDDLEWARE 
-// app.use(helmet()); // set HTTP headers
-app.use(cors());
+// +++++++++++++++
+
+// SET HTTP HEADERS
+// content security policy
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "default-src": ["'self'"],
+      "script-src": ["'self'", "'unsafe-eval'", "*.fontawesome.com/"],
+      "script-src-elem": ["'self'", "*.fontawesome.com/"],
+      "connect-src": ["'self'", "*.fontawesome.com/"],
+      "style-src": ["'self'", "'unsafe-inline'", "*.fontawesome.com/"],
+      "font-src": ["'self'", "*.fontawesome.com/"],
+      "img-src": ["'self'", "data:image/*", "'unsafe-eval'", "'unsafe-inline'"]
+    },
+    frameguard: "deny"
+  }
+}))
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -64,30 +84,27 @@ app.use(session({
   // }
 })); //
 
+// +++++++++++++++++++
+// CONFIGURE PASSPORT 
+// +++++++++++++++++++
 // STRATEGIES
 passport.use(User.createStrategy())
 
-// CONFIGURE PASSPORT 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// serialize user
-passport.serializeUser(User.serializeUser());
+passport.serializeUser(User.serializeUser());// serialize user
+passport.deserializeUser(User.deserializeUser()); // deserialize user 
 
-// deserialize user 
-passport.deserializeUser(User.deserializeUser());
-
-// User.create({ username: "devin1984", password: "grapeness", role: "administrator" }, () => {
-
-// })
-
+// ++++++++++++++++++
 // INITIALIZE ROUTES
+// ++++++++++++++++++
 app.use("/", userRoutes)
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/comments", commentRoutes)
 
-
+// SEND BUNDLE TO BROWSER
 app
   .use(express.static(path.join(__dirname, '../build')))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));

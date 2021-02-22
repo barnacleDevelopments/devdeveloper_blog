@@ -43,6 +43,7 @@ router.post('/login', (req, res, next) => {
             passport.authenticate("local", (error, user) => {
                 req.login(user, (err) => {
                     if (err) {
+                        console.log(user)
                         res.json({ status: "error", message: error })
 
                     } else {
@@ -75,12 +76,11 @@ router.post('/signup', (req, res, next) => {
 
     userSchema.validate(newUser)
         .then(() => {
-            User.register(new User({ username: newUser.username }), newUser.password, (err, user) => {
+            User.register(new User({ username: newUser.username, role: "administrator" }), newUser.password, (err, user) => {
                 if (!err) {
                     const authenticate = User.authenticate();
-                    authenticate(user.username, user.password, (error, result) => {
+                    authenticate(user.username, user.password, (error) => {
                         if (err) {
-                            console.log(err)
                             res.json({ status: "error", message: error })
                         } else {
                             res.json({

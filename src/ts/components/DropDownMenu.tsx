@@ -56,19 +56,14 @@ const UserLogo = styled("i")`
     margin-right: 5px;
 `;
 
-interface MenuItem {
-    link: string,
-    name: string,
-    func?(): any
-}
 
 interface DropDownMenuInterface {
-    menuItems: MenuItem[]
+
 }
 
-const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems }) => {
+const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isAuthenticated, user } = useContext(UserContext)
+    const { isAuthenticated, user, logout } = useContext(UserContext)
 
     const toggleDropdown = () => {
         isOpen ? setIsOpen(false) : setIsOpen(true);
@@ -86,9 +81,8 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = ({ menuItems }) =
             {isOpen ? <Shadow onClick={toggleDropdown} /> : null}
             {isOpen ?
                 <List>
-                    {menuItems.map(item => {
-                        return <ListItem onClick={item.func}><Link to={item.link}>{item.name}</Link></ListItem>
-                    })}
+                    <ListItem onClick={() => logout()}><Link to={"/"}>Logout</Link></ListItem>
+                    <ListItem><Link to="/user">Settings</Link></ListItem>
                 </List> : null}
         </Body>
 

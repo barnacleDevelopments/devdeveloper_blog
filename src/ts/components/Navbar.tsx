@@ -56,14 +56,7 @@ const Logo = styled("div")`
 
 const Navbar: React.FunctionComponent<NavComponent> = () => {
     const { backBtnParams, backBtnStatus } = useNav();
-
-    // User Context
-    const { logout, isAuthenticated } = useContext(UserContext);
-
-    // logs the user out
-    const handleLogout = () => {
-        logout();
-    }
+    const { isAuthenticated } = useContext(UserContext);
 
     return (
         <Navbody>
@@ -72,10 +65,7 @@ const Navbar: React.FunctionComponent<NavComponent> = () => {
                 <i className="fas fa-arrow-left fa-3x"></i>
             </Link> : <Logo />}
 
-            {isAuthenticated ? <DropDownMenu menuItems={[
-                { name: "Loggout", link: "/", func: handleLogout },
-                { name: "Settings", link: "/user" }
-            ]} /> :
+            {isAuthenticated ? <DropDownMenu /> :
                 <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
         </Navbody>
     )

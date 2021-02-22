@@ -4,17 +4,22 @@ DATE: January 3st, 2021
 FILE: comment_routes.js
 */
 
+// DEPENDENCIES
 import express from "express";
-const router = express.Router();
+import cors from "cors"
 
 // MODELS
 import Comment from "../models/comment_model";
 import Post from "../models/post_model";
 import User from "../models/user_model";
-
 import isLoggedIn from "./user_routes"
 
+// CORS CONGIGURATION
+import { adminCorsOptions, userCorsOptions, guestCorsOptions } from "../configuration/cors/cors_config"
+
+
 // CATEGORY ROUTES
+const router = express.Router();
 
 // retrieve all comments
 router.get("/", (req, res) => {

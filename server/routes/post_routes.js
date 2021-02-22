@@ -4,23 +4,25 @@ DATE: January 3st, 2021
 FILE: post_routes.js
 */
 
+// DEPENDENCIES
 import express from "express";
 import * as yup from "yup";
+import cors from "cors";
 
 // MODELS
 import Post from "../models/post_model";
 import Category from "../models/category_model";
-
 import isLoggedIn from "./user_routes";
 
-const router = express.Router();
+// CORS CONGIGURATION
+import { adminCorsOptions, userCorsOptions, guestCorsOptions } from "../configuration/cors/cors_config"
 
 /*
 =================
 POST ROUTES
 =================
 */
-
+const router = express.Router();
 //retrieve all posts
 router.get("/", (req, res) => {
     Post.find({}, (err, blogs) => {
