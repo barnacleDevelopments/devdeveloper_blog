@@ -87,6 +87,7 @@ const PostView: React.FunctionComponent<PostView> = () => {
 
     // create new comment on post
     const createComment = (comment: NewCommentData) => {
+        console.log(user)
         Comment.prototype.create(user._id, postId, comment)
             .then(data => {
                 let newCommentList: CommentComponentData[] = comments
@@ -104,10 +105,20 @@ const PostView: React.FunctionComponent<PostView> = () => {
     return (
         <Body>
             {post ?
-                <PostBody user={user} postId={postId} catId={catId} title={post.title} content={post.content} />
-                : null}
+                <PostBody
+                    user={user}
+                    postId={postId}
+                    catId={catId}
+                    title={post.title}
+                    content={post.content} />
+                : null
+            }
             <Title title="COMMENTS" />
-            {isAuthenticated ? <CommentForm createComment={createComment} userId={user._id} postId={postId} /> : null}
+            {isAuthenticated ? <CommentForm
+                createComment={createComment}
+                userId={user._id}
+                postId={postId} /> : null
+            }
             {isAuthenticated ? null : <Link to="/login">Login</Link>}
             {comments.length <= 0 ?
                 <Fallback>
@@ -115,7 +126,13 @@ const PostView: React.FunctionComponent<PostView> = () => {
                 </Fallback>
 
                 : comments.map((comment) => {
-                    return <CommentBody username={comment.username} key={comment._id} commentId={comment._id} postId={postId} content={comment.content} date={comment.date} />
+                    return <CommentBody
+                        username={comment.username}
+                        key={comment._id}
+                        commentId={comment._id}
+                        postId={postId}
+                        content={comment.content}
+                        date={comment.date} />
                 })}
 
         </Body>

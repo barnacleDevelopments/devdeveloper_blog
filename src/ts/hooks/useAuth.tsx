@@ -39,7 +39,6 @@ export default () => {
                     setIsError(true);
                 } else {
                     setIsAuthenticated(true);
-                    console.log(isAuthenticated)
                     data.data ? setUser(data.data) : null
                 }
             })

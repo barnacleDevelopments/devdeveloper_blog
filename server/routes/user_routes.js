@@ -43,13 +43,12 @@ router.post('/login', (req, res, next) => {
             passport.authenticate("local", (error, user) => {
                 req.login(user, (err) => {
                     if (err) {
-                        console.log(user)
                         res.json({ status: "error", message: error })
 
                     } else {
                         res.json({
                             status: "success", data: {
-                                id_: user._id,
+                                _id: user._id,
                                 username: user.username,
                                 role: user.role
                             }

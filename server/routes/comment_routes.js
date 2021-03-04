@@ -96,6 +96,7 @@ router.post("/create/:userId/:postId", isLoggedIn, (req, res) => {
                     let newUserCommentList = user.comments;
                     newUserCommentList.push(com._id);
                     User.findByIdAndUpdate(userId, { comments: newUserCommentList }, (err, user) => {
+                        console.log("Yup")
                         if (!err) {
                             // find associated post
                             Post.findById(postId, (err, post) => {

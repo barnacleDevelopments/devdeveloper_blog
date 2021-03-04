@@ -46,7 +46,7 @@ class Comment {
             username: ""
         };
 
-        console.log(newComment)
+        console.log(userId)
 
         await fetch(`http://localhost:${PORT}/comments/create/${userId}/${postId}`, {
             method: "POST",

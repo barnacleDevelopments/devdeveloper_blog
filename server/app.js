@@ -58,7 +58,7 @@ app.use(helmet({
       "connect-src": ["'self'", "*.fontawesome.com/"],
       "style-src": ["'self'", "'unsafe-inline'", "*.fontawesome.com/"],
       "font-src": ["'self'", "*.fontawesome.com/"],
-      "img-src": ["'self'", "data:image/*", "'unsafe-eval'", "'unsafe-inline'"]
+      "img-src": ["'self'", "data:", "'unsafe-eval'", "'unsafe-inline'"]
     },
     frameguard: "deny"
   }
