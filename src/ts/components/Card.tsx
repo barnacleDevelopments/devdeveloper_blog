@@ -73,7 +73,7 @@ const CardContent = styled("div")`
 
     div {
         display: flex;
-        justify-content: right;
+        justify-content: flex-end;
         align-items: flex-end;
     }
 
@@ -111,7 +111,6 @@ const CardContent = styled("div")`
         text-decoration: none;
         color: #f5f5f5;
         box-shadow: 3px 3px 30px -10px black;
-        margin-top: 9px;
         height: 40px;
     }
 `;
