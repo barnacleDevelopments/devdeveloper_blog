@@ -5,8 +5,9 @@ FILE: TextProcessor.tsx
 */
 
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
+import { useForm } from "react-hook-form";
 // import { useForm } from "react-hook-form";
 
 // INTERFACES
@@ -90,12 +91,14 @@ const Form = styled("form")`
         border-radius: 4px;
     }
 
-    a {
+    button {
         color: #f5f5f5;
         background-color: #9e5a63;
         padding: 9px 14px 9px 14px;
         border-radius: 4px;
         text-decoration: none;
+        border: none;
+        box-shadow: 1px 1px 5px 0px #00000030;
     }
 `;
 
@@ -107,7 +110,7 @@ const ButtonContainer = styled("div")`
 `;
 
 const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancelFunc }) => {
-    // const { register, getValues, handleSubmit, errors } = useForm()
+    const { register, handleSubmit } = useForm()
     const [formData, setFormData] = useState<CategoryFormData>({
         name: name,
         desc: desc
@@ -119,21 +122,40 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
         setFormData(data);
     }
 
-    const handleFormSubmit = () => {
+    const onSubmit = () => {
         submitFunc(formData)
         cancelFunc()
     }
 
+    const categoryNameRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (categoryNameRef.current !== null) {
+            register(categoryNameRef.current, { required: true })
+            categoryNameRef.current.focus()
+        }
+    }, [])
+
     return (
         <Body>
             <Shadow onClick={cancelFunc}></Shadow>
-            <Form>
+            <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* FORM INPUTS */}
-                <input name="name" defaultValue={name} onChange={handleFormData} type="text" />
-                <textarea name="desc" defaultValue={desc} onChange={handleFormData} />
+                <input
+                    name="name"
+                    defaultValue={name}
+                    onChange={handleFormData}
+                    type="text"
+                    ref={categoryNameRef}
+                />
+                <textarea
+                    name="desc"
+                    defaultValue={desc}
+                    onChange={handleFormData}
+                />
                 <ButtonContainer>
-                    <a onClick={cancelFunc}>Cancel</a>
-                    <a onClick={handleFormSubmit}>{btnText}</a>
+                    <button onClick={cancelFunc}>Cancel</button>
+                    <button type="submit">{btnText}</button>
                 </ButtonContainer>
             </Form>
         </Body>

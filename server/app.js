@@ -7,12 +7,11 @@ FILE: app.js
 // DEPENDENCIES
 import express from "express";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
 import session from "express-session";
 import passport from 'passport';
-import helmet, { frameguard } from "helmet";
+import helmet from "helmet";
 
 // ROUTES
 import postRoutes from "./routes/post_routes";
@@ -65,8 +64,8 @@ app.use(helmet({
 }))
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // EXPRESS SESSION
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour

@@ -91,14 +91,30 @@ const LoginForm: React.FunctionComponent<LoginFormComponent> = () => {
     }, [])
 
     return (
-        <Form action="/login" method="post" onSubmit={handleSubmit(onSubmit)}>
+        <Form
+            action="/login"
+            method="post"
+            onSubmit={handleSubmit(onSubmit)}
+        >
             <h1>LOGIN</h1>
             <div>
-                <input onInput={() => setIsError(false)} placeholder="Username..." type="text" name="username" ref={usernameRef} />
+                <input
+                    onInput={() => setIsError(false)}
+                    placeholder="Username..."
+                    type="text"
+                    name="username"
+                    ref={usernameRef}
+                />
             </div>
             <div>
-                <input onInput={() => setIsError(false)} placeholder="Password..." type="password" name="password" ref={
-                    register({ required: true })} />
+                <input
+                    onInput={() => setIsError(false)}
+                    placeholder="Password..."
+                    type="password"
+                    name="password"
+                    ref={
+                        register({ required: true })}
+                />
             </div>
 
             {/* ERROR ELEMENTS */}
