@@ -10,6 +10,7 @@ import Category from "../controllers/category_controller";
 
 // CONTEXTS
 import ErrorContext from "../contexts/ErrorContext";
+import useAuth from "./useAuth";
 
 const usePosts = () => {
     const { addError } = useContext(ErrorContext)
@@ -19,18 +20,26 @@ const usePosts = () => {
         content: "",
         date: "",
     }]);
+    const { getAccessTokenSilently } = useAuth();
 
-    const addPost = (title: string, content: string, catId: string) => {
+    const addPost = async (title: string, content: string, catId: string) => {
         let adjustedPostsList = posts;
-        Post.prototype.create(title, content, catId)
-            .then((data) => {
-                if (data.status === "error" && data.message !== undefined) {
-                    addError(data.message)
-                } else {
-                    adjustedPostsList = [data.data, ...adjustedPostsList];
-                    setPosts(adjustedPostsList);
-                }
-            });
+        try {
+            const token = await getAccessTokenSilently();
+            Post.prototype.create(title, content, catId, token)
+                .then((data) => {
+                    if (data.status === "error" && data.message !== undefined) {
+                        addError(data.message)
+                    } else {
+                        adjustedPostsList = [data.data, ...adjustedPostsList];
+                        setPosts(adjustedPostsList);
+                    }
+                });
+        } catch {
+
+        }
+
+
     }
 
     const getCategoryPosts = (catId: string) => {

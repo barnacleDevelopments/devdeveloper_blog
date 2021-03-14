@@ -4,10 +4,12 @@ DATE: January 1st, 2021
 FILE: DropDownMenu.tsx
 */
 
-import React, { FunctionComponent, useContext, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import styled from "@emotion/styled";
-import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
+// import { useAuth0 } from "@auth0/auth0-react";
+import useAuth from "../hooks/useAuth";
+
 
 const Body = styled("div")`
     position: relative;
@@ -63,7 +65,7 @@ interface DropDownMenuInterface {
 
 const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isAuthenticated, user, logout } = useContext(UserContext)
+    const { isAuthenticated, isAdmin, logout } = useAuth();
 
     const toggleDropdown = () => {
         isOpen ? setIsOpen(false) : setIsOpen(true);
@@ -72,7 +74,7 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
     return (
         <Body>
             {isAuthenticated ? (
-                user.role === "administrator" ?
+                isAdmin ?
                     <UserLogo onClick={toggleDropdown} className="fas fa-user-tie" />
                     :
                     <UserLogo onClick={toggleDropdown} className="fas fa-user" />
@@ -81,7 +83,7 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
             {isOpen ? <Shadow onClick={toggleDropdown} /> : null}
             {isOpen ?
                 <List>
-                    <ListItem onClick={() => logout()}><Link to={"/"}>Logout</Link></ListItem>
+                    <ListItem onClick={() => logout({ returnTo: "http://localhost:5000/" })}>Logout</ListItem>
                     <ListItem><Link to="/user">Settings</Link></ListItem>
                 </List> : null}
         </Body>

@@ -12,7 +12,7 @@ import cors from "cors"
 import Comment from "../models/comment_model";
 import Post from "../models/post_model";
 import User from "../models/user_model";
-import isLoggedIn from "./user_routes"
+import jwtCheck from "../configuration/json_web_token.config";
 
 // CORS CONGIGURATION
 import { adminCorsOptions, userCorsOptions, guestCorsOptions } from "../configuration/cors/cors_config"
@@ -81,7 +81,7 @@ router.get("/post/:id", (req, res) => {
 })
 
 // create one comment
-router.post("/create/:userId/:postId", isLoggedIn, (req, res) => {
+router.post("/create/:userId/:postId", jwtCheck, (req, res) => {
     const body = req.body;
     const userId = req.params.userId;
     const postId = req.params.postId;
@@ -140,7 +140,7 @@ router.post("/create/:userId/:postId", isLoggedIn, (req, res) => {
 });
 
 // update one comment
-router.put("/update/:id", isLoggedIn, (req, res) => {
+router.put("/update/:id", jwtCheck, (req, res) => {
     const body = req.body;
     const id = req.params.id;
     Comment.findOneAndUpdate({ _id: id }, body, (err, com) => {
@@ -152,7 +152,7 @@ router.put("/update/:id", isLoggedIn, (req, res) => {
 });
 
 // delete one comment
-router.delete("/delete/:commentId/:userId/:postId", isLoggedIn, (req, res) => {
+router.delete("/delete/:commentId/:userId/:postId", jwtCheck, (req, res) => {
     if (req.user.role === "administrator") {
         const commentId = req.params.commentId;
         const userId = req.params.userId;

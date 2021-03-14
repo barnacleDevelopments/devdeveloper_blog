@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: Navbar.tsx
 */
 
-import React, { useContext } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { Link, Redirect } from "react-router-dom";
 import * as logoImage from "../../img/logo_3.png";
@@ -19,9 +19,8 @@ interface NavComponent {
 
 // COMPONENTS
 import DropDownMenu from "../components/DropDownMenu";
+import useAuth from "../hooks/useAuth";
 
-// CONTEXTS
-import { UserContext } from "../contexts/UserContext";
 
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -56,7 +55,9 @@ const Logo = styled("div")`
 
 const Navbar: React.FunctionComponent<NavComponent> = () => {
     const { backBtnParams, backBtnStatus } = useNav();
-    const { isAuthenticated } = useContext(UserContext);
+    const { isAuthenticated, isLoading, loginWithRedirect } = useAuth();
+
+
 
     return (
         <Navbody>
@@ -65,8 +66,8 @@ const Navbar: React.FunctionComponent<NavComponent> = () => {
                 <i className="fas fa-arrow-left fa-3x"></i>
             </Link> : <Logo />}
 
-            {isAuthenticated ? <DropDownMenu /> :
-                <Link to="/login"><i className="fas fa-sign-in-alt"></i></Link>}
+            {isAuthenticated && !isLoading ? <DropDownMenu /> :
+                <a onClick={() => loginWithRedirect()}><i className="fas fa-sign-in-alt"></i></a>}
         </Navbody>
     )
 }

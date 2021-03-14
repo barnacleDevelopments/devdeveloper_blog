@@ -11,13 +11,14 @@ import { useParams } from "react-router-dom";
 // CONTEXTS 
 import PostContext from "../contexts/PostContext";
 
-//COMPONENTS
+// //COMPONENTS
 import PostSnip from "./PostSnip"
 // import Title from "./Title";
 import PostSnipFallback from "./PostSnipFallback";
 import CreateBtn from "./CreateBtn";
 import usePosts from "../hooks/usePosts";
 import PostForm from "./PostForm";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // INTERFACES
 interface ParamTypes {
@@ -26,20 +27,22 @@ interface ParamTypes {
 
 // INTERFACES 
 interface PostsViewComponent {
-    user: UserComponentData;
+
 }
 
 const Body = styled("section")`
 
 `;
-const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
+const PostsView: React.FunctionComponent<PostsViewComponent> = () => {
     const { catId } = useParams<ParamTypes>();
     const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
     const PostContextData = usePosts();
+    const { user, isAuthenticated, isLoading } = useAuth0();
+
+
 
     useEffect(() => {
         PostContextData.getCategoryPosts(catId);
-        console.log(PostContextData.posts)
     }, []);
 
     const toggleCreateForm = () => {
@@ -53,7 +56,7 @@ const PostsView: React.FunctionComponent<PostsViewComponent> = ({ user }) => {
                 {createFormVisible ? <PostForm title="" content="" btnText="Create" cancleFunc={toggleCreateForm} submitFunc={(postData: PostFormData) => PostContextData.addPost(postData.title, postData.content, catId)} /> : null}
 
                 {/* if admin is logged in display create btn */}
-                {user.role === "administrator" ? <CreateBtn func={toggleCreateForm} /> : null}
+                {(isAuthenticated && !isLoading) ? <CreateBtn func={toggleCreateForm} /> : null}
 
                 {/* if posts exists display them */}
                 {PostContextData.posts.length <= 0 ? <PostSnipFallback /> :

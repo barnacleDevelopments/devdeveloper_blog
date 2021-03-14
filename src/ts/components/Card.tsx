@@ -24,7 +24,7 @@ interface CategoryComponentData {
     desc: string,
     count: number,
     img?: string,
-    user: UserComponentData,
+    isAdmin: boolean,
     deleteCategory(catId: string): void,
     updateCategory(catId: string, name: string, desc: string): void
 }
@@ -134,7 +134,7 @@ const CardCount = styled("div")`
 
 `;
 
-const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, name, desc, count, deleteCategory, updateCategory }) => {
+const Card: React.FunctionComponent<CategoryComponentData> = ({ isAdmin, catId, name, desc, count, deleteCategory, updateCategory }) => {
     const [deleteFormVisible, setDeleteFormVisible] = useState<boolean>(false);
     const [editFormVisible, setEditFormVisible] = useState<Boolean>(false);
 
@@ -184,11 +184,11 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ user, catId, nam
                 /> : null}
 
             {/* EDIT BUTTON */}
-            {user.role === "administrator" ?
+            {isAdmin ?
                 <a onClick={toggleEditForm}><i className="fas fa-pen fa-1x"></i></a> : null}
 
             {/* DELETE BUTTON */}
-            {user.role === "administrator" ?
+            {isAdmin ?
                 <a onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></a> : null}
         </CardBody>
     )

@@ -98,7 +98,7 @@ class Category {
         return recievedData
     }
 
-    async create(name: string, desc: string): Promise<CategoryResponse> {
+    async create(name: string, desc: string, token: string): Promise<CategoryResponse> {
         let recievedData: CategoryResponse = {
             data: {
                 _id: "",
@@ -123,7 +123,8 @@ class Category {
             mode: "cors",
             headers: {
                 "Content-Type": "application/json;charset=UTF-8",
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ name, desc })
         })
@@ -135,7 +136,7 @@ class Category {
         return recievedData;
     }
 
-    async update(id: string, name: string, desc: string): Promise<CategoryResponse> {
+    async update(id: string, name: string, desc: string, token: string): Promise<CategoryResponse> {
         let recievedData: CategoryResponse = {
             data: {
                 _id: "",
@@ -153,7 +154,8 @@ class Category {
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ name, desc })
         })
@@ -163,7 +165,7 @@ class Category {
         return recievedData;
     }
 
-    async delete(id: string): Promise<BasicResponse> {
+    async delete(id: string, token: string): Promise<BasicResponse> {
 
         let recievedData: BasicResponse = { status: "pending", message: "" }
 
@@ -172,7 +174,8 @@ class Category {
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             }
         })
             .then(response => response.json())

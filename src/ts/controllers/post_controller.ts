@@ -34,7 +34,7 @@ class Post {
         return recievedData
     }
 
-    async create(title: string, content: string, catId: string): Promise<PostResponse> {
+    async create(title: string, content: string, catId: string, token: string): Promise<PostResponse> {
         let recievedData: PostResponse = {
             data: {
                 _id: "",
@@ -52,7 +52,8 @@ class Post {
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ title, content })
         })

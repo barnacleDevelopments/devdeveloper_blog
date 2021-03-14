@@ -9,11 +9,13 @@ import Category from "../controllers/category_controller";
 
 // CONTEXTS
 import ErrorContext from "../contexts/ErrorContext";
+import useAuth from "./useAuth";
 
 
 const useCategories = () => {
     const [categories, setCategories] = useState<CategoryData[]>([]);
     const { addError } = useContext(ErrorContext);
+    const { getAccessTokenSilently } = useAuth();
 
 
     // retrive all the categories
@@ -28,47 +30,68 @@ const useCategories = () => {
             })
     }, []);
 
-    const addCategory = (name: string, desc: string) => {
+    const addCategory = async (name: string, desc: string) => {
         let adjustedCatList = categories;
-        Category.prototype.create(name, desc)
-            .then(data => {
-                if (data.status === "error") {
-                    addError(data.message);
-                } else {
-                    adjustedCatList = [data.data, ...adjustedCatList]
-                    setCategories(adjustedCatList);
-                }
-            })
+
+        try {
+            const token = await getAccessTokenSilently();
+            await Category.prototype.create(name, desc, token)
+                .then(data => {
+                    if (data.status === "error") {
+                        addError(data.message);
+                    } else {
+                        adjustedCatList = [data.data, ...adjustedCatList]
+                        setCategories(adjustedCatList);
+                    }
+                })
+        } catch (error) {
+            console.log(error)
+            addError("Failed to authorize category creation. Try login in again.")
+        }
+
     }
 
-    const deleteCategory = (catId: string) => {
-        Category.prototype.delete(catId)
-            .then((data) => {
-                if (data.status === "error") {
-                    addError(data.message || "");
-                } else {
-                    let newCatList = categories.filter(category => category._id === catId ? false : true);
-                    setCategories(newCatList);
-                }
-            });
+    const deleteCategory = async (catId: string) => {
+        try {
+            const token = await getAccessTokenSilently();
+            await Category.prototype.delete(catId, token)
+                .then((data) => {
+                    if (data.status === "error") {
+                        addError(data.message || "");
+                    } else {
+                        let newCatList = categories.filter(category => category._id === catId ? false : true);
+                        setCategories(newCatList);
+                    }
+                });
+        } catch (error) {
+            console.log(error)
+            addError("Failed to authorize category deletion. Try login in again.")
+        }
     }
 
-    const updateCategory = (catId: string, name: string, desc: string) => {
-        Category.prototype.update(catId, name, desc)
-            .then((data) => {
-                if (data.status === "error") {
-                    addError(data.message);
-                } else {
-                    let newCategories = categories.map(category => {
-                        if (category._id === data.data._id) {
-                            return data.data;
-                        } else {
-                            return category;
-                        }
-                    })
-                    setCategories(newCategories);
-                }
-            })
+    const updateCategory = async (catId: string, name: string, desc: string) => {
+        try {
+            const token = await getAccessTokenSilently();
+            await Category.prototype.update(catId, name, desc, token)
+                .then((data) => {
+                    if (data.status === "error") {
+                        addError(data.message);
+                    } else {
+                        let newCategories = categories.map(category => {
+                            if (category._id === data.data._id) {
+                                return data.data;
+                            } else {
+                                return category;
+                            }
+                        })
+                        setCategories(newCategories);
+                    }
+                })
+
+        } catch (error) {
+            console.log(error)
+            addError("Failed to authorize category update. Try login in again.")
+        }
     }
 
     return {

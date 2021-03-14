@@ -1,16 +1,13 @@
 /// <reference types="react" />
-declare const _default: () => {
-    user: UserComponentData;
-    auth: () => void;
+declare const useAuth: () => {
+    userMetadata: null;
+    setUserMetadata: import("react").Dispatch<import("react").SetStateAction<null>>;
     isAuthenticated: boolean;
-    logout: () => void;
-    login: (username: string, password: string) => void;
-    isError: boolean;
-    setIsError: import("react").Dispatch<import("react").SetStateAction<boolean>>;
-    setUserErrorMessage: import("react").Dispatch<import("react").SetStateAction<string>>;
-    userErrorMessage: string;
-    signup: (username: string, password: string) => void;
-    deleteAccount: () => void;
-    changePassword: (oldPass: string, newPass: string) => void;
+    user: any;
+    isLoading: boolean;
+    isAdmin: boolean;
+    logout: (options?: import("@auth0/auth0-react").LogoutOptions | undefined) => void;
+    loginWithRedirect: (options?: import("@auth0/auth0-react").RedirectLoginOptions | undefined) => Promise<void>;
+    getAccessTokenSilently: (options?: import("@auth0/auth0-react").GetTokenSilentlyOptions | undefined) => Promise<string>;
 };
-export default _default;
+export default useAuth;

@@ -5,7 +5,7 @@ interface CategoryComponentData {
     desc: string;
     count: number;
     img?: string;
-    user: UserComponentData;
+    isAdmin: boolean;
     deleteCategory(catId: string): void;
     updateCategory(catId: string, name: string, desc: string): void;
 }

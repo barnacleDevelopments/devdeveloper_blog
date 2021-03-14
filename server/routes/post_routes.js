@@ -12,7 +12,7 @@ import cors from "cors";
 // MODELS
 import Post from "../models/post_model";
 import Category from "../models/category_model";
-import isLoggedIn from "./user_routes";
+import jwtCheck from "../configuration/json_web_token.config";
 
 // CORS CONGIGURATION
 import { adminCorsOptions, userCorsOptions, guestCorsOptions } from "../configuration/cors/cors_config"
@@ -56,7 +56,7 @@ router.get("/:id", (req, res) => {
 });
 
 // create one post 
-router.post("/create/:catId", isLoggedIn, (req, res) => {
+router.post("/create/:catId", jwtCheck, (req, res) => {
     if (req.user.role === "administrator") {
         const body = req.body;
         const catId = req.params.catId;
@@ -114,7 +114,7 @@ router.post("/create/:catId", isLoggedIn, (req, res) => {
 });
 
 // update one post
-router.put("/update/:id", isLoggedIn, (req, res) => {
+router.put("/update/:id", jwtCheck, (req, res) => {
     if (req.user.role === "administrator") {
         const body = req.body;
         const id = req.params.id;
@@ -138,7 +138,7 @@ router.put("/update/:id", isLoggedIn, (req, res) => {
 });
 
 // delete one post
-router.delete("/delete/:postId/:catId", isLoggedIn, (req, res) => {
+router.delete("/delete/:postId/:catId", jwtCheck, (req, res) => {
     if (req.user.role === "administrator") {
         const postId = req.params.postId;
         const catId = req.params.catId
