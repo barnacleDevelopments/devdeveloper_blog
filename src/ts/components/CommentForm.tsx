@@ -50,6 +50,7 @@ const Body = styled("article")`
         height: 34px;
         text-align: center;
         border-radius: 4px;
+        margin-top: 14px;
     }
 `;
 

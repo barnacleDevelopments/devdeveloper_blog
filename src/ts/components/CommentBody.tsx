@@ -23,6 +23,7 @@ interface CommentComponent {
 
 // STYLES
 const Body = styled("article")`
+    box-shadow: 1px 1px 5px 0px #00000030;
     width: 100%;
     background-color: #314455;
     position: relative;
