@@ -13,7 +13,6 @@ const Auth0ProviderWithHistory: FunctionComponent = ({ children }) => {
 
     const onRedirectCallback = (appState: any) => {
         history.push(appState?.returnTo || window.location.pathname);
-
     };
 
     return (
@@ -23,6 +22,10 @@ const Auth0ProviderWithHistory: FunctionComponent = ({ children }) => {
             redirectUri={redirectURI}
             audience={audience}
             onRedirectCallback={onRedirectCallback}
+            advancedOptions={{
+                defaultScope: 'openid profile email'
+            }}
+            scope='user_metadata app_metadata slack_id'
         >
             {children}
         </Auth0Provider>

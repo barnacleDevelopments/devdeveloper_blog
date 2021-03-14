@@ -9,42 +9,24 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 
 const useAuth = () => {
-    const [userMetadata, setUserMetadata] = useState(null);
-    const { user, getAccessTokenSilently, isAuthenticated, isLoading, error, logout, loginWithRedirect } = useAuth0();
+    // auth0 hook
+    const { user, getAccessTokenSilently, isAuthenticated, isLoading, logout, loginWithRedirect } = useAuth0();
+    // is admin state
     const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
+    // retrive 
     useEffect(() => {
-        (async () => {
-            try {
+        if (isAuthenticated && (user["http://reallyuniquenamespace.com/roles"][0] === "administrator")) {
+            setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
+        }
+    }, [])
 
-                const token = await getAccessTokenSilently();
 
-
-                const userDetailsByIdUrl = `https://dev-qkxpd7xc.auth0.com/userinfo`;
-
-                const metadataResponse = await fetch(userDetailsByIdUrl, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                metadataResponse.json()
-                    .then(data => {
-                        if (data["https://dev-qkxpd7xc:auth0:com/user_metadata"].role === "administrator") {
-                            setIsAdmin(true)
-                        } else {
-                            setIsAdmin(false)
-                        }
-                    })
-            } catch (e) {
-                console.error(e);
-                console.log(error)
-            }
-        })();
-    }, [getAccessTokenSilently]);
+    console.log(user)
 
     return {
-        userMetadata,
-        setUserMetadata,
         isAuthenticated,
         user,
         isLoading,
@@ -54,7 +36,6 @@ const useAuth = () => {
         getAccessTokenSilently
 
     }
-
 }
 
 export default useAuth;

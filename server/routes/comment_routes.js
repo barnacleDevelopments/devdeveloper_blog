@@ -6,23 +6,22 @@ FILE: comment_routes.js
 
 // DEPENDENCIES
 import express from "express";
-import cors from "cors"
+import got from "got"
 
 // MODELS
 import Comment from "../models/comment_model";
 import Post from "../models/post_model";
 import User from "../models/user_model";
-import jwtCheck from "../configuration/json_web_token.config";
 
-// CORS CONGIGURATION
-import { adminCorsOptions, userCorsOptions, guestCorsOptions } from "../configuration/cors/cors_config"
-
+// JWT MIDDLEWARE
+import jwtCheck from "../middleware/jwt_token_check";
 
 // CATEGORY ROUTES
 const router = express.Router();
 
 // retrieve all comments
 router.get("/", (req, res) => {
+    // query all comments
     Comment.find({}, (err, coms) => {
         if (!err) {
             const commentList = coms
@@ -34,8 +33,9 @@ router.get("/", (req, res) => {
                     content: com.content
                 }
             })
-            res.send(newCommentList)
+            res.status(200).send(newCommentList)
         } else {
+            res.status(500).send({ status: "error" })
             console.log(err)
         }
 
@@ -44,97 +44,106 @@ router.get("/", (req, res) => {
 
 // retrieve one comment
 router.get("/:id", (req, res) => {
-    const comId = req.params.id;
+    const comId = req.params.id; // comment id
+    // query one comment
     Comment.findOne({ _id: comId }, (err, com) => {
-        err ? console.log(err) : res.json(com);
+        err ? res.status(500).json({ status: "error" }) : res.status(200).json(com);
     });
 });
 
 // retrieve post's comments
 router.get("/post/:id", (req, res) => {
-    let postId = req.params.id
+    let postId = req.params.id // post id
+    // query all comments of post
     Post.findById(postId)
         .populate({ path: "comments" })
         .exec((err, post) => {
-            console.log(post.comments)
-            if (post.comments.length > 0) {
-                (async () => {
-                    // wait for usernames to be added to each comment
-                    await Promise.all(post.comments.map(async (com) => {
-                        let username
-                        // wait to retrieve user
-                        await User.findById(com.userId, (err, user) => {
-                            if (!err) {
-                                username = user.username
+            if (!err) {
+                if (post.comments.length > 0) {
+                    (async () => {
+                        // wait for usernames to be added to each comment
+                        await Promise.all(post.comments.map(async (com) => {
+                            let username
+                            // wait to retrieve user
+                            await User.findById(com.userId, (err, user) => {
+                                if (!err) {
+                                    username = user.username
+                                }
+                            })
+                            return {
+                                _id: com._id,
+                                username: username,
+                                date: com.date,
+                                content: com.content
                             }
-                        })
-                        return {
-                            _id: com._id,
-                            username: username,
-                            date: com.date,
-                            content: com.content
-                        }
-                    })).then(comments => res.json(comments))
-                })()
+                        })).then(comments => res.status(200).json(comments));
+                    })();
+                }
+            } else {
+                res.status(500).json({ status: "error" });
             }
         });
 })
 
 // create one comment
-router.post("/create/:userId/:postId", jwtCheck, (req, res) => {
-    const body = req.body;
-    const userId = req.params.userId;
-    const postId = req.params.postId;
-    console.log(body)
+router.post("/create/:userId/:postId/", (req, res) => {
+    const body = req.body; // request body
+    const userId = req.params.userId; // user id
+    const postId = req.params.postId; // post id 
+
     // create new comment 
     Comment.create(body, (err, com) => {
         if (!err) {
             // find associated user
-            User.findById(userId, (err, user) => {
-                if (!err) {
+            got.patch(`https://dev-qkxpd7xc.auth0.com/api/v2/users/${userId}`, {
+                headers: {
+                    method: "patch",
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8",
+                        Accept: "application/json",
+                    },
+                    body: com._id,
+                }
+            })
+                .then(() => {
                     // update user's comment list
                     let newUserCommentList = user.comments;
                     newUserCommentList.push(com._id);
-                    User.findByIdAndUpdate(userId, { comments: newUserCommentList }, (err, user) => {
-                        console.log("Yup")
+                    // find associated post
+                    Post.findById(postId, (err, post) => {
                         if (!err) {
-                            // find associated post
-                            Post.findById(postId, (err, post) => {
-                                if (!err) {
-                                    // update post's comment list
-                                    let newCommentList = post.comments;
-                                    newCommentList.push(com._id);
-                                    Post.findByIdAndUpdate(postId,
-                                        { comments: newCommentList }, (err, post) => {
-                                            if (!err) {
-                                                Post.findById(postId)
-                                                    .populate("comments")
-                                                    .exec((err, post) => {
-                                                        !err ? res.json({
-                                                            _id: com._id,
-                                                            username: user.username,
-                                                            date: com.date,
-                                                            content: com.content
-                                                        }) : console.log(err)
+                            // update post's comment list
+                            let newCommentList = post.comments;
+                            newCommentList.push(com._id);
+                            Post.findByIdAndUpdate(postId,
+                                { comments: newCommentList }, (err, post) => {
+                                    if (!err) {
+                                        Post.findById(postId)
+                                            .populate("comments")
+                                            .exec((err, post) => {
+                                                if (!err) {
+                                                    res.status(201).json({
+                                                        _id: com._id,
+                                                        username: user.username,
+                                                        date: com.date,
+                                                        content: com.content
                                                     })
-                                            } else {
-                                                console.log(err)
-                                            }
-                                        })
-                                } else {
-                                    console.log(err);
-                                }
-                            });
+                                                } else {
+                                                    res.status(500).json({ status: "error" });
+                                                }
+                                            })
+                                    } else {
+                                        res.status(500).json({ status: "error" });
+                                    }
+                                })
                         } else {
-                            console.log(err);
+                            res.status(500).json({ status: "error" });
                         }
                     });
-                } else {
-                    console.log(err);
-                }
-            });
+                }).catch(err => res.status(500).json({ status: "error" }));
         } else {
-            console.log(err);
+            res.status(500).json({ status: "error" });
         }
     });
 });
@@ -144,59 +153,50 @@ router.put("/update/:id", jwtCheck, (req, res) => {
     const body = req.body;
     const id = req.params.id;
     Comment.findOneAndUpdate({ _id: id }, body, (err, com) => {
-        err ? console.log(err) : (
+        if (!err) {
             console.log(`Comment with id: ${com._id} updated!`)
-        )
+        } else {
+            res.status(500).json({ status: "error" });
+        }
     })
-
 });
 
 // delete one comment
 router.delete("/delete/:commentId/:userId/:postId", jwtCheck, (req, res) => {
-    if (req.user.role === "administrator") {
-        const commentId = req.params.commentId;
-        const userId = req.params.userId;
-        const postId = req.params.postId;
-        // find comment and delete from database
-        Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
-            if (!err) {
-                // find the comment's associated user
-                User.findById(userId, (err, data) => {
-                    if (!err) {
-                        let newUserCommentList = data.comments.filter((id) => {
-                            id === commentId ? false : true;
-                        })
-                        // update the users comments list 
-                        User.findByIdAndUpdate(userId, { comments: newUserCommentList }, (err, data) => {
-                            if (!err) {
-                                // find associated post
-                                Post.findById(postId, (err, data) => {
-                                    if (!err) {
-                                        let newPostCommentList = data.comments.filter((id) => {
-                                            id === commentId ? false : true;
-                                        })
-                                        // update post comment list 
-                                        Post.findByIdAndUpdate(postId, { comments: newPostCommentList }, (err, data) => {
-                                            if (!err) {
-                                                console.log(`Comment with id: ${commentId} deleted!`)
-                                                res.json({ status: "success" })
-                                            } else {
-                                                console.log(err)
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            } else {
-                res.json({ status: "error", message: err })
-            }
-        })
-    } else {
-        res.redirect("/")
-    }
+    const commentId = req.params.commentId; // comment id
+    const userId = req.params.userId; // user id 
+    const postId = req.params.postId; // post id 
+    // find comment and delete from database
+    Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
+        if (!err) {
+
+            let newUserCommentList = data.comments.filter((id) => {
+                id === commentId ? false : true;
+            })
+
+            // find associated post
+            Post.findById(postId, (err, data) => {
+                if (!err) {
+                    // filter out comment from post
+                    let newPostCommentList = data.comments.filter((id) => {
+                        id === commentId ? false : true;
+                    })
+                    // update post comment list 
+                    Post.findByIdAndUpdate(postId, { comments: newPostCommentList }, (err, data) => {
+                        if (!err) {
+                            console.log(`Comment with id: ${commentId} deleted!`)
+                            res.status(200).json({ status: "success" })
+                        } else {
+                            res.status(500).json({ status: "error" });
+                        }
+                    })
+                }
+            })
+
+        } else {
+            res.status(500).json({ status: "error" });
+        }
+    })
 })
 
 export default router;

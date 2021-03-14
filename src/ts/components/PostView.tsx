@@ -19,8 +19,10 @@ import PostBody from "./PostBody";
 import CommentBody from "./CommentBody";
 import Title from "./Title";
 import CommentForm from "./CommentForm";
-import { UserContext } from "../contexts/UserContext";
 import ErrorContext from "../contexts/ErrorContext";
+
+// HOOKS
+import useAuth from "../hooks/useAuth";
 
 
 // INTERFACES 
@@ -70,7 +72,7 @@ const PostView: React.FunctionComponent<PostView> = () => {
     const { postId, catId } = useParams<ParamTypes>();
     const [post, setPost] = useState<PostData>();
     const [comments, setComments] = useState<CommentComponentData[]>([])
-    const { isAuthenticated, user } = useContext(UserContext);
+    const { user, isAuthenticated, getAccessTokenSilently } = useAuth();
     const { addError } = useContext(ErrorContext);
 
     useEffect(() => {
@@ -86,9 +88,9 @@ const PostView: React.FunctionComponent<PostView> = () => {
     }, [])
 
     // create new comment on post
-    const createComment = (comment: NewCommentData) => {
-        console.log(user)
-        Comment.prototype.create(user._id, postId, comment)
+    const createComment = async (comment: NewCommentData) => {
+        const token = await getAccessTokenSilently();
+        Comment.prototype.create(user.sub, postId, comment, token)
             .then(data => {
                 let newCommentList: CommentComponentData[] = comments
                 setComments([data, ...newCommentList])
@@ -114,10 +116,10 @@ const PostView: React.FunctionComponent<PostView> = () => {
                 : null
             }
             <Title title="COMMENTS" />
-            {isAuthenticated ? <CommentForm
+            {isAuthenticated && <CommentForm
                 createComment={createComment}
                 userId={user._id}
-                postId={postId} /> : null
+                postId={postId} />
             }
             {isAuthenticated ? null : <Link to="/login">Login</Link>}
             {comments.length <= 0 ?

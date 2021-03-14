@@ -11,35 +11,30 @@ import { useParams } from "react-router-dom";
 // CONTEXTS 
 import PostContext from "../contexts/PostContext";
 
-// //COMPONENTS
+// COMPONENTS
 import PostSnip from "./PostSnip"
 // import Title from "./Title";
 import PostSnipFallback from "./PostSnipFallback";
 import CreateBtn from "./CreateBtn";
 import usePosts from "../hooks/usePosts";
 import PostForm from "./PostForm";
-import { useAuth0 } from "@auth0/auth0-react";
+
+// HOOKS
+import useAuth from "../hooks/useAuth";
 
 // INTERFACES
 interface ParamTypes {
     catId: string
 }
 
-// INTERFACES 
-interface PostsViewComponent {
-
-}
-
 const Body = styled("section")`
 
 `;
-const PostsView: React.FunctionComponent<PostsViewComponent> = () => {
+const PostsView: React.FunctionComponent = () => {
     const { catId } = useParams<ParamTypes>();
     const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
     const PostContextData = usePosts();
-    const { user, isAuthenticated, isLoading } = useAuth0();
-
-
+    const { isAuthenticated, isLoading } = useAuth();
 
     useEffect(() => {
         PostContextData.getCategoryPosts(catId);
@@ -62,7 +57,7 @@ const PostsView: React.FunctionComponent<PostsViewComponent> = () => {
                 {PostContextData.posts.length <= 0 ? <PostSnipFallback /> :
                     PostContextData.posts.map(post => {
                         return (
-                            <PostSnip user={user} key={post._id} postId={post._id} catId={catId} title={post.title} content={post.content} />
+                            <PostSnip key={post._id} postId={post._id} catId={catId} title={post.title} content={post.content} />
                         );
                     })}
             </PostContext.Provider>

@@ -134,7 +134,6 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
 
     const { register, handleSubmit } = useForm();
 
-
     const postTitleRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {

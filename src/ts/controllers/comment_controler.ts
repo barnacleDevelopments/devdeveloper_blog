@@ -38,7 +38,7 @@ class Comment {
         return recievedData;
     }
 
-    async create(userId: string, postId: string, newComment: NewCommentData): Promise<CommentComponentData> {
+    async create(userId: string, postId: string, newComment: NewCommentData, token: string): Promise<CommentComponentData> {
         let recievedData: CommentComponentData = {
             _id: "",
             content: "",
@@ -46,16 +46,16 @@ class Comment {
             username: ""
         };
 
-        console.log(userId)
-
         await fetch(`http://localhost:${PORT}/comments/create/${userId}/${postId}`, {
             method: "POST",
             mode: "cors",
             headers: {
                 "Content-Type": "application/json;charset=UTF-8",
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(newComment)
+            body: JSON.stringify(newComment),
+
         })
             .then(response => response.json())
             .then(data => {
