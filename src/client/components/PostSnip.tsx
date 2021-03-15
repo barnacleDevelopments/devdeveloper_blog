@@ -13,13 +13,17 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
 // ASSETS
-import CardPhoto from "../../img/logo.png";
+import CardPhoto from "../img/logo.png";
 
 // COMPONENTS
 import ConfirmForm from "./ConfirmForm";
 import PostContext from "../contexts/PostContext";
 import PostForm from "./PostForm";
 import useAuth from "../hooks/useAuth";
+
+
+// STATELESS COMPONENTS
+import { EditBtn, DeleteBtn, CardBtn } from "../stateless_components/buttons";
 
 // INTERFACES
 interface PostData {
@@ -40,29 +44,7 @@ const Body = styled("div")`
     padding: 10px;
     position: relative;
     min-width: 270px;
-    > a {
-        box-shadow: 1px 1px 5px 0px #00000030;
-    } 
-
-    > a:nth-of-type(1) {
-        position: absolute;
-        right: -13px;
-        top: -10px;
-        background-color: #97aabd; 
-        padding: 8px;
-        border-radius: 30px;
-        color: #f5f5f5;
-    }
-    
-    > a:nth-of-type(2) {
-        position: absolute;
-        right: -10px;
-        top: 30px;
-        background-color: #97aabd; 
-        padding: 6px;
-        border-radius: 30px;
-        color: #f5f5f5;
-    }
+ 
     img {
         width: 100%;
     }
@@ -89,15 +71,6 @@ const PostSnipContent = styled("div")`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-    a {
-        color: #f5f5f5;
-        background-color: #9e5a63;
-        padding: 9px 14px 9px 14px;
-        border-radius: 4px;
-        text-decoration: none;
-        border: none;
-        box-shadow: 1px 1px 5px 0px #00000040;
     }
     div {
         display: flex;
@@ -134,7 +107,7 @@ const PostSnip: React.FunctionComponent<PostData> = ({ catId, postId, title, con
                 <h2>{title ? title : "No Title"}</h2>
                 <p>{content ? stripHtml(content).result : "This post has no content."}</p>
                 <div>
-                    <Link to={`/posts/${catId}/${postId}`}>READ</Link>
+                    <CardBtn><Link to={`/posts/${catId}/${postId}`}>Read</Link></CardBtn>
                 </div>
             </PostSnipContent>
 
@@ -159,14 +132,14 @@ const PostSnip: React.FunctionComponent<PostData> = ({ catId, postId, title, con
                     }} btnText="Confirm" message="You sure you want to delete this thing?" />}
 
             {/* EDIT FORM BUTTON */}
-            {isAdmin && <a onClick={
+            {isAdmin && <EditBtn onClick={
                 () => toggleEditForm()
-            }><i className="fas fa-pen fa-1x"></i></a>}
+            }><i className="fas fa-pen fa-1x"></i></EditBtn>}
 
             {/* DELETE FORM BUTTON */}
-            {isAdmin && <a onClick={
+            {isAdmin && <DeleteBtn onClick={
                 () => toggleDeleteForm()
-            }><i className="far fa-trash-alt"></i></a>}
+            }><i className="far fa-trash-alt"></i></DeleteBtn>}
         </Body>
     )
 }

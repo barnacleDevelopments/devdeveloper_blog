@@ -25,7 +25,7 @@ const Form = styled("form")`
     width: 93%;
     display: grid;
     grid-template-rows: 1fr 1fr;
-    background-color: #9e5a63;
+    background-color: #314455;
     padding: 14px;
     border-radius: 4px;
     @media (min-width: 576px) {
@@ -46,6 +46,7 @@ const Form = styled("form")`
     p {
         grid-column: 1 / span 2;
         color: #f5f5f5;
+        font-size: 1.2em;
     }
     
 `;
@@ -55,17 +56,6 @@ const BtnContainer = styled("div")`
     justify-content: flex-end;
     width: 100%;
     grid-column: 1 / span 2;
-    a {
-        display: flex;
-        justify-content: center;
-        padding: 9px;
-        background-color: #97aabd;
-        padding: 9px 14px;
-        border-radius: 4px;
-        margin-left: 10px;
-        color: #f5f5f5;
-        
-    }
 `;
 
 const Shadow = styled("div")`
@@ -77,6 +67,9 @@ const Shadow = styled("div")`
     height: 100%;
     position: fixed;
 `;
+
+// STATELESS COMPONENTS
+import { CancelBtn, ConfirmBtn } from "../stateless_components/buttons";
 
 // INTERFACES
 interface ConfirmFormComponent {
@@ -93,15 +86,12 @@ const ConfirmForm: FunctionComponent<ConfirmFormComponent> = ({ confirmHandler, 
             <Form>
                 <p>{message}</p>
                 <BtnContainer>
-                    <a onClick={cancelHandler}>Cancle</a>
-                    <a onClick={confirmHandler}>{btnText}</a>
+                    <CancelBtn onClick={cancelHandler}>Cancle</CancelBtn>
+                    <ConfirmBtn onClick={confirmHandler}>{btnText}</ConfirmBtn>
                 </BtnContainer>
 
             </Form>
         </Body>
-
-
-
     )
 }
 

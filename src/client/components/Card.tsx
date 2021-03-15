@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 // ASSETS 
-import CardPhoto from "../../img/logo.png"
+import CardPhoto from "../img/logo.png"
 import ConfirmForm from "./ConfirmForm";
 import CategoryForm from "./CategoryForm";
 
@@ -29,6 +29,10 @@ interface CategoryComponentData {
     updateCategory(catId: string, name: string, desc: string): void
 }
 
+// STATELESS COMPONENTS
+import { CardBtn, EditBtn, DeleteBtn } from "../stateless_components/buttons";
+
+
 const CardBody = styled("div")`
     background-color: #314455;
     color: #f5f5f5;
@@ -38,25 +42,6 @@ const CardBody = styled("div")`
     box-shadow: 3px 3px 30px -20px black;
     position: relative;
     min-width: 270px;
-    > a:nth-of-type(1) {
-        position: absolute;
-        right: -13px;
-        top: -10px;
-        background-color: #97aabd; 
-        padding: 8px;
-        border-radius: 30px;
-        color: #f5f5f5;
-    }
-
-    > a:nth-of-type(2) {
-        position: absolute;
-        right: -10px;
-        top: 30px;
-        background-color: #97aabd; 
-        padding: 6px;
-        border-radius: 30px;
-        color: #f5f5f5;
-    }
 `;
 
 const CardImg = styled("img")`
@@ -94,24 +79,6 @@ const CardContent = styled("div")`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    a {
-        background-color: #9E5A63;
-        border-radius: 4px;
-        padding: 10px 15px;
-        box-shadow: 
-        display: inline-block;
-        grid-column: 2;
-        text-align: center;
-        width: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        color: #f5f5f5;
-        box-shadow: 3px 3px 30px -10px black;
-        height: 40px;
     }
 `;
 
@@ -154,7 +121,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ isAdmin, catId, 
                 <h2>{name ? name : "No Name"}</h2>
                 {<p>{desc ? desc : "This category has no description."}</p>}
                 <div>
-                    <Link to={`/categories/posts/${catId}`}>VIEW</Link>
+                    <CardBtn><Link to={`/categories/posts/${catId}`}>View</Link></CardBtn>
                 </div>
             </CardContent>
 
@@ -184,11 +151,11 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ isAdmin, catId, 
 
             {/* EDIT BUTTON */}
             {isAdmin ?
-                <a onClick={toggleEditForm}><i className="fas fa-pen fa-1x"></i></a> : null}
+                <EditBtn onClick={toggleEditForm}><i className="fas fa-pen fa-1x"></i></EditBtn> : null}
 
             {/* DELETE BUTTON */}
             {isAdmin ?
-                <a onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></a> : null}
+                <DeleteBtn onClick={toggleDeleteForm} ><i className="far fa-trash-alt"></i></DeleteBtn> : null}
         </CardBody>
     )
 }

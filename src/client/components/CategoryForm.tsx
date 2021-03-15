@@ -19,6 +19,9 @@ interface CategoryFormComponent {
     cancelFunc(): void
 }
 
+// STATELESS COMPONENTS
+import { CancelBtn, ConfirmBtn } from "../stateless_components/buttons";
+
 const Body = styled("div")`
     position: fixed;
     display: flex;
@@ -90,23 +93,10 @@ const Form = styled("form")`
         font-family: 'Chivo', sans-serif;
         border-radius: 4px;
     }
-
-    button {
-        color: #f5f5f5;
-        background-color: #9e5a63;
-        padding: 9px 14px 9px 14px;
-        border-radius: 4px;
-        text-decoration: none;
-        border: none;
-        box-shadow: 1px 1px 5px 0px #00000030;
-    }
 `;
 
 const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
-    a {
-        margin-left: 10px;
-    }
 `;
 
 const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancelFunc }) => {
@@ -154,8 +144,8 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                     onChange={handleFormData}
                 />
                 <ButtonContainer>
-                    <button onClick={cancelFunc}>Cancel</button>
-                    <button type="submit">{btnText}</button>
+                    <CancelBtn onClick={cancelFunc}>Cancel</CancelBtn>
+                    <ConfirmBtn type="submit">{btnText}</ConfirmBtn>
                 </ButtonContainer>
             </Form>
         </Body>

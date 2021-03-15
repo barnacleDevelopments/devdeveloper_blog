@@ -82,7 +82,7 @@ const Content = styled("div")`
 `;
 
 // ASSETS 
-import CardPhoto from "../../img/logo.png"
+import CardPhoto from "../img/logo.png"
 
 // INTERFACES
 interface PostComponent {

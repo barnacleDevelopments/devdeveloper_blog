@@ -90,10 +90,11 @@ const PostView: React.FunctionComponent<PostView> = () => {
     // create new comment on post
     const createComment = async (comment: NewCommentData) => {
         const token = await getAccessTokenSilently();
-        Comment.prototype.create(user.sub, postId, comment, token)
+        console.log(comment.username)
+        Comment.prototype.create(postId, comment, token)
             .then(data => {
                 let newCommentList: CommentComponentData[] = comments
-                setComments([data, ...newCommentList])
+                setComments([data, ...newCommentList]);
             })
     }
 
@@ -101,7 +102,6 @@ const PostView: React.FunctionComponent<PostView> = () => {
     useEffect(() => {
         Comment.prototype.getFromPost(postId)
             .then(data => setComments(data))
-
     }, [])
 
     return (
@@ -118,7 +118,7 @@ const PostView: React.FunctionComponent<PostView> = () => {
             <Title title="COMMENTS" />
             {isAuthenticated && <CommentForm
                 createComment={createComment}
-                userId={user._id}
+                username={user.name}
                 postId={postId} />
             }
             {isAuthenticated ? null : <Link to="/login">Login</Link>}

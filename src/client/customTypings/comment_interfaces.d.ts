@@ -15,7 +15,9 @@ interface CommentComponentData {
 interface NewCommentData {
     _id: string,
     content: string,
-    date: string
+    date: string,
+    username: string,
+    userId: string
 }
 
 interface CommentFormData {

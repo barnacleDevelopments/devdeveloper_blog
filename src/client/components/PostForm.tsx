@@ -20,6 +20,10 @@ import { Editor } from "react-draft-wysiwyg";
 import { useForm } from "react-hook-form";
 
 // INTERFACES 
+
+// STATELESS COMPONENTS
+import { CancelBtn, ConfirmBtn } from "../stateless_components/buttons";
+
 interface PostFormComponent {
     title: string,
     content: string,
@@ -98,27 +102,10 @@ const Form = styled("form")`
         font-family: 'Chivo', sans-serif;
         border-radius: 4px;
     }
-
-    button {
-        color: #f5f5f5;
-        background-color: #9e5a63;
-        padding: 9px 14px 9px 14px;
-        border-radius: 4px;
-        text-decoration: none;
-        border: none;
-        box-shadow: 1px 1px 5px 0px #00000030;
-    }
 `;
 
 const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
-    button {
-        margin-left: 10px;
-    }
-    button:nth-of-type(1) {
-        background-color: #97aabd;
-    }
-
 `;
 
 
@@ -183,8 +170,8 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
                     stripPastedStyles={true}
                 />
                 <ButtonContainer>
-                    <button onClick={cancleFunc} >Cancle</button>
-                    <button type="submit">{btnText}</button>
+                    <CancelBtn onClick={cancleFunc} >Cancle</CancelBtn>
+                    <ConfirmBtn type="submit">{btnText}</ConfirmBtn>
                 </ButtonContainer>
             </Form>
         </Body>

@@ -7,7 +7,7 @@ FILE: Navbar.tsx
 import React from "react";
 import styled from "@emotion/styled";
 import { Link, Redirect } from "react-router-dom";
-import * as logoImage from "../../img/logo_3.png";
+import * as logoImage from "../img/logo_3.png";
 
 // HOOKS
 import useNav from "../hooks/useNav";
@@ -18,7 +18,7 @@ interface NavComponent {
 }
 
 // COMPONENTS
-import DropDownMenu from "../components/DropDownMenu";
+import DropDownMenu from "./DropDownMenu";
 import useAuth from "../hooks/useAuth";
 
 

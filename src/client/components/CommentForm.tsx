@@ -10,10 +10,13 @@ import styled from "@emotion/styled";
 // CLASSES 
 import EasyDate from "../classes/EasyDate";
 
+// HOOKS
+import useAuth from "../hooks/useAuth";
+
 // INTERFACES
 interface CommentFormComponent {
     createComment(comment: CommentFormData): void,
-    userId: string,
+    username: string,
     postId: string
 }
 
@@ -71,14 +74,17 @@ const Content = styled("div")`
     margin-top: 14px;
 `;
 
-const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment, userId, postId }) => {
+const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment, username, postId }) => {
     const [commentData, setCommentData] = React.useState<CommentFormData>({ content: "", date: "" })
+    const { user } = useAuth();
+
 
     const handleFormData = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         let comment = {
             content: e.target.value,
             date: EasyDate.prototype.getRegDate(),
-            userId: userId,
+            username: username,
+            userId: user.sub,
             postId: postId
         }
         setCommentData(comment)

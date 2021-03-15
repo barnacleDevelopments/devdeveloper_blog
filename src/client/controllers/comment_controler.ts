@@ -38,15 +38,16 @@ class Comment {
         return recievedData;
     }
 
-    async create(userId: string, postId: string, newComment: NewCommentData, token: string): Promise<CommentComponentData> {
+    async create(postId: string, newComment: NewCommentData, token: string): Promise<CommentComponentData> {
         let recievedData: CommentComponentData = {
             _id: "",
             content: "",
             date: "",
-            username: ""
+            username: "",
         };
+        console.log(newComment.username)
 
-        await fetch(`http://localhost:${PORT}/comments/create/${userId}/${postId}`, {
+        await fetch(`http://localhost:${PORT}/comments/create/${postId}`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -77,14 +78,15 @@ class Comment {
         })
     }
 
-    async delete(commentId: string, userId: string, postId: string): Promise<ResponseStatus> {
+    async delete(commentId: string, postId: string, token: string): Promise<ResponseStatus> {
         let recievedData: ResponseStatus = { status: "pending" }
-        await fetch(`http://localhost:${PORT}/comments/delete/${commentId}/${userId}/${postId}`, {
+        await fetch(`http://localhost:${PORT}/comments/delete/${commentId}/${postId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             }
         })
             .then(response => response.json())

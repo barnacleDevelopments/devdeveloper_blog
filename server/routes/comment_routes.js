@@ -6,12 +6,10 @@ FILE: comment_routes.js
 
 // DEPENDENCIES
 import express from "express";
-import got from "got"
 
 // MODELS
 import Comment from "../models/comment_model";
 import Post from "../models/post_model";
-import User from "../models/user_model";
 
 // JWT MIDDLEWARE
 import jwtCheck from "../middleware/jwt_token_check";
@@ -59,26 +57,7 @@ router.get("/post/:id", (req, res) => {
         .populate({ path: "comments" })
         .exec((err, post) => {
             if (!err) {
-                if (post.comments.length > 0) {
-                    (async () => {
-                        // wait for usernames to be added to each comment
-                        await Promise.all(post.comments.map(async (com) => {
-                            let username
-                            // wait to retrieve user
-                            await User.findById(com.userId, (err, user) => {
-                                if (!err) {
-                                    username = user.username
-                                }
-                            })
-                            return {
-                                _id: com._id,
-                                username: username,
-                                date: com.date,
-                                content: com.content
-                            }
-                        })).then(comments => res.status(200).json(comments));
-                    })();
-                }
+                res.status(200).json(post.comments)
             } else {
                 res.status(500).json({ status: "error" });
             }
@@ -86,63 +65,47 @@ router.get("/post/:id", (req, res) => {
 })
 
 // create one comment
-router.post("/create/:userId/:postId/", (req, res) => {
+router.post("/create/:postId", (req, res) => {
     const body = req.body; // request body
-    const userId = req.params.userId; // user id
     const postId = req.params.postId; // post id 
 
     // create new comment 
     Comment.create(body, (err, com) => {
         if (!err) {
-            // find associated user
-            got.patch(`https://dev-qkxpd7xc.auth0.com/api/v2/users/${userId}`, {
-                headers: {
-                    method: "patch",
-                    mode: "cors",
-                    headers: {
-                        "Content-Type": "application/json;charset=UTF-8",
-                        Accept: "application/json",
-                    },
-                    body: com._id,
-                }
-            })
-                .then(() => {
-                    // update user's comment list
-                    let newUserCommentList = user.comments;
-                    newUserCommentList.push(com._id);
-                    // find associated post
-                    Post.findById(postId, (err, post) => {
-                        if (!err) {
-                            // update post's comment list
-                            let newCommentList = post.comments;
-                            newCommentList.push(com._id);
-                            Post.findByIdAndUpdate(postId,
-                                { comments: newCommentList }, (err, post) => {
-                                    if (!err) {
-                                        Post.findById(postId)
-                                            .populate("comments")
-                                            .exec((err, post) => {
-                                                if (!err) {
-                                                    res.status(201).json({
-                                                        _id: com._id,
-                                                        username: user.username,
-                                                        date: com.date,
-                                                        content: com.content
-                                                    })
-                                                } else {
-                                                    res.status(500).json({ status: "error" });
-                                                }
+            // find associated post
+            Post.findById(postId, (err, post) => {
+                if (!err) {
+                    // update post's comment list
+                    let newCommentList = post.comments;
+                    newCommentList.push(com._id);
+                    Post.findByIdAndUpdate(postId,
+                        { comments: newCommentList }, (err, post) => {
+                            if (!err) {
+                                Post.findById(postId)
+                                    .populate("comments")
+                                    .exec((err, post) => {
+                                        if (!err) {
+                                            res.status(201).json({
+                                                _id: com._id,
+                                                date: com.date,
+                                                content: com.content,
+                                                username: com.username
                                             })
-                                    } else {
-                                        res.status(500).json({ status: "error" });
-                                    }
-                                })
-                        } else {
-                            res.status(500).json({ status: "error" });
-                        }
-                    });
-                }).catch(err => res.status(500).json({ status: "error" }));
+                                        } else {
+                                            res.status(500).json({ status: "error" });
+                                        }
+                                    })
+                            } else {
+                                res.status(500).json({ status: "error" });
+                            }
+                        })
+                } else {
+                    res.status(500).json({ status: "error" });
+                }
+            });
+
         } else {
+            console.log("Failed to create comment!")
             res.status(500).json({ status: "error" });
         }
     });
@@ -162,18 +125,12 @@ router.put("/update/:id", jwtCheck, (req, res) => {
 });
 
 // delete one comment
-router.delete("/delete/:commentId/:userId/:postId", jwtCheck, (req, res) => {
+router.delete("/delete/:commentId/:postId", jwtCheck, (req, res) => {
     const commentId = req.params.commentId; // comment id
-    const userId = req.params.userId; // user id 
     const postId = req.params.postId; // post id 
     // find comment and delete from database
     Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
         if (!err) {
-
-            let newUserCommentList = data.comments.filter((id) => {
-                id === commentId ? false : true;
-            })
-
             // find associated post
             Post.findById(postId, (err, data) => {
                 if (!err) {

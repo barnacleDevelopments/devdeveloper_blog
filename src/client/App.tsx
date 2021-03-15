@@ -8,21 +8,21 @@ import React from "react";
 import * as  ReactDOM from "react-dom";
 import styled from "@emotion/styled";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
-import Auth0ProviderWithHistory from "./ts/components/Auth0ProviderWIthHistory";
+import Auth0ProviderWithHistory from "./components/Auth0ProviderWIthHistory";
 
 // COMPONENTS
-import Container from "./ts/components/Container";
-import Navbar from "./ts/components/Navbar";
-import CategoriesView from "./ts/components/CategoriesView";
-import PostsView from "./ts/components/PostsView";
-import PostView from "./ts/components/PostView";
-import ErrorNotification from "./ts/components/ErrorNotification";
+import Container from "./components/Container";
+import Navbar from "./components/Navbar";
+import CategoriesView from "./components/CategoriesView";
+import PostsView from "./components/PostsView";
+import PostView from "./components/PostView";
+import ErrorNotification from "./components/ErrorNotification";
 
 // HOOKS
-import useError from "./ts/hooks/useError";
+import useError from "./hooks/useError";
 
 // CONTEXTS
-import ErrorContext from "./ts/contexts/ErrorContext";
+import ErrorContext from "./contexts/ErrorContext";
 
 //GLOBAL STYLES
 import "./css/reset.css";

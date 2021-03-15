@@ -5,12 +5,14 @@ FILE: Comment.tsx
 */
 
 // DEPENDENCIES
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 // CONTROLLERS
 import Comment from "../controllers/comment_controler";
-import { UserContext } from "../contexts/UserContext";
+
+// HOOKS
+import useAuth from "../hooks/useAuth";
 
 // INTERFACES 
 interface CommentComponent {
@@ -97,13 +99,20 @@ const Content = styled("div")`
 // COMPONENT
 const CommentBody: React.FunctionComponent<CommentComponent> = ({ commentId, content, date, username, postId }) => {
     const [isDeleted, setIsDeleted] = useState(false)
-    const { isAuthenticated, user } = useContext(UserContext);
+    const { isAdmin, getAccessTokenSilently } = useAuth();
     // delete comment
-    const deleteComment = () => {
-        Comment.prototype.delete(commentId, user._id, postId)
-            .then((res) => {
-                res.status === "success" ? setIsDeleted(true) : setIsDeleted(false)
-            })
+    const deleteComment = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+
+            Comment.prototype.delete(commentId, postId, token)
+                .then((res) => {
+                    res.status === "success" ? setIsDeleted(true) : setIsDeleted(false)
+                })
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     // display comment if not deleted
@@ -118,7 +127,7 @@ const CommentBody: React.FunctionComponent<CommentComponent> = ({ commentId, con
                     <p>{date}</p>
                 </Content>
                 <div>
-                    {user.role === "administrator" && isAuthenticated ?
+                    {isAdmin ?
                         <a onClick={deleteComment}><i className="far fa-trash-alt fa-1x"></i></a> : null}
                 </div>
             </Body>
