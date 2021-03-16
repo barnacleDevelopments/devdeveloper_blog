@@ -79,9 +79,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve && nodemon -r esm ./server/app.js",
+    "start": "node ./server/app.js",
     "build": "webpack",
-    "server": "nodemon -r esm ./server/app.js"
+    "server": "nodemon -r esm ./server/app.js",
+    "heroku-postbuild": "npm install && npm run build"
   },
   "author": "",
   "license": "ISC"
