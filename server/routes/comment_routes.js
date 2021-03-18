@@ -13,6 +13,7 @@ import Post from "../models/post_model";
 
 // JWT MIDDLEWARE
 import jwtCheck from "../middleware/jwt_token_check";
+import checkPermissions from "../middleware/jwt_permission_check";
 
 // CATEGORY ROUTES
 const router = express.Router();
@@ -65,7 +66,7 @@ router.get("/post/:id", (req, res) => {
 })
 
 // create one comment
-router.post("/create/:postId", (req, res) => {
+router.post("/create/:postId", [jwtCheck, checkPermissions(["create:comment"])], (req, res) => {
     const body = req.body; // request body
     const postId = req.params.postId; // post id 
 
@@ -85,6 +86,7 @@ router.post("/create/:postId", (req, res) => {
                                     .populate("comments")
                                     .exec((err, post) => {
                                         if (!err) {
+                                            console.log(`Comment with id: ${com._id} created!`)
                                             res.status(201).json({
                                                 _id: com._id,
                                                 date: com.date,
@@ -112,7 +114,7 @@ router.post("/create/:postId", (req, res) => {
 });
 
 // update one comment
-router.put("/update/:id", jwtCheck, (req, res) => {
+router.put("/update/:id", [jwtCheck, checkPermissions(["update:comment"])], (req, res) => {
     const body = req.body;
     const id = req.params.id;
     Comment.findOneAndUpdate({ _id: id }, body, (err, com) => {
@@ -125,7 +127,7 @@ router.put("/update/:id", jwtCheck, (req, res) => {
 });
 
 // delete one comment
-router.delete("/delete/:commentId/:postId", jwtCheck, (req, res) => {
+router.delete("/delete/:commentId/:postId", [jwtCheck, checkPermissions(["delete:comment"])], (req, res) => {
     const commentId = req.params.commentId; // comment id
     const postId = req.params.postId; // post id 
     // find comment and delete from database

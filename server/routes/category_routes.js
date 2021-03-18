@@ -84,6 +84,7 @@ router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, 
                     res.status(201).json({ data: cat, status: "success" });
                     console.log(`Category with ${cat._id} created!`)
                 } else {
+                    console.log(err)
                     res.status(500).json({
                         status: "error",
                         message: err
@@ -91,7 +92,10 @@ router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, 
                 }
 
             })
-        }).catch(err => res.status(413).json({ status: "error", message: err }))
+        }).catch(err => {
+            console.log(err)
+            res.status(413).json({ status: "error", message: err })
+        })
 })
 
 // update one category

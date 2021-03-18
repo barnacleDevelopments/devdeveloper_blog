@@ -24,7 +24,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 // MONGOOOSE CONFIGURATION
-mongoose.connect("mongodb://localhost/blogs", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect("mongodb+srv://test_user:JCylhXHFYC91J98P@devdeveloperblog.1t4lu.mongodb.net/blog?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 const db = mongoose.connection;
 
@@ -35,7 +35,7 @@ db.once('open', function () {
 
 // CROSS ORGIN REQUEST SETTINGS
 app.use(cors({
-  origin: "http://localhost:5000",
+  origin: "*",
 }));
 
 // +++++++++++++++
@@ -69,7 +69,7 @@ app.use(express.urlencoded({ extended: true }));
 // ++++++++++++++++++
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
-app.use("/comments", commentRoutes)
+app.use("/comments", commentRoutes);
 
 // SEND BUNDLE TO BROWSER
 app
