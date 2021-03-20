@@ -4,8 +4,35 @@ DATE: January 3rd, 2021
 FILE: post_controller.ts
 */
 
+import { RessourceId } from "../customTypings/global_types";
+
 class Post {
     constructor() { }
+
+    async getAll(): Promise<PostResponse[]> {
+        let recievedData: PostResponse[] = [{
+            data: {
+                _id: "",
+                title: "",
+                content: "",
+                date: ""
+            },
+            status: "pending",
+            message: ""
+        }];
+        await fetch(`http://localhost:3000/api/posts/all`, {
+            method: "GET",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => recievedData = data.data);
+
+        return recievedData
+    }
     async getOne(postId: RessourceId): Promise<PostResponse> {
         let recievedData: PostResponse = {
             data: {
@@ -17,7 +44,7 @@ class Post {
             status: "pending",
             message: ""
         };
-        await fetch(`/api/posts/view/${postId}`, {
+        await fetch(`http://localhost:3000/api/posts/view/${postId}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -26,7 +53,7 @@ class Post {
             }
         })
             .then(response => response.json())
-            .then(data => recievedData = data);
+            .then(data => recievedData = data.data);
         return recievedData
     }
 
@@ -69,7 +96,7 @@ class Post {
             status: "pending",
             message: ""
         }
-        await fetch(`/api/posts/update/${postId}`, {
+        await fetch(`http://localhost:3000/api/posts/update/${postId}`, {
             method: "PUT",
             mode: "cors",
             headers: {
@@ -84,7 +111,7 @@ class Post {
         return recievedData;
     }
 
-    async delete(postId: RessourceId, catId: RessourceId): Promise<BasicResponse> {
+    async delete(postId: RessourceId, catId: any): Promise<BasicResponse> {
         let recievedData: BasicResponse = {
             status: "pending",
             message: ""

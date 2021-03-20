@@ -4,10 +4,12 @@
 // FILE: comment_controller.ts
 // */
 
+import { RessourceId } from "../customTypings/global_types";
+
 class Comment {
     constructor() { }
 
-    async getFromPost(postId: RessourceId) {
+    async getFromPost(postId: RessourceId): Promise<CommentComponentData[]> {
         let recievedData: CommentComponentData[] = [
             {
                 _id: "",
@@ -17,7 +19,7 @@ class Comment {
             }
         ];
 
-        await fetch(`/api/comments/${postId}`, {
+        await fetch(`http://localhost:3000/api/comments/${postId}`, {
             method: "GET",
             mode: "cors",
             headers: {

@@ -1,9 +1,9 @@
 
 const PORT = process.env.EXTERNAL_API_PORT
 
-export default async function getCategories(res: any) {
+export default async function getAllPosts(res: any) {
     try {
-        await fetch(`http://localhost:${PORT}/categories`, {
+        await fetch(`http://localhost:${PORT}/posts`, {
             method: "GET",
             mode: "cors",
             headers: {

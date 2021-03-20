@@ -56,9 +56,14 @@ const Navbar: React.FunctionComponent = () => {
 
     return (
         <Navbody>
-            {backBtnStatus ? <Link href={backBtnParams}>
+
+
+
+            {backBtnStatus && (<Link href={backBtnParams}>
                 <Icon icon={faArrowLeft} />
-            </Link> : <Logo src="../img/logo_3.png" />}
+            </Link>)}
+
+            <Logo src="../img/logo_3.png" />
 
             {user && !isLoading ?
                 <DropDownMenu /> :

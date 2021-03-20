@@ -7,18 +7,14 @@ FILE: usePosts.tsx
 import { useState, useContext } from "react";
 import Post from "../controllers/post_controller";
 import Category from "../controllers/category_controller";
+import { RessourceId } from "../customTypings/global_types";
 
 // CONTEXTS
 import ErrorContext from "../contexts/ErrorContext";
 
-const usePosts = () => {
+const usePosts = (initialCategories: any) => {
     const { addError } = useContext(ErrorContext)
-    const [posts, setPosts] = useState<PostData[]>([{
-        _id: "",
-        title: "",
-        content: "",
-        date: "",
-    }]);
+    const [posts, setPosts] = useState<PostData[]>(initialCategories);
 
     const addPost = async (title: string, content: string, catId: RessourceId) => {
         let adjustedPostsList = posts;
@@ -44,7 +40,7 @@ const usePosts = () => {
             })
     }
 
-    const deletePost = (postId: RessourceId, catId: RessourceId) => {
+    const deletePost = (postId: RessourceId, catId: any) => {
         Post.prototype.delete(postId, catId)
             .then(data => {
                 if (data.status === "error" && data.message !== undefined) {
@@ -76,18 +72,12 @@ const usePosts = () => {
         })
     }
 
-    const getAllPosts = () => {
-
-    }
-
     return {
         posts,
         addPost,
         deletePost,
         getCategoryPosts,
-        updatePost,
-        getAllPosts
-
+        updatePost
     }
 }
 

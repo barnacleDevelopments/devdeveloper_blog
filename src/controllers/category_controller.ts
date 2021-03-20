@@ -3,8 +3,8 @@ AUTHOR: Devin Davis
 DATE: January 3rd, 2021
 FILE: category_controller.ts
 */
+import { RessourceId } from "../customTypings/global_types";
 
-// ENV VARIABLES
 class Category {
     constructor() { }
 
@@ -22,7 +22,7 @@ class Category {
             message: ""
         };
 
-        await fetch(`/api/categories/all`, {
+        await fetch(`http://localhost:3000/api/categories/all`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -32,7 +32,7 @@ class Category {
         })
             .then(response => response.json())
             .then(data => {
-                recievedData = data;
+                recievedData = data.data;
             });
         return recievedData
     }
@@ -62,7 +62,7 @@ class Category {
         })
             .then(response => response.json())
             .then(data => {
-                recievedData = data;
+                recievedData = data.data;
             });
         return recievedData;
     }
@@ -79,7 +79,7 @@ class Category {
             message: ""
         }
 
-        await fetch(`/api/posts/${catId}`, {
+        await fetch(`http://localhost:3000/api/posts/${catId}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -89,8 +89,8 @@ class Category {
         })
             .then(response => response.json())
             .then(data => {
-                recievedData = data;
-            });
+                recievedData = data.data;
+            })
         return recievedData
     }
 

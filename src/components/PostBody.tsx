@@ -7,7 +7,6 @@ FILE: Post.tsx
 import * as React from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import DOMPurify from "dompurify";
 
 // HOOKS
 import useAuth from "../hooks/useAuth";
@@ -100,7 +99,7 @@ const Post: React.FunctionComponent<PostComponent> = ({ title, content }) => {
             <img src="../../img/logo.png" />
             <Content>
                 <h1>{title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></div>
+                <div dangerouslySetInnerHTML={{ __html: content }}></div>
             </Content>
 
             { (user && !isLoading && isAdmin) &&

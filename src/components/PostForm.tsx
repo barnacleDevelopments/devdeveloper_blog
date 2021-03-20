@@ -14,8 +14,9 @@ import { stateFromHTML } from "draft-js-import-html"
 import { EditorState } from 'draft-js';
 
 // COMPONENTS 
-import { Editor } from "react-draft-wysiwyg";
 
+// import dynamic from 'next/dynamic'
+const Editor: any = import('react-draft-wysiwyg');
 // HOOKS 
 import { useForm } from "react-hook-form";
 

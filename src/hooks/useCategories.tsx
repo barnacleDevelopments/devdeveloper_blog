@@ -4,30 +4,23 @@ DATE: January 27th, 2021
 FILE: useCategories.tsx
 */
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import Category from "../controllers/category_controller";
+import { RessourceId } from "../customTypings/global_types";
 
 // CONTEXTS
 import ErrorContext from "../contexts/ErrorContext";
 
-
-const useCategories = () => {
-    const [categories, setCategories] = useState<CategoryData[]>([]);
+const useCategories = (initialCategories: any) => {
+    const [categories, setCategories] = useState<CategoryData[]>(initialCategories);
     const { addError } = useContext(ErrorContext);
 
-
-    // retrive all the categories
-    useEffect(() => {
-        Category.prototype.getAll()
-            .then(data => {
-                if (data.status === "error" && data.message !== undefined) {
-                    addError(data.message);
-                } else {
-                    setCategories(data.data)
-                }
-            })
-    }, []);
-
+    /**
+     * 
+     * @param name Category name.
+     * @param desc Category description.
+     * @description Makes a POST request containing a new category entry directed at the devdevloper_blog api.
+     */
     const addCategory = async (name: string, desc: string) => {
         let adjustedCatList = categories;
         try {
@@ -45,9 +38,13 @@ const useCategories = () => {
             console.log(error)
             addError("Failed to authorize category creation. Try login in again.")
         }
-
     }
 
+    /**
+     * 
+     * @param catId Category ID.
+     * @description Makes a DELETE request to remove a category directed at the devdevloper_blog api.
+     */
     const deleteCategory = async (catId: RessourceId) => {
         try {
             await Category.prototype.delete(catId)
@@ -65,6 +62,13 @@ const useCategories = () => {
         }
     }
 
+    /**
+     * 
+     * @param catId Category ID.
+     * @param name Category name.
+     * @param desc Category description.
+     * @description Makes a PUT request containing updates for a category entry directed at the devdevloper_blog api.
+     */
     const updateCategory = async (catId: RessourceId, name: string, desc: string) => {
         try {
             await Category.prototype.update(catId, name, desc)
@@ -95,7 +99,8 @@ const useCategories = () => {
         categories,
         addCategory,
         deleteCategory,
-        updateCategory
+        updateCategory,
+        setCategories
     }
 }
 

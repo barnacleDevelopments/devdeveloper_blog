@@ -4,6 +4,8 @@ DATE: January 7th, 2021
 FILE: user_interfaces.ts
 */
 
+import { UserContext } from "@auth0/nextjs-auth0"
+
 // INTERFACES
 interface UserData {
     _id: string,
@@ -42,3 +44,15 @@ interface NewUserFormData {
 }
 
 type UserStatus = boolean
+
+type UserRole = "administrator" | "user"
+
+interface user extends UserContext.user {
+    ["http://reallyuniquenamespace.com/roles"]: Array
+}
+
+
+interface CustomUserContext extends UserContext {
+    user: user | UserContext.user
+
+}

@@ -110,14 +110,14 @@ const CommentBody: React.FunctionComponent<CommentComponent> = ({ commentId, con
     // delete comment
     const deleteComment = async () => {
         try {
-            Comment.prototype.delete(commentId, postId)
-                .then((res) => {
-                    res.status === "success" ? setIsDeleted(true) : setIsDeleted(false)
-                })
+            if (postId !== undefined)
+                Comment.prototype.delete(commentId, postId)
+                    .then((res) => {
+                        res.status === "success" ? setIsDeleted(true) : setIsDeleted(false)
+                    })
         } catch (err) {
             console.log(err)
         }
-
     }
 
     // display comment if not deleted

@@ -76,20 +76,22 @@ const Content = styled("div")`
 
 const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComment, username }) => {
     const [commentData, setCommentData] = React.useState<CommentFormData>({ content: "", date: "" })
-    const { user } = useAuth();
+    const { user, isLoading } = useAuth();
     const router = useRouter();
     const { postId } = router.query
 
 
     const handleFormData = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        let comment = {
-            content: e.target.value,
-            date: EasyDate.prototype.getRegDate(),
-            username: username,
-            userId: user.sub,
-            postId: postId
+        if (!isLoading && user) {
+            let comment = {
+                content: e.target.value,
+                date: EasyDate.prototype.getRegDate(),
+                username: username,
+                userId: user.sub,
+                postId: postId
+            }
+            setCommentData(comment)
         }
-        setCommentData(comment)
     }
 
     return (

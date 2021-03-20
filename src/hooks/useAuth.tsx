@@ -6,31 +6,26 @@ FILE: useNav.tsx
 
 // DEPENDENTCIES
 import { useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0";
+import { UserContext, useUser } from "@auth0/nextjs-auth0";
+import { CustomUserContext } from "../customTypings/user_interfaces";
 
 const useAuth = () => {
     // auth0 hook
-    const { user, isLoading } = useUser();
-    // is admin state
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
-
+    const User: UserContext = useUser();
+    let CustomUser: CustomUserContext = (User as CustomUserContext)
+    const [isAdmin, setIsAdmin] = useState(false);
     // retrive 
     useEffect(() => {
-        if ((user !== undefined) && !isLoading) {
-            if ((user["http://reallyuniquenamespace.com/roles"][0] === "administrator")) {
-                setIsAdmin(true)
+        if ((CustomUser.user !== undefined) && !CustomUser.isLoading) {
+            if (CustomUser.user["http://reallyuniquenamespace.com/roles"][0] === "administrator") {
+                setIsAdmin(true);
             } else {
-                setIsAdmin(false)
+                setIsAdmin(false);
             }
         }
-    }, [])
+    }, [CustomUser.user, CustomUser.isLoading])
 
-    return {
-        user,
-        isLoading,
-        isAdmin
-
-    }
+    return { isAdmin, ...CustomUser };
 }
 
 export default useAuth;

@@ -15,7 +15,7 @@ import Head from "next/head"
 const ContainerBody = styled("div")`
     width: 90%;
     margin: 0 auto;
-    margin-top: 74px;
+    margin-top: 85px;
     padding-bottom: 14px;
     
     @media (min-width: 576px) {

@@ -34,6 +34,7 @@ interface CategoryComponentData {
 
 // STATELESS COMPONENTS
 import { CardBtn, EditBtn, DeleteBtn } from "../stateless_components/buttons";
+import useAuth from "../hooks/useAuth";
 
 
 const CardBody = styled("div")`
@@ -107,6 +108,8 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
     const [deleteFormVisible, setDeleteFormVisible] = useState<boolean>(false);
     const [editFormVisible, setEditFormVisible] = useState<Boolean>(false);
 
+    const { isLoading, user, isAdmin } = useAuth();
+
     const toggleDeleteForm = () => {
         deleteFormVisible ?
             setDeleteFormVisible(false) : setDeleteFormVisible(true);
@@ -154,12 +157,13 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
 
             {/* EDIT BUTTON */}
             {
-                <EditBtn onClick={toggleEditForm}><Icon icon={faPen} /></EditBtn>}
+                (isAdmin && !isLoading && user) && < EditBtn onClick={toggleEditForm}><Icon icon={faPen} /></EditBtn>}
 
             {/* DELETE BUTTON */}
             {
-                <DeleteBtn onClick={toggleDeleteForm} ><Icon icon={faTrash} /></DeleteBtn>}
-        </CardBody>
+                (isAdmin && !isLoading && user) && <DeleteBtn onClick={toggleDeleteForm} ><Icon icon={faTrash} /></DeleteBtn>
+            }
+        </CardBody >
     )
 }
 

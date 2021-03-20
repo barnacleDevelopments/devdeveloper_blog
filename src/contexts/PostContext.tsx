@@ -6,15 +6,14 @@ FILE: PostContext.tsx
 
 
 import { createContext } from "react";
+import { RessourceId } from "../customTypings/global_types";
 
 interface PostsContextData {
     posts: PostData[],
-    addPost(title: string, content: string, catId: string): void,
-    getCategoryPosts(catId: string): void,
-    deletePost(postId: string, catId: string): void,
-    updatePost(postId: string, title: string, content: string): void,
-    getAllPosts(): void
-
+    addPost(title: string, content: string, catId: RessourceId): void,
+    getCategoryPosts(catId: RessourceId): void,
+    deletePost(postId: RessourceId, catId: RessourceId): void,
+    updatePost(postId: RessourceId, title: string, content: string): void
 }
 
 export const PostsContextDefaultValue: PostsContextData = {
@@ -27,10 +26,7 @@ export const PostsContextDefaultValue: PostsContextData = {
     addPost: () => null,
     deletePost: () => null,
     getCategoryPosts: () => null,
-    updatePost: () => null,
-    getAllPosts: () => null,
-
-
+    updatePost: () => null
 }
 
 export default createContext(PostsContextDefaultValue);

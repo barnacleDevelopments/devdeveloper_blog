@@ -7,8 +7,7 @@ FILE: post_routes.js
 // DEPENDENCIES
 import express from "express";
 import * as yup from "yup";
-
-
+import sanitizeHtml from "sanitize-html";
 // MODELS
 import Post from "../models/post_model";
 import Category from "../models/category_model";
@@ -57,13 +56,16 @@ router.get("/:id", (req, res) => {
 
 // create one post 
 router.post("/create/:catId", [jwtCheck, checkPermissions(["create:post"])], (req, res) => {
-    const body = req.body; // request body
+    let body = req.body; // request body
     const catId = req.params.catId; // category id
     // create validation schema 
     let newPostSchema = yup.object().shape({
         title: yup.string().required().min(5).max(15),
-        content: yup.string().required().min(50).max(1000)
+        content: yup.string().required().min(50)
     });
+
+
+    body.content = sanitizeHtml(body.content)
     // validate incoming body
     newPostSchema.validate(body)
         .then(() => {

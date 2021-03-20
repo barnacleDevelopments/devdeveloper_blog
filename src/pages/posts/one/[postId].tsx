@@ -5,10 +5,11 @@ FILE: PostView.tsx
 */
 
 // DEPENDENCIES
-import React, { useContext } from "react";
-import { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import Link from "next/link"
+import Link from "next/link";
+
+
 
 // CONTROLLERS
 import Comment from "../../../controllers/comment_controler";
@@ -28,7 +29,8 @@ import { useRouter } from "next/router";
 
 // INTERFACES 
 interface PostView {
-
+    comments: any
+    post: any
 }
 
 // STYLES
@@ -63,24 +65,19 @@ const Fallback = styled("div")`
     }
 `;
 
-const PostView: React.FunctionComponent<PostView> = () => {
+const PostView: React.FunctionComponent<PostView> = ({ post }) => {
     // Retrieve post id from url
     const Router = useRouter();
-    const { postId, catId } = Router.query
-    const [post, setPost] = useState<PostData>();
-    const [comments, setComments] = useState<CommentComponentData[]>([])
+    const { postId } = Router.query
     const { user, isLoading, isAdmin } = useAuth();
     const { addError } = useContext(ErrorContext);
+    const [comments, setComments] = useState([]);
+
 
     useEffect(() => {
-        Post.prototype.getOne(postId)
-            .then((data: PostResponse) => {
-                if (data.status === "error") {
-                    addError(data.message)
-                } else {
-                    setPost(data.data)
-                }
-
+        Comment.prototype.getFromPost(postId)
+            .then(comments => {
+                setComments(comments)
             })
     }, [])
 
@@ -93,14 +90,6 @@ const PostView: React.FunctionComponent<PostView> = () => {
             })
     }
 
-    // retrieve post comments
-    useEffect(() => {
-        Comment.prototype.getFromPost(postId)
-            .then(data => {
-                setComments(data)
-            })
-    }, [])
-
     return (
         <Body>
             {post &&
@@ -109,28 +98,61 @@ const PostView: React.FunctionComponent<PostView> = () => {
                     content={post.content} />
             }
             <Title title="COMMENTS" />
-            {(user && !isLoading) && <CommentForm
-                createComment={createComment}
-                username={user.name}
-            />
+            {
+                (user && !isLoading) && <CommentForm
+                    createComment={createComment}
+                    username={user.name}
+                />
             }
             {(!user && !isLoading) && <Link href="/login">Login</Link>}
-            {comments.length <= 0 ?
-                <Fallback>
-                    <h2>No comments... <br />be the first!</h2>
-                </Fallback>
 
-                : comments.map((comment) => {
-                    return <CommentBody
-                        username={comment.username}
-                        key={comment._id}
-                        commentId={comment._id}
-                        content={comment.content}
-                        date={comment.date} />
-                })}
+            {
+                comments.length > 0 ?
+                    comments.map((comment) => {
+                        return <CommentBody
+                            username={comment.username}
+                            key={comment._id}
+                            commentId={comment._id}
+                            content={comment.content}
+                            date={comment.date} />
+                    })
+                    :
+                    <Fallback>
+                        <h2>No comments... <br />be the first!</h2>
+                    </Fallback>
+            }
 
         </Body>
     )
+}
+
+export async function getStaticProps(context: any) {
+    const postId = context.params.postId
+
+    const post = await Post.prototype.getOne(postId)
+        .then((data: PostResponse) => data)
+
+    return {
+        props: {
+            post
+        }, // will be passed to the page component as props
+    }
+}
+
+export async function getStaticPaths() {
+    // Get the paths we want to pre-render based on posts
+    const paths = await Post.prototype.getAll()
+        .then(posts => posts.map(post => ({
+            params: {
+                postId: post._id,
+            }
+        })));
+
+    // We'll pre-render only these paths at build time.
+    return {
+        paths,
+        fallback: false
+    }
 }
 
 export default PostView;

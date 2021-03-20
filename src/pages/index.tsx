@@ -6,6 +6,7 @@ FILE: CategoryView.tsx
 
 import React, { useState } from "react";
 import styled from "@emotion/styled";
+import { InferGetStaticPropsType } from 'next'
 
 // COMPONENTS
 import Card from "../components/Card";
@@ -14,25 +15,28 @@ import CreateBtn from "../components/CreateBtn";
 import FallbackMessage from "../components/FallbackMessage";
 import CategoryForm from "../components/CategoryForm";
 
+// CONTROLLERS 
+import Category from "../controllers/category_controller";
+
 // HOOKS 
 import useCategories from "../hooks/useCategories";
 import useAuth from "../hooks/useAuth";
-
 
 // STYLES 
 const Body = styled("section")`
   
 `;
 
-export default function CategoriesPage() {
+function CategoriesPage({ categoriesList }: InferGetStaticPropsType<typeof getStaticProps>) {
+
   // category hook 
-  const { categories, deleteCategory, addCategory, updateCategory } = useCategories();
+  const { deleteCategory, updateCategory, addCategory, categories } = useCategories(categoriesList);
 
   // form visibility state
   const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
 
   // authentication authorization hook
-  const { isLoading } = useAuth();
+  const { isLoading, user, isAdmin } = useAuth();
 
 
   // form toggling function 
@@ -46,7 +50,8 @@ export default function CategoriesPage() {
       {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
 
       {/* CREATE BUTTON */}
-      { (!isLoading) && <CreateBtn func={toggleCreateForm} />}
+      {(!isLoading && isAdmin && user) &&
+        <CreateBtn func={toggleCreateForm} />}
       <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
 
       {/* FALLBACK MESSAGE */}
@@ -61,6 +66,21 @@ export default function CategoriesPage() {
   )
 }
 
+export async function getStaticProps() {
+
+  // retrieve all categories from api
+  const categoriesList = await Category.prototype.getAll();
+
+  return {
+    props: {
+      categoriesList
+    } // will be passed to the page component as props
+  }
+}
+
+
+
+export default CategoriesPage;
 
 
 

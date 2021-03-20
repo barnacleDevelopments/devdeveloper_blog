@@ -40,7 +40,7 @@ const Body = styled("div")`
     color: #f5f5f5;
     display: grid;
     grid-template-columns: 100px 1fr;
-    margin-bottom: 14px;
+    margin-bottom: 25px;
     box-shadow: 1px 1px 5px 0px #00000040;
     border-radius: 4px;
     padding: 10px;
@@ -89,7 +89,8 @@ const PostSnip: React.FunctionComponent<PostData> = ({ postId, title, content })
     // post context reference
     const { deletePost, updatePost } = useContext(PostContext);
     // auth context 
-    const { isAdmin, user, isLoading } = useAuth();
+    const { isAdmin, user } = useAuth();
+    // query parameters 
     const Router = useRouter();
     const { catId } = Router.query
 
@@ -111,7 +112,9 @@ const PostSnip: React.FunctionComponent<PostData> = ({ postId, title, content })
                 <h2>{title ? title : "No Title"}</h2>
                 <p>{content ? stripHtml(content).result : "This post has no content."}</p>
                 <div>
-                    <Link href={`/posts/${catId}/${postId}`}><CardBtn>Read</CardBtn></Link>
+                    <Link href={`/posts/one/${postId}`}>
+                        <CardBtn>Read</CardBtn>
+                    </Link>
                 </div>
             </PostSnipContent>
 
@@ -135,20 +138,24 @@ const PostSnip: React.FunctionComponent<PostData> = ({ postId, title, content })
                     cancelHandler={toggleDeleteForm}
                     confirmHandler={() => {
                         toggleDeleteForm();
-                        deletePost(postId, catId);
+                        if (catId !== undefined) {
+                            deletePost(postId, catId);
+                        }
+
                     }} btnText="Confirm" message="You sure you want to delete this thing?" />
             }
 
             {/* EDIT FORM BUTTON */}
             {
-                (user && !isLoading && isAdmin) && <EditBtn onClick={
+
+                (user && isAdmin) && <EditBtn onClick={
                     () => toggleEditForm()
                 }><Icon icon={faPen}></Icon></EditBtn>
             }
 
             {/* DELETE FORM BUTTON */}
             {
-                (user && !isLoading && isAdmin) && <DeleteBtn onClick={
+                (user && isAdmin) && <DeleteBtn onClick={
                     () => toggleDeleteForm()
                 }><Icon icon={faTrash}></Icon></DeleteBtn>
             }

@@ -1,1 +1,1 @@
-type RessourceId = string | string[]
+export type RessourceId = string | string[]

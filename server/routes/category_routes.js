@@ -24,9 +24,11 @@ CATEGORY ROUTES
 const router = express.Router();
 // retrieve all categories
 router.get("/", (req, res) => {
+
     // retrieve all categories
     Category.find({}, (err, cats) => {
         if (!err) {
+            console.log("Sucessfuly retrieved all categories")
             res.status(200).json({ data: cats, status: "success" })
         } else {
             res.status(500).json({ status: "error", message: err })
