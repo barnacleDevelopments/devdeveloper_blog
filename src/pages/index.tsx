@@ -6,7 +6,7 @@ FILE: CategoryView.tsx
 
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { InferGetStaticPropsType } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 
 // COMPONENTS
 import Card from "../components/Card";
@@ -27,7 +27,7 @@ const Body = styled("section")`
   
 `;
 
-function CategoriesPage({ categoriesList }: InferGetStaticPropsType<typeof getStaticProps>) {
+function CategoriesPage({ categoriesList }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   // category hook 
   const { deleteCategory, updateCategory, addCategory, categories } = useCategories(categoriesList);
@@ -66,7 +66,7 @@ function CategoriesPage({ categoriesList }: InferGetStaticPropsType<typeof getSt
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 
   // retrieve all categories from api
   const categoriesList = await Category.prototype.getAll();

@@ -132,7 +132,7 @@ const PostView: React.FunctionComponent<PostView> = ({ post }) => {
     )
 }
 
-export async function getStaticProps(context: any) {
+export async function getSeverSideProps(context: any) {
     // get post ID parameter
     const postId = context.params.postId
 
@@ -146,20 +146,20 @@ export async function getStaticProps(context: any) {
     }
 }
 
-export async function getStaticPaths() {
-    // Get the paths we want to pre-render based on posts
-    const paths = await Post.prototype.getAll()
-        .then(posts => posts.map(post => ({
-            params: {
-                postId: post._id,
-            }
-        })));
+// export async function getStaticPaths() {
+//     // Get the paths we want to pre-render based on posts
+//     const paths = await Post.prototype.getAll()
+//         .then(posts => posts.map(post => ({
+//             params: {
+//                 postId: post._id,
+//             }
+//         })));
 
-    // We'll pre-render only these paths at build time.
-    return {
-        paths,
-        fallback: false
-    }
-}
+//     // We'll pre-render only these paths at build time.
+//     return {
+//         paths,
+//         fallback: false
+//     }
+// }
 
 export default PostView;
