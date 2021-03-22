@@ -7,7 +7,7 @@ FILE: PostsView.tsx
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { InferGetStaticPropsType } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 
 // COMPONENTS
 import PostSnip from "../../components/PostSnip"
@@ -25,7 +25,7 @@ import PostContext from "../../contexts/PostContext";
 const Body = styled("section")`
 
 `;
-const PostsView = ({ postList }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const router = useRouter();
     const { catId } = router.query
     const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
@@ -61,7 +61,7 @@ const PostsView = ({ postList }: InferGetStaticPropsType<typeof getStaticProps>)
 }
 
 
-export async function getStaticProps(context: any) {
+export async function getServerSideProps(context: any) {
     let catId = context.params.catId
     // retrieve all categories from api
     const postList = await Category.prototype.getPosts(catId);
@@ -75,20 +75,20 @@ export async function getStaticProps(context: any) {
 }
 
 
-export async function getStaticPaths() {
-    // get all category path ids
-    const paths = await Category.prototype.getAll()
-        .then(categories => categories.map((category: { _id: any; }) => {
-            return { params: { catId: category._id } }
-        }))
+// export async function getStaticPaths() {
+//     // get all category path ids
+//     const paths = await Category.prototype.getAll()
+//         .then(categories => categories.map((category: { _id: any; }) => {
+//             return { params: { catId: category._id } }
+//         }))
 
-    // return possible path ids
-    return {
-        paths: paths,
-        fallback: false
-    }
+//     // return possible path ids
+//     return {
+//         paths: paths,
+//         fallback: false
+//     }
 
-}
+// }
 
 
 export default PostsView;
