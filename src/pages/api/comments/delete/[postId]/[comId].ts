@@ -1,6 +1,6 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default async function deleteComment(req: any, res: any) {
     try {
@@ -8,7 +8,7 @@ export default async function deleteComment(req: any, res: any) {
         const postId = req.query.postId
         const comId = req.query.comId
 
-        await fetch(`http://localhost:${PORT}/comments/delete/${comId}/${postId}`, {
+        await fetch(`${API_URL}/comments/delete/${comId}/${postId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {

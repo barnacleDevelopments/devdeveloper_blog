@@ -1,6 +1,6 @@
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default withApiAuthRequired(async function createPost(req, res) {
     try {
@@ -8,7 +8,7 @@ export default withApiAuthRequired(async function createPost(req, res) {
         const catId = req.query.catId
         const body = req.body;
         console.log(body, catId)
-        await fetch(`http://localhost:${PORT}/posts/create/${catId}`, {
+        await fetch(`${API_URL}/posts/create/${catId}`, {
             method: "POST",
             mode: "cors",
             headers: {

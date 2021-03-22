@@ -1,13 +1,13 @@
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default withApiAuthRequired(async function createCategory(req, res) {
     try {
         const { accessToken } = await getAccessToken(req, res, { scopes: ["create:category"] });
 
         const body = req.body;
-        await fetch(`http://localhost:${PORT}/categories/create`, {
+        await fetch(`${API_URL}/categories/create`, {
             method: "POST",
             mode: "cors",
             headers: {

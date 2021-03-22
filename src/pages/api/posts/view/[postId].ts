@@ -1,10 +1,10 @@
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default async function getPost(req: any, res: any) {
     try {
         const postId = req.query.postId
-        await fetch(`http://localhost:${PORT}/posts/${postId}`, {
+        await fetch(`${API_URL}/posts/${postId}`, {
             method: "GET",
             mode: "cors",
             headers: {

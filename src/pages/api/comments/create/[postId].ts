@@ -1,13 +1,13 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default async function createComment(req: any, res: any) {
     try {
         const { accessToken } = await getAccessToken(req, res, { scopes: ["create:comment"] });
         const postId = req.query.postId
         const body = req.body
-        await fetch(`http://localhost:${PORT}/comments/create/${postId}`, {
+        await fetch(`${API_URL}/comments/create/${postId}`, {
             method: "POST",
             mode: "cors",
             headers: {

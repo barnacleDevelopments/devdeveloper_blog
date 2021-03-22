@@ -1,6 +1,6 @@
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default withApiAuthRequired(async function deleteCategory(req, res) {
     try {
@@ -8,7 +8,7 @@ export default withApiAuthRequired(async function deleteCategory(req, res) {
             scopes: ["delete:category"]
         });
         const catId = req.query.catId;
-        await fetch(`http://localhost:${PORT}/categories/delete/${catId}`, {
+        await fetch(`${API_URL}/categories/delete/${catId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {

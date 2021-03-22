@@ -1,13 +1,13 @@
 
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default async function getPostComments(req: any, res: any) {
     try {
 
         const postId = req.query.postId
 
-        await fetch(`http://localhost:${PORT}/comments/post/${postId}`, {
+        await fetch(`${API_URL}/comments/post/${postId}`, {
             method: "GET",
             mode: "cors",
             headers: {

@@ -1,6 +1,6 @@
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-const PORT = process.env.EXTERNAL_API_PORT
+const API_URL = process.env.EXTERNAL_API_URL
 
 export default withApiAuthRequired(async function updatePost(req, res) {
     try {
@@ -9,7 +9,7 @@ export default withApiAuthRequired(async function updatePost(req, res) {
         });
         const body = req.body;
         const postId = req.query.postId
-        await fetch(`http://localhost:${PORT}/posts/update/${postId}`, {
+        await fetch(`${API_URL}/posts/update/${postId}`, {
             method: "PUT",
             mode: "cors",
             headers: {
