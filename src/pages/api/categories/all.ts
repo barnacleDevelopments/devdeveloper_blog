@@ -1,7 +1,7 @@
 
 const PORT = process.env.EXTERNAL_API_PORT
 
-export default async function getCategories(res: any) {
+export default async function getCategories({ }, res: any) {
     try {
         await fetch(`http://localhost:${PORT}/categories`, {
             method: "GET",
@@ -20,6 +20,6 @@ export default async function getCategories(res: any) {
 
     } catch (error) {
         console.error(error)
-        res.status(error.status || 500).end(error.message)
+
     }
 }

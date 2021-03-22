@@ -5,18 +5,18 @@ FILE: TextProcessor.tsx
 */
 
 import React, { useRef, useEffect } from "react";
-import { stateToHTML } from "draft-js-export-html";
+// import { stateToHTML } from "draft-js-export-html";
 import { useState } from 'react';
 import styled from "@emotion/styled";
-import { stateFromHTML } from "draft-js-import-html"
+// import { stateFromHTML } from "draft-js-import-html"
 
 // STATES 
-import { EditorState } from 'draft-js';
+// import { EditorState } from 'draft-js';
 
 // COMPONENTS 
 
 // import dynamic from 'next/dynamic'
-const Editor: any = import('react-draft-wysiwyg');
+// const Editor: any = import('react-draft-wysiwyg');
 // HOOKS 
 import { useForm } from "react-hook-form";
 
@@ -112,9 +112,9 @@ const ButtonContainer = styled("div")`
 
 
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createWithContent(stateFromHTML(content)),
-    );
+    // const [editorState, setEditorState] = useState(
+    //     () => EditorState.createWithContent(stateFromHTML(content)),
+    // );
     const [formData, setFormData] = useState<PostFormData>({
         title: title,
         content: content
@@ -141,12 +141,12 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
         setFormData(data);
     }
 
-    const handleTextData = (event: EditorState) => {
-        setEditorState(event)
-        let data: PostFormData = formData;
-        data.content = stateToHTML(editorState.getCurrentContent())
-        setFormData(data);
-    }
+    // const handleTextData = (event: EditorState) => {
+    //     setEditorState(event)
+    //     let data: PostFormData = formData;
+    //     data.content = stateToHTML(editorState.getCurrentContent())
+    //     setFormData(data);
+    // }
 
     const handlePostSubmit = () => {
         submitFunc(formData)
@@ -159,7 +159,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
             <Form onSubmit={handleSubmit(handlePostSubmit)} >
                 <input name="title" ref={postTitleRef} onChange={handleTitleData} defaultValue={title} type="text" />
                 {/* <textarea name="content" onChange={handleFormData} defaultValue={content} /> */}
-                <Editor
+                {/* <Editor
                     wrapperStyle={{ width: "100%", backgroundColor: "#f5f5f5", height: "100%" }}
                     wrapperClassName="post-editor-wrapper"
                     editorClassName="post-editor"
@@ -169,7 +169,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
                     placeholder="Write article here..."
                     spellCheck={true}
                     stripPastedStyles={true}
-                />
+                /> */}
                 <ButtonContainer>
                     <CancelBtn onClick={cancleFunc} >Cancle</CancelBtn>
                     <ConfirmBtn type="submit">{btnText}</ConfirmBtn>

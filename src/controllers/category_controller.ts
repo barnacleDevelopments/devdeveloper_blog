@@ -8,19 +8,16 @@ import { RessourceId } from "../customTypings/global_types";
 class Category {
     constructor() { }
 
-    async getAll(): Promise<BasicResponse | CategoriesResponse> {
-        let recievedData: CategoriesResponse = {
-            data: [{
-                _id: "",
-                name: "",
-                desc: "",
-                count: 0,
-                img: "",
-                posts: []
-            }],
-            status: "pending",
-            message: ""
-        };
+    async getAll(): Promise<CategoryData[]> {
+        let recievedData: CategoryData[] = [{
+            _id: "",
+            name: "",
+            desc: "",
+            count: 0,
+            img: "",
+            posts: []
+        }]
+            ;
 
         await fetch(`http://localhost:3000/api/categories/all`, {
             method: "GET",
@@ -37,20 +34,17 @@ class Category {
         return recievedData
     }
 
-    async getOne(catId: RessourceId): Promise<CategoryResponse> {
-        let recievedData: CategoryResponse = {
-            data: {
-                _id: "",
-                name: "",
-                desc: "",
-                count: 0,
-                img: "",
-                posts: []
-            },
-            status: "pending",
-            message: ""
-
+    async getOne(catId: RessourceId): Promise<CategoryData> {
+        let recievedData: CategoryData = {
+            _id: "",
+            name: "",
+            desc: "",
+            count: 0,
+            img: "",
+            posts: []
         }
+
+
 
         await fetch(`/api/categories/${catId}`, {
             method: "GET",
@@ -67,17 +61,13 @@ class Category {
         return recievedData;
     }
 
-    async getPosts(catId: RessourceId): Promise<PostsResponse> {
-        let recievedData: PostsResponse = {
-            data: [{
-                _id: "",
-                title: "",
-                content: "",
-                date: "",
-            }],
-            status: "pending",
-            message: ""
-        }
+    async getPosts(catId: RessourceId): Promise<PostData[]> {
+        let recievedData: PostData[] = [{
+            _id: "",
+            title: "",
+            content: "",
+            date: "",
+        }]
 
         await fetch(`http://localhost:3000/api/posts/${catId}`, {
             method: "GET",
@@ -94,24 +84,14 @@ class Category {
         return recievedData
     }
 
-    async create(name: string, desc: string): Promise<CategoryResponse> {
-        let recievedData: CategoryResponse = {
-            data: {
-                _id: "",
-                name: "",
-                desc: "",
-                count: 0,
-                img: "",
-                posts: [{
-                    _id: "",
-                    title: "",
-                    content: "",
-                    date: ""
-                }]
-            },
-            status: "pending",
-            message: ""
-
+    async create(name: string, desc: string): Promise<CategoryData> {
+        let recievedData: CategoryData = {
+            _id: "",
+            name: "",
+            desc: "",
+            count: 0,
+            img: "",
+            posts: []
         }
 
         await fetch(`/api/categories/create`, {
@@ -125,25 +105,22 @@ class Category {
         })
             .then(response => response.json())
             .then(data => {
-                recievedData = data;
+                recievedData = data.data;
             })
 
         return recievedData;
     }
 
-    async update(catId: RessourceId, name: string, desc: string): Promise<CategoryResponse> {
-        let recievedData: CategoryResponse = {
-            data: {
-                _id: "",
-                name: "",
-                desc: "",
-                count: 0,
-                img: "",
-                posts: []
-            },
-            status: "pending",
-            message: ""
+    async update(catId: RessourceId, name: string, desc: string): Promise<CategoryData> {
+        let recievedData: CategoryData = {
+            _id: "",
+            name: "",
+            desc: "",
+            count: 0,
+            img: "",
+            posts: []
         }
+
         await fetch(`/api/categories/update/${catId}`, {
             method: "PUT",
             mode: "cors",
@@ -154,15 +131,12 @@ class Category {
             body: JSON.stringify({ name, desc })
         })
             .then(response => response.json())
-            .then(data => recievedData = data)
+            .then(data => recievedData = data.data)
 
         return recievedData;
     }
 
-    async delete(catId: RessourceId): Promise<BasicResponse> {
-
-        let recievedData: BasicResponse = { status: "pending", message: "" }
-
+    async delete(catId: RessourceId) {
         await fetch(`/api/categories/delete/${catId}`, {
             method: "DELETE",
             mode: "cors",
@@ -171,11 +145,7 @@ class Category {
                 Accept: "application/json",
             }
         })
-            .then(response => response.json())
-            .then(data => recievedData = data)
-
-
-        return recievedData;
+            .catch(err => console.log(err))
     }
 }
 

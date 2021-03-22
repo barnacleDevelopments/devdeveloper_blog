@@ -78,7 +78,7 @@ export async function getStaticProps(context: any) {
 export async function getStaticPaths() {
     // get all category path ids
     const paths = await Category.prototype.getAll()
-        .then(categories => categories.map(category => {
+        .then(categories => categories.map((category: { _id: any; }) => {
             return { params: { catId: category._id } }
         }))
 

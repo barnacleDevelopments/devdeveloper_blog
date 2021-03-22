@@ -9,16 +9,12 @@ import { RessourceId } from "../customTypings/global_types";
 class Post {
     constructor() { }
 
-    async getAll(): Promise<PostResponse[]> {
-        let recievedData: PostResponse[] = [{
-            data: {
-                _id: "",
-                title: "",
-                content: "",
-                date: ""
-            },
-            status: "pending",
-            message: ""
+    async getAll(): Promise<PostData[]> {
+        let recievedData: PostData[] = [{
+            _id: "",
+            title: "",
+            content: "",
+            date: ""
         }];
         await fetch(`http://localhost:3000/api/posts/all`, {
             method: "GET",
@@ -33,16 +29,12 @@ class Post {
 
         return recievedData
     }
-    async getOne(postId: RessourceId): Promise<PostResponse> {
-        let recievedData: PostResponse = {
-            data: {
-                _id: "",
-                title: "",
-                content: "",
-                date: ""
-            },
-            status: "pending",
-            message: ""
+    async getOne(postId: RessourceId): Promise<PostData> {
+        let recievedData: PostData = {
+            _id: "",
+            title: "",
+            content: "",
+            date: ""
         };
         await fetch(`http://localhost:3000/api/posts/view/${postId}`, {
             method: "GET",
@@ -57,17 +49,12 @@ class Post {
         return recievedData
     }
 
-    async create(title: string, content: string, catId: RessourceId): Promise<PostResponse> {
-        let recievedData: PostResponse = {
-            data: {
-                _id: "",
-                title: "",
-                content: "",
-                date: "",
-            },
-
-            status: "pending",
-            message: ""
+    async create(title: string, content: string, catId: RessourceId): Promise<PostData> {
+        let recievedData: PostData = {
+            _id: "",
+            title: "",
+            content: "",
+            date: "",
         }
 
         await fetch(`/api/posts/create/${catId}`, {
@@ -80,22 +67,19 @@ class Post {
             body: JSON.stringify({ title, content })
         })
             .then(response => response.json())
-            .then(data => recievedData = data)
+            .then(data => recievedData = data.data)
 
         return recievedData;
     }
 
-    async update(postId: RessourceId, newPost: EditPostData): Promise<PostResponse> {
-        let recievedData: PostResponse = {
-            data: {
-                _id: "",
-                title: "",
-                content: "",
-                date: ""
-            },
-            status: "pending",
-            message: ""
+    async update(postId: RessourceId, newPost: EditPostData): Promise<PostData> {
+        let recievedData: PostData = {
+            _id: "",
+            title: "",
+            content: "",
+            date: ""
         }
+
         await fetch(`http://localhost:3000/api/posts/update/${postId}`, {
             method: "PUT",
             mode: "cors",
@@ -106,17 +90,17 @@ class Post {
             body: JSON.stringify(newPost)
         })
             .then(response => response.json())
-            .then(data => recievedData = data)
+            .then(data => recievedData = data.data)
             .catch(err => console.log(err))
         return recievedData;
     }
 
     async delete(postId: RessourceId, catId: any): Promise<BasicResponse> {
-        let recievedData: BasicResponse = {
+        let response: BasicResponse = {
             status: "pending",
             message: ""
         }
-        await fetch(`/api/posts/delete/${catId}/${postId}`, {
+        fetch(`/api/posts/delete/${catId}/${postId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
@@ -125,12 +109,11 @@ class Post {
             }
         })
             .then(response => response.json())
-            .then(data => recievedData = data)
-            .catch(err => {
-                console.log(err)
-                recievedData = { status: "error", message: "" }
-            })
-        return recievedData;
+            .then(data => response = data)
+            .catch(err => console.log(err))
+
+        return response;
+
     }
 }
 

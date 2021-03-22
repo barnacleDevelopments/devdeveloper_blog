@@ -1,7 +1,7 @@
 
 const PORT = process.env.EXTERNAL_API_PORT
 
-export default async function getAllPosts(res: any) {
+export default async function getAllPosts({ }, res: any) {
     try {
         await fetch(`http://localhost:${PORT}/posts`, {
             method: "GET",

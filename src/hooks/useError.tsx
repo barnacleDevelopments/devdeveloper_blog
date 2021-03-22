@@ -12,20 +12,14 @@ const useError = () => {
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [currentError, setCurrentError] = useState<string>("");
 
-
     useEffect(() => {
         errorMessages.forEach((err) => {
-            console.log("set current error")
             setCurrentError(err);
             setTimeout(() => {
-                console.log("clean current error")
                 setCurrentError("")
-
             }, 5000)
         })
     }, [errorMessages])
-
-
 
     const addError = (error: string) => {
         let newErrorList: string[] = errorMessages;

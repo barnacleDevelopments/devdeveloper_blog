@@ -87,16 +87,11 @@ router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, 
                     console.log(`Category with ${cat._id} created!`)
                 } else {
                     console.log(err)
-                    res.status(500).json({
-                        status: "error",
-                        message: err
-                    })
+                    res.status(500).send({ message: err })
                 }
-
             })
         }).catch(err => {
-            console.log(err)
-            res.status(413).json({ status: "error", message: err })
+            res.status(413).send({ message: err.message })
         })
 })
 
@@ -120,10 +115,10 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:category"])], (re
                     res.status(201).json({ data: cat, status: "success" })
                     console.log(`Category with id: ${cat._id} updated!`)
                 } else {
-                    res.status(500).json({ status: "error" })
+                    res.status(500).send({ message: "Failed to update category." })
                 }
             })
-        }).catch(err => res.status(413).json({ status: "error", message: err.message }))
+        }).catch(err => res.status(413).send({ message: err.message }))
 });
 
 // delete one category
@@ -135,14 +130,14 @@ router.delete("/delete/:id", [jwtCheck, checkPermissions(["delete:category"])], 
             // delete all post of delete category
             Post.deleteMany({ catId: catId }, (err) => {
                 if (!err) {
-                    res.status(200).json({ status: "success" })
+                    res.status(200).send({ message: "success" })
                     console.log(`Category with id: ${cat._id} deleted!`)
                 } else {
-                    res.status(500).json({ status: "error" })
+                    res.status(500).send({ message: "Failed to delete posts of category." })
                 }
             })
         } else {
-            res.status(500).json({ status: "error" })
+            res.status(500).send({ message: "Failed to query category in database." })
         }
     })
 })

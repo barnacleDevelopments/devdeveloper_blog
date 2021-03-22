@@ -24,16 +24,13 @@ const useCategories = (initialCategories: any) => {
     const addCategory = async (name: string, desc: string) => {
         let adjustedCatList = categories;
         try {
-
             await Category.prototype.create(name, desc)
                 .then(data => {
-                    if (data.status === "error") {
-                        addError(data.message);
-                    } else {
-                        adjustedCatList = [data.data, ...adjustedCatList]
-                        setCategories(adjustedCatList);
-                    }
+                    adjustedCatList = [data, ...adjustedCatList]
+                    setCategories(adjustedCatList);
                 })
+                .catch(err => addError(err.message))
+
         } catch (error) {
             console.log(error)
             addError("Failed to authorize category creation. Try login in again.")
@@ -48,14 +45,11 @@ const useCategories = (initialCategories: any) => {
     const deleteCategory = async (catId: RessourceId) => {
         try {
             await Category.prototype.delete(catId)
-                .then((data) => {
-                    if (data.status === "error") {
-                        addError(data.message || "");
-                    } else {
-                        let newCatList = categories.filter(category => category._id === catId ? false : true);
-                        setCategories(newCatList);
-                    }
-                });
+                .then(() => {
+                    let newCatList = categories.filter(category => category._id === catId ? false : true);
+                    setCategories(newCatList);
+                }).catch(err => addError(err.message))
+
         } catch (error) {
             console.log(error)
             addError("Failed to authorize category deletion. Try login in again.")
@@ -73,21 +67,15 @@ const useCategories = (initialCategories: any) => {
         try {
             await Category.prototype.update(catId, name, desc)
                 .then((data) => {
-                    if (data.status === "error") {
-                        addError(data.message);
-                    } else {
-                        console.log(categories)
-                        let newCategories = categories.map(category => {
-                            console.log(data)
-                            if (category._id === data.data._id) {
-                                return data.data;
-                            } else {
-                                return category;
-                            }
-                        })
-                        setCategories(newCategories);
-                    }
-                })
+                    let newCategories = categories.map(category => {
+                        if (category._id === data._id) {
+                            return data;
+                        } else {
+                            return category;
+                        }
+                    })
+                    setCategories(newCategories);
+                }).catch(err => addError(err.message));
 
         } catch (error) {
             console.log(error)
