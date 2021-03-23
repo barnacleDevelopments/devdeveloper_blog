@@ -7,7 +7,11 @@ export default handleAuth({
                 authorizationParams: {
                     audience: `http://localhost:5000/`, // or AUTH0_AUDIENCE
                     // Add the `offline_access` scope to also get a Refresh Token
-                    scope: 'openid profile email create:category delete:category update:category create:post update:post delete:post create:comment delete:comment' // or AUTH0_SCOPE
+                    scope: 'openid profile email create:category delete:category update:category create:post update:post delete:post create:comment delete:comment', // or AUTH0_SCOPE
+                    client_secret: process.env.AUTH0_CLIENT_SECRET,
+                    redirect_uri: 'https://devdeveloper-blog-jcsdb4tl4-barnacledevelopments.vercel.app/api/callback',
+                    client_id: process.env.AUTH0_CLIENT_ID
+
                 }
             });
         } catch (error) {
