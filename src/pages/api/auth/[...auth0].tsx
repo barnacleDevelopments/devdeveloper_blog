@@ -13,7 +13,7 @@ export default handleAuth({
 
             });
             await handleCallback(req, res, {
-                redirectUri: "https://devdeveloper-blog-98c0a9nq2-barnacledevelopments.vercel.app/"
+                redirectUri: "https://devdeveloper-blog-qw4lq4dod-barnacledevelopments.vercel.app/"
             })
         } catch (error) {
             res.status(error.status || 400).end(error.message);
