@@ -19,7 +19,7 @@ class Category {
         }]
             ;
 
-        await fetch(`http://localhost:3000/api/categories/all`, {
+        await fetch(` https://devdeveloper-blog-6q1zpg16i-barnacledevelopments.vercel.app/api/categories/all`, {
             method: "GET",
             mode: "cors",
             headers: {
