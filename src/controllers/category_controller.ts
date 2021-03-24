@@ -5,6 +5,8 @@ FILE: category_controller.ts
 */
 import { RessourceId } from "../customTypings/global_types";
 
+const LOCAL_URL = process.env.AUTH0_BASE_URL;
+
 class Category {
     constructor() { }
 
@@ -19,7 +21,7 @@ class Category {
         }]
             ;
 
-        await fetch(`http://localhost:3000/api/categories/all`, {
+        await fetch(`${LOCAL_URL}/api/categories/all`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -46,7 +48,7 @@ class Category {
 
 
 
-        await fetch(`/api/categories/${catId}`, {
+        await fetch(`${LOCAL_URL}/api/categories/${catId}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -69,7 +71,7 @@ class Category {
             date: "",
         }]
 
-        await fetch(`http://localhost:3000/api/posts/${catId}`, {
+        await fetch(`${LOCAL_URL}/api/posts/${catId}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -94,7 +96,7 @@ class Category {
             posts: []
         }
 
-        await fetch(`/api/categories/create`, {
+        await fetch(`${LOCAL_URL}/api/categories/create`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -121,7 +123,7 @@ class Category {
             posts: []
         }
 
-        await fetch(`/api/categories/update/${catId}`, {
+        await fetch(`${LOCAL_URL}/api/categories/update/${catId}`, {
             method: "PUT",
             mode: "cors",
             headers: {
@@ -137,7 +139,7 @@ class Category {
     }
 
     async delete(catId: RessourceId) {
-        await fetch(`/api/categories/delete/${catId}`, {
+        await fetch(`${LOCAL_URL}/api/categories/delete/${catId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
