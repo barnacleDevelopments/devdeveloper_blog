@@ -6,6 +6,8 @@ FILE: post_controller.ts
 
 import { RessourceId } from "../customTypings/global_types";
 
+const LOCAL_URL = process.env.AUTH0_BASE_URL;
+
 class Post {
     constructor() { }
 
@@ -16,7 +18,7 @@ class Post {
             content: "",
             date: ""
         }];
-        await fetch(`http://localhost:3000/api/posts/all`, {
+        await fetch(`${LOCAL_URL}/api/posts/all`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -36,7 +38,7 @@ class Post {
             content: "",
             date: ""
         };
-        await fetch(`http://localhost:3000/api/posts/view/${postId}`, {
+        await fetch(`${LOCAL_URL}/api/posts/view/${postId}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -57,7 +59,7 @@ class Post {
             date: "",
         }
 
-        await fetch(`/api/posts/create/${catId}`, {
+        await fetch(`${LOCAL_URL}/api/posts/create/${catId}`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -80,7 +82,7 @@ class Post {
             date: ""
         }
 
-        await fetch(`http://localhost:3000/api/posts/update/${postId}`, {
+        await fetch(`${LOCAL_URL}/api/posts/update/${postId}`, {
             method: "PUT",
             mode: "cors",
             headers: {
@@ -100,7 +102,7 @@ class Post {
             status: "pending",
             message: ""
         }
-        fetch(`/api/posts/delete/${catId}/${postId}`, {
+        fetch(`${LOCAL_URL}/api/posts/delete/${catId}/${postId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {

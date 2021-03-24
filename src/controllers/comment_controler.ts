@@ -6,6 +6,8 @@
 
 import { RessourceId } from "../customTypings/global_types";
 
+const LOCAL_URL = process.env.AUTH0_BASE_URL;
+
 class Comment {
     constructor() { }
 
@@ -19,7 +21,7 @@ class Comment {
             }
         ];
 
-        await fetch(`http://localhost:3000/api/comments/${postId}`, {
+        await fetch(`${LOCAL_URL}/api/comments/${postId}`, {
             method: "GET",
             mode: "cors",
             headers: {
@@ -43,7 +45,7 @@ class Comment {
             username: "",
         };
 
-        await fetch(`/api/comments/create/${postId}`, {
+        await fetch(`${LOCAL_URL}/api/comments/create/${postId}`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -62,7 +64,7 @@ class Comment {
     }
 
     async update(comId: RessourceId, newComment: NewCommentData) {
-        await fetch(`/categories/update/${comId}`, {
+        await fetch(`${LOCAL_URL}/categories/update/${comId}`, {
             method: "PUT",
             mode: "cors",
             headers: {
@@ -75,7 +77,7 @@ class Comment {
 
     async delete(commentId: RessourceId, postId: RessourceId): Promise<BasicResponse> {
         let recievedData: BasicResponse = { status: "pending" }
-        await fetch(`/api/comments/delete/${postId}/${commentId}`, {
+        await fetch(`${LOCAL_URL}/api/comments/delete/${postId}/${commentId}`, {
             method: "DELETE",
             mode: "cors",
             headers: {
