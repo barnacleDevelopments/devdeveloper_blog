@@ -1,4 +1,4 @@
-import { handleAuth, handleCallback, handleLogin } from '@auth0/nextjs-auth0';
+import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
 // const API_URL = process.env.EXTERNAL_API_URL
 export default handleAuth({
     async login(req, res) {
@@ -12,9 +12,7 @@ export default handleAuth({
                 },
 
             });
-            await handleCallback(req, res, {
-                redirectUri: process.env.AUTH0_BASE_URL
-            })
+
         } catch (error) {
             res.status(error.status || 400).end(error.message);
         }
