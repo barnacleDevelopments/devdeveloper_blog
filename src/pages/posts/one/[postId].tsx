@@ -132,10 +132,10 @@ const PostView: React.FunctionComponent<PostView> = ({ post }) => {
     )
 }
 
-export async function getSeverSideProps(context: any) {
+export async function getServerSideProps(context: any) {
     // get post ID parameter
     const postId = context.params.postId
-
+    console.log(postId)
     const post = await Post.prototype.getOne(postId)
         .then((data: PostData) => data)
 

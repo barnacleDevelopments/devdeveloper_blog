@@ -4,7 +4,9 @@ const API_URL = process.env.EXTERNAL_API_URL
 export default async function getCategoryPosts(req: any, res: any) {
     try {
         // category id of posts 
+
         const catId = req.query.catId
+
         await fetch(`${API_URL}/categories/posts/${catId}`, {
             method: "GET",
             mode: "cors",
