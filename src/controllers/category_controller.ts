@@ -5,7 +5,7 @@ FILE: category_controller.ts
 */
 import { RessourceId } from "../customTypings/global_types";
 
-const LOCAL_URL = process.env.AUTH0_BASE_URL;
+const LOCAL_URL = "https://blog.devdevloper.ca";
 
 class Category {
     constructor() { }
