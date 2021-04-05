@@ -69,7 +69,7 @@ const Shadow = styled("div")`
 `;
 
 // STATELESS COMPONENTS
-import { CancelBtn, ConfirmBtn } from "../stateless_components/buttons";
+import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";
 
 // INTERFACES
 interface ConfirmFormComponent {

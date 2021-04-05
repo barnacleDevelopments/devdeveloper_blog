@@ -15,7 +15,6 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 const Body = styled("div")`
     position: relative;
     height: 100%;
-    width: 60px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -27,6 +26,9 @@ const Body = styled("div")`
 `;
 
 const List = styled("ul")`
+    width: 120px;
+    text-align: center;
+    font-weight: 600;
     display: flex;
     position: absolute;
     flex-direction: column;
@@ -37,11 +39,12 @@ const List = styled("ul")`
     color: #f5f5f5;
 `;
 
+// :nth-of-type(1) {
+//     border-bottom: 1px solid #f5f5f5;
+// }
 const ListItem = styled("li")`
     padding: 10px;
-    :nth-of-type(1) {
-        border-bottom: 1px solid #f5f5f5;
-    }
+  
     a {
         text-decoration: none;
         color: #f5f5f5;
@@ -80,11 +83,9 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
             )}
             {/* Display dropdown menu and display shadow on open */}
             {isOpen && <Shadow onClick={toggleDropdown} />}
-            {isOpen &&
-                <List>
-                    <ListItem><Link href="/api/auth/logout">Logout</Link></ListItem>
-                    <ListItem><Link href="/user">Settings</Link></ListItem>
-                </List>}
+            {isOpen && <List>
+                {(user && !isLoading) && <ListItem><Link href="/api/auth/logout">Logout</Link></ListItem>}
+            </List>}
         </Body>
 
     )

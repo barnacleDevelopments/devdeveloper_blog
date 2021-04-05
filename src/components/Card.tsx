@@ -33,7 +33,7 @@ interface CategoryComponentData {
 }
 
 // STATELESS COMPONENTS
-import { CardBtn, EditBtn, DeleteBtn } from "../stateless_components/buttons";
+import { CardBtn, EditBtn, DeleteBtn } from "../styled_components/buttons";
 import useAuth from "../hooks/useAuth";
 
 
@@ -140,7 +140,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
                         toggleDeleteForm();
                     }}
                     btnText="Confirm"
-                    message="You sure you want to delete this thing?" /> : null}
+                    message="You sure you want to delete this category?" /> : null}
 
             {/* EDIT FORM */}
             {editFormVisible ?
