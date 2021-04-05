@@ -18,7 +18,6 @@ import ErrorContext from "../contexts/ErrorContext";
 //GLOBAL STYLES
 import "../styles/reset.css";
 import "../styles/global.css";
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // COMPONENTS
 import Container from "../components/Container"
@@ -26,7 +25,7 @@ import Container from "../components/Container"
 import type { AppProps /*, AppContext */ } from "next/app"
 
 // AUTH
-import { UserProvider } from "@auth0/nextjs-auth0";
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 function MyApp({ Component, pageProps }: AppProps) {
 

@@ -5,10 +5,10 @@ FILE: TextProcessor.tsx
 */
 
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
-// import { useForm } from "react-hook-form";
+
 
 // INTERFACES
 interface CategoryFormComponent {
@@ -17,6 +17,11 @@ interface CategoryFormComponent {
     btnText: string,
     submitFunc(data: NewCategoryData): void
     cancelFunc(): void
+}
+
+type CategoryInputs = {
+    name: string,
+    desc: string
 }
 
 // STATELESS COMPONENTS
@@ -92,6 +97,7 @@ const Form = styled("form")`
         padding-left: 16px;
         font-family: 'Chivo', sans-serif;
         border-radius: 4px;
+        height: 100px;
     }
 `;
 
@@ -99,32 +105,32 @@ const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
 `;
 
+// create validation schema 
+// const categorySchema = yup.object().shape({
+//     name: yup.string().required().min(4).max(20),
+//     desc: yup.string().required().min(16).max(50)
+// })
+
 const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancelFunc }) => {
-    const { register, handleSubmit } = useForm()
-    const [formData, setFormData] = useState<CategoryFormData>({
-        name: name,
-        desc: desc
-    });
+    const { register, handleSubmit, formState: { errors } } = useForm<CategoryInputs>()
+    // const [formData, setFormData] = useState<CategoryFormData>({
+    //     name: name,
+    //     desc: desc
+    // });
 
-    const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        let data: CategoryFormData = formData;
-        data[event.target.name] = event.target.value;
-        setFormData(data);
+    // const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    //     let data: CategoryFormData = formData;
+    //     data[event.target.name] = event.target.value;
+    //     setFormData(data);
+    // }
+
+    const onSubmit = (data: any) => {
+        console.log("data")
+        submitFunc(data)
+        cancelFunc() // close form
     }
-
-    const onSubmit = () => {
-        submitFunc(formData)
-        cancelFunc()
-    }
-
-    const categoryNameRef = useRef<HTMLInputElement>(null)
-
-    useEffect(() => {
-        if (categoryNameRef.current !== null) {
-            register(categoryNameRef.current, { required: true })
-            categoryNameRef.current.focus()
-        }
-    }, [])
+    // const categoryNameInputRef = useRef<HTMLInputElement | null>(null);
+    const { ref, ...rest } = register('name');
 
     return (
         <Body>
@@ -132,17 +138,21 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* FORM INPUTS */}
                 <input
+                    {...rest}
                     name="name"
-                    defaultValue={name}
-                    onChange={handleFormData}
                     type="text"
-                    ref={categoryNameRef}
+                    placeholder={name ? name : "Category Name..."}
+
                 />
+                {errors.name && "Name field is required."}
                 <textarea
+                    {...register("desc")}
                     name="desc"
-                    defaultValue={desc}
-                    onChange={handleFormData}
+                    placeholder={desc ? desc : "Category Description..."}
+                    style={{ resize: "none" }}
                 />
+                {errors.desc && "Description field is required."}
+
                 <ButtonContainer>
                     <CancelBtn onClick={cancelFunc}>Cancel</CancelBtn>
                     <ConfirmBtn type="submit">{btnText}</ConfirmBtn>
