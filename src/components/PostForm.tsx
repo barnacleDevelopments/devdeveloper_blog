@@ -135,14 +135,16 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
                     {...register("title")}
                     name="title"
                     type="text"
-                    placeholder={title}
+                    placeholder={"Post Title..."}
+                    defaultValue={title}
                 />
                 {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
                 {/* TEXT INPUT */}
                 <textarea
                     {...register("content")}
                     name="content"
-                    placeholder={content}
+                    placeholder={"Post Content..."}
+                    defaultValue={content}
                 />
                 {<FormError>{errors.content && `${errors.content?.message}.`}</FormError>}
                 {/* FORM BUTTONS */}

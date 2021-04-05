@@ -130,13 +130,15 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                     {...register("name")}
                     name="name"
                     type="text"
-                    placeholder={name ? name : "Category Name..."}
+                    placeholder={"Category Name..."}
+                    defaultValue={name}
                 />
                 {<FormError>{errors.name && `${errors.name?.message}.`}</FormError>}
                 <textarea
                     {...register("desc")}
                     name="desc"
-                    placeholder={desc}
+                    placeholder={"Category Description..."}
+                    defaultValue={desc}
                 />
                 {<FormError>{errors.desc && `${errors.desc?.message}.`}</FormError>}
 
