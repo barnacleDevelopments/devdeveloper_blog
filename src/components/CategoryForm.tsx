@@ -5,10 +5,11 @@ FILE: TextProcessor.tsx
 */
 
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
-// import { useForm } from "react-hook-form";
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup";
 
 // INTERFACES
 interface CategoryFormComponent {
@@ -20,7 +21,8 @@ interface CategoryFormComponent {
 }
 
 // STATELESS COMPONENTS
-import { CancelBtn, ConfirmBtn } from "../stateless_components/buttons";
+import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";
+import { FormError } from "../styled_components/errors"
 
 const Body = styled("div")`
     position: fixed;
@@ -99,32 +101,24 @@ const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
 `;
 
+// create validation schema 
+const categorySchema = yup.object().shape({
+    name: yup.string().required().min(4).max(20),
+    desc: yup.string().required().min(16).max(50)
+})
+
 const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancelFunc }) => {
-    const { register, handleSubmit } = useForm()
-    const [formData, setFormData] = useState<CategoryFormData>({
-        name: name,
-        desc: desc
-    });
+    const { register, handleSubmit, formState: { errors } } = useForm<CategoryInputs>({
+        resolver: yupResolver(categorySchema)
+    })
 
-    const handleFormData = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        let data: CategoryFormData = formData;
-        data[event.target.name] = event.target.value;
-        setFormData(data);
+    const onSubmit = (data: any) => {
+        console.log("data")
+        submitFunc(data)
+        cancelFunc() // close form
     }
-
-    const onSubmit = () => {
-        submitFunc(formData)
-        cancelFunc()
-    }
-
-    const categoryNameRef = useRef<HTMLInputElement>(null)
-
-    useEffect(() => {
-        if (categoryNameRef.current !== null) {
-            register(categoryNameRef.current, { required: true })
-            categoryNameRef.current.focus()
-        }
-    }, [])
+    const categoryNameInputRef = useRef<HTMLInputElement | null>(null);
+    const { ref, ...rest } = register<any>('name');
 
     return (
         <Body>
@@ -136,13 +130,20 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                     defaultValue={name}
                     onChange={handleFormData}
                     type="text"
-                    ref={categoryNameRef}
+                    placeholder={name ? name : "Category Name..."}
+                    ref={(e) => {
+                        ref(e)
+                        categoryNameInputRef.current = e;
+                    }}
                 />
+                {<FormError>{errors.name && `${errors.name?.message}.`}</FormError>}
                 <textarea
                     name="desc"
                     defaultValue={desc}
                     onChange={handleFormData}
                 />
+                {<FormError>{errors.desc && `${errors.desc?.message}.`}</FormError>}
+
                 <ButtonContainer>
                     <CancelBtn onClick={cancelFunc}>Cancel</CancelBtn>
                     <ConfirmBtn type="submit">{btnText}</ConfirmBtn>

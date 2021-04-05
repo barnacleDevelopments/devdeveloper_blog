@@ -4,26 +4,24 @@ DATE: January 4th, 2021
 FILE: TextProcessor.tsx
 */
 
-import React, { useRef, useEffect } from "react";
-// import { stateToHTML } from "draft-js-export-html";
-import { useState } from 'react';
+// DEPENDENCIES
+import React, { useRef } from "react";
 import styled from "@emotion/styled";
-// import { stateFromHTML } from "draft-js-import-html"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup";
 
-// STATES 
-// import { EditorState } from 'draft-js';
-
-// COMPONENTS 
-
-// import dynamic from 'next/dynamic'
-// const Editor: any = import('react-draft-wysiwyg');
 // HOOKS 
 import { useForm } from "react-hook-form";
 
-// INTERFACES 
+// STYLED COMPONENTS
+import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";
+import { FormError } from "../styled_components/errors";
 
-// STATELESS COMPONENTS
-import { CancelBtn, ConfirmBtn } from "../stateless_components/buttons";
+// VALIDATION SCHEMAS
+let newPostSchema = yup.object().shape({
+    title: yup.string().required().min(5).max(15),
+    content: yup.string().required().min(50)
+});
 
 interface PostFormComponent {
     title: string,
@@ -109,67 +107,42 @@ const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
 `;
 
-
-
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
-    // const [editorState, setEditorState] = useState(
-    //     () => EditorState.createWithContent(stateFromHTML(content)),
-    // );
-    const [formData, setFormData] = useState<PostFormData>({
-        title: title,
-        content: content
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(newPostSchema)
     });
 
-    const { register, handleSubmit } = useForm();
 
-    const postTitleRef = useRef<HTMLInputElement>(null)
+    const postTitleInputRef = useRef<HTMLInputElement | null>(null);
+    const { ref, ...rest } = register<any>('title');
 
-    useEffect(() => {
-        if (postTitleRef.current !== null) {
-            register(postTitleRef.current, {
-                required: true,
-                minLength: 6,
-                maxLength: 20,
-            })
-            postTitleRef.current.focus()
-        }
-    }, [])
-
-    const handleTitleData = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let data: PostFormData = formData;
-        data.title = event.target.value;
-        setFormData(data);
-    }
-
-    // const handleTextData = (event: EditorState) => {
-    //     setEditorState(event)
-    //     let data: PostFormData = formData;
-    //     data.content = stateToHTML(editorState.getCurrentContent())
-    //     setFormData(data);
-    // }
-
-    const handlePostSubmit = () => {
-        submitFunc(formData)
+    const handlePostSubmit = (data: any) => {
+        submitFunc(data)
         cancleFunc();
     }
 
     return (
         <Body style={{ height: "100%" }}>
+            {/* SHADOW OVERLAY */}
             <Shadow onClick={cancleFunc}></Shadow>
+            {/* POST FORM */}
             <Form onSubmit={handleSubmit(handlePostSubmit)} >
-                <input name="title" ref={postTitleRef} onChange={handleTitleData} defaultValue={title} type="text" />
-                {/* <textarea name="content" onChange={handleFormData} defaultValue={content} /> */}
-                {/* <Editor
-                    wrapperStyle={{ width: "100%", backgroundColor: "#f5f5f5", height: "100%" }}
-                    wrapperClassName="post-editor-wrapper"
-                    editorClassName="post-editor"
-                    toolbarClassName="post-toolbar"
-                    editorState={editorState}
-                    onEditorStateChange={handleTextData}
-                    placeholder="Write article here..."
-                    spellCheck={true}
-                    stripPastedStyles={true}
-                /> */}
+                {/* TITLE INPUT */}
+                <input
+                    {...register("title")}
+                    name="title"
+                    type="text"
+                    placeholder={title}
+                    ref={(e) => {
+                        ref(e)
+                        postTitleInputRef.current = e;
+                    }} />
+                {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
+                {/* TEXT INPUT */}
+                <textarea {...register("content")} name="content" placeholder={content} />
+                {<FormError>{errors.content && `${errors.content?.message}.`}</FormError>}
+                {/* FORM BUTTONS */}
                 <ButtonContainer>
                     <CancelBtn onClick={cancleFunc} >Cancle</CancelBtn>
                     <ConfirmBtn type="submit">{btnText}</ConfirmBtn>

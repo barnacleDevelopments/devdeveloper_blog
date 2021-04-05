@@ -25,7 +25,7 @@ import useAuth from "../hooks/useAuth";
 
 
 // STATELESS COMPONENTS
-import { EditBtn, DeleteBtn, CardBtn } from "../stateless_components/buttons";
+import { EditBtn, DeleteBtn, CardBtn } from "../styled_components/buttons";
 import { useRouter } from "next/router";
 
 // INTERFACES
