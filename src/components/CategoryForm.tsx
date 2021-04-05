@@ -20,9 +20,9 @@ interface CategoryFormComponent {
     cancelFunc(): void
 }
 
-interface CategoryInputs {
+type CategoryInputs = {
     name: string,
-    des: string
+    desc: string
 }
 
 // STATELESS COMPONENTS
@@ -107,7 +107,7 @@ const ButtonContainer = styled("div")`
 `;
 
 // create validation schema 
-const categorySchema = yup.object().shape({
+const categorySchema: any = yup.object().shape({
     name: yup.string().required().min(4).max(20),
     desc: yup.string().required().min(16).max(50)
 })
@@ -118,12 +118,11 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
     })
 
     const onSubmit = (data: any) => {
-        console.log("data")
         submitFunc(data)
         cancelFunc() // close form
     }
     const categoryNameInputRef = useRef<HTMLInputElement | null>(null);
-    const { ref, ...rest } = register<any>('name');
+    const ref: any = register('name');
 
     return (
         <Body>
@@ -131,12 +130,12 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* FORM INPUTS */}
                 <input
-                    {...rest}
+                    {...ref.rest}
                     name="name"
                     type="text"
                     placeholder={name ? name : "Category Name..."}
                     ref={(e) => {
-                        ref(e)
+                        ref.ref(e)
                         categoryNameInputRef.current = e;
                     }}
                 />
@@ -144,7 +143,7 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                 <textarea
                     {...register("desc")}
                     name="desc"
-                    defaultValue={desc}
+                    placeholder={desc}
                 />
                 {<FormError>{errors.desc && `${errors.desc?.message}.`}</FormError>}
 

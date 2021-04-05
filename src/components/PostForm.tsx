@@ -18,7 +18,7 @@ import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";
 import { FormError } from "../styled_components/errors";
 
 // VALIDATION SCHEMAS
-let newPostSchema = yup.object().shape({
+let newPostSchema: any = yup.object().shape({
     title: yup.string().required().min(5).max(15),
     content: yup.string().required().min(50)
 });
@@ -31,7 +31,7 @@ interface PostFormComponent {
     cancleFunc(): void
 }
 
-interface PostInputs {
+type PostInputs = {
     title: string,
     content: string
 }
@@ -120,7 +120,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
 
 
     const postTitleInputRef = useRef<HTMLInputElement | null>(null);
-    const { ref, ...rest } = register<any>('title');
+    const ref: any = register('title');
 
     const handlePostSubmit = (data: any) => {
         submitFunc(data)
@@ -135,17 +135,21 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
             <Form onSubmit={handleSubmit(handlePostSubmit)} >
                 {/* TITLE INPUT */}
                 <input
-                    {...rest}
+                    {...ref.rest}
                     name="title"
                     type="text"
                     placeholder={title}
                     ref={(e) => {
-                        ref(e)
+                        ref.ref(e)
                         postTitleInputRef.current = e;
                     }} />
                 {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
                 {/* TEXT INPUT */}
-                <textarea {...register("content")} name="content" placeholder={content} />
+                <textarea
+                    {...register("content")}
+                    name="content"
+                    placeholder={content}
+                />
                 {<FormError>{errors.content && `${errors.content?.message}.`}</FormError>}
                 {/* FORM BUTTONS */}
                 <ButtonContainer>
