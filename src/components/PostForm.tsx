@@ -5,7 +5,7 @@ FILE: TextProcessor.tsx
 */
 
 // DEPENDENCIES
-import React, { useRef } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -119,9 +119,6 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
     });
 
 
-    const postTitleInputRef = useRef<HTMLInputElement | null>(null);
-    const ref: any = register('title');
-
     const handlePostSubmit = (data: any) => {
         submitFunc(data)
         cancleFunc();
@@ -135,14 +132,11 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
             <Form onSubmit={handleSubmit(handlePostSubmit)} >
                 {/* TITLE INPUT */}
                 <input
-                    {...ref.rest}
+                    {...register("title")}
                     name="title"
                     type="text"
                     placeholder={title}
-                    ref={(e) => {
-                        ref.ref(e)
-                        postTitleInputRef.current = e;
-                    }} />
+                />
                 {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
                 {/* TEXT INPUT */}
                 <textarea

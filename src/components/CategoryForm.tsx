@@ -5,7 +5,6 @@ FILE: TextProcessor.tsx
 */
 
 import * as React from "react";
-import { useRef } from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import * as yup from "yup"
@@ -121,8 +120,6 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
         submitFunc(data)
         cancelFunc() // close form
     }
-    const categoryNameInputRef = useRef<HTMLInputElement | null>(null);
-    const ref: any = register('name');
 
     return (
         <Body>
@@ -130,14 +127,10 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* FORM INPUTS */}
                 <input
-                    {...ref.rest}
+                    {...register("name")}
                     name="name"
                     type="text"
                     placeholder={name ? name : "Category Name..."}
-                    ref={(e) => {
-                        ref.ref(e)
-                        categoryNameInputRef.current = e;
-                    }}
                 />
                 {<FormError>{errors.name && `${errors.name?.message}.`}</FormError>}
                 <textarea
