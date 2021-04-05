@@ -20,6 +20,11 @@ interface CategoryFormComponent {
     cancelFunc(): void
 }
 
+interface CategoryInputs {
+    name: string,
+    des: string
+}
+
 // STATELESS COMPONENTS
 import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";
 import { FormError } from "../styled_components/errors"
@@ -126,9 +131,8 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* FORM INPUTS */}
                 <input
+                    {...rest}
                     name="name"
-                    defaultValue={name}
-                    onChange={handleFormData}
                     type="text"
                     placeholder={name ? name : "Category Name..."}
                     ref={(e) => {
@@ -138,9 +142,9 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                 />
                 {<FormError>{errors.name && `${errors.name?.message}.`}</FormError>}
                 <textarea
+                    {...register("desc")}
                     name="desc"
                     defaultValue={desc}
-                    onChange={handleFormData}
                 />
                 {<FormError>{errors.desc && `${errors.desc?.message}.`}</FormError>}
 
