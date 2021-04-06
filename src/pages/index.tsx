@@ -4,7 +4,7 @@ DATE: January 2st, 2021
 FILE: CategoryView.tsx
 */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { InferGetServerSidePropsType } from 'next'
 
@@ -27,7 +27,7 @@ const Body = styled("section")`
   
 `;
 
-function CategoriesPage({ categoriesList }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function IndexPage({ categoriesList }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   // category hook 
   const { deleteCategory, updateCategory, addCategory, categories } = useCategories(categoriesList);
@@ -38,32 +38,58 @@ function CategoriesPage({ categoriesList }: InferGetServerSidePropsType<typeof g
   // authentication authorization hook
   const { isLoading, user, isAdmin } = useAuth();
 
+  // check if is desktop
+  const [isDesktop, setDesktop] = useState<Boolean>();
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 1450);
+  };
+
+  useEffect(() => {
+    updateMedia();
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
 
   // form toggling function 
   const toggleCreateForm = () => {
     createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true)
   }
 
-  return (
-    <Body>
-      {/* CREATE FORM */}
-      {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
 
-      {/* CREATE BUTTON */}
-      {(!isLoading && isAdmin && user) &&
-        <CreateBtn func={toggleCreateForm} />}
-      <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
+  if (isDesktop) {
+    return (
 
-      {/* FALLBACK MESSAGE */}
-      {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
+      <div></div>
 
-        /* DISPLAY CATEGORY CARDS*/
-        categories.map((cat) => {
-          let postCount = cat.posts.length;
-          return <Card deleteCategory={deleteCategory} updateCategory={updateCategory} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
-        })}
-    </Body>
-  )
+    )
+
+
+  } else {
+    return (
+      <Body>
+        {/* CREATE FORM */}
+        {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
+
+        {/* CREATE BUTTON */}
+        {(!isLoading && isAdmin && user) &&
+          <CreateBtn func={toggleCreateForm} />}
+        <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
+
+        {/* FALLBACK MESSAGE */}
+        {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
+
+          /* DISPLAY CATEGORY CARDS*/
+          categories.map((cat) => {
+            let postCount = cat.posts.length;
+            return <Card deleteCategory={deleteCategory} updateCategory={updateCategory} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
+          })}
+      </Body>
+    )
+  }
 }
 
 export async function getServerSideProps() {
@@ -80,7 +106,7 @@ export async function getServerSideProps() {
 
 
 
-export default CategoriesPage;
+export default IndexPage;
 
 
 
