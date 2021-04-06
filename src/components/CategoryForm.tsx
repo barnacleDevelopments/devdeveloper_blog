@@ -4,7 +4,7 @@ DATE: January 4th, 2021
 FILE: TextProcessor.tsx
 */
 
-import * as React from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import * as yup from "yup"
@@ -19,7 +19,8 @@ interface CategoryFormComponent {
     cancelFunc(): void
 }
 
-type CategoryInputs = {
+type CategoryInputData = {
+    [index: string]: string,
     name: string,
     desc: string
 }
@@ -112,8 +113,10 @@ const categorySchema: any = yup.object().shape({
 })
 
 const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, desc, btnText, submitFunc, cancelFunc }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<CategoryInputs>({
-        resolver: yupResolver(categorySchema)
+
+    const { register, handleSubmit, formState: { errors } } = useForm<CategoryInputData>({
+        resolver: yupResolver(categorySchema),
+        defaultValues: { name, desc }
     })
 
     const onSubmit = (data: any) => {
@@ -127,18 +130,20 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* FORM INPUTS */}
                 <input
-                    {...register("name")}
+                    ref={register}
                     name="name"
                     type="text"
                     placeholder={"Category Name..."}
                     defaultValue={name}
+
                 />
                 {<FormError>{errors.name && `${errors.name?.message}.`}</FormError>}
                 <textarea
-                    {...register("desc")}
+                    ref={register}
                     name="desc"
                     placeholder={"Category Description..."}
                     defaultValue={desc}
+
                 />
                 {<FormError>{errors.desc && `${errors.desc?.message}.`}</FormError>}
 

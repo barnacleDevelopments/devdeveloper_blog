@@ -31,7 +31,8 @@ interface PostFormComponent {
     cancleFunc(): void
 }
 
-type PostInputs = {
+type PostInputData = {
+    [index: string]: string,
     title: string,
     content: string
 }
@@ -114,15 +115,16 @@ const ButtonContainer = styled("div")`
 
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<PostInputs>({
+    const { register, handleSubmit, formState: { errors } } = useForm<PostInputData>({
         resolver: yupResolver(newPostSchema)
     });
-
 
     const handlePostSubmit = (data: any) => {
         submitFunc(data)
         cancleFunc();
     }
+
+
 
     return (
         <Body style={{ height: "100%" }}>
@@ -132,7 +134,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
             <Form onSubmit={handleSubmit(handlePostSubmit)} >
                 {/* TITLE INPUT */}
                 <input
-                    {...register("title")}
+                    ref={register}
                     name="title"
                     type="text"
                     placeholder={"Post Title..."}
@@ -141,7 +143,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
                 {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
                 {/* TEXT INPUT */}
                 <textarea
-                    {...register("content")}
+                    ref={register}
                     name="content"
                     placeholder={"Post Content..."}
                     defaultValue={content}
