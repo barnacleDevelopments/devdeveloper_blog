@@ -31,7 +31,7 @@ const ContainerBody = styled("div")`
     }
 
     @media (min-width: 1200px) {
-        width: 50%;
+        width: 80%;
     }
 `
 const Container: React.FunctionComponent = ({ children }) => (

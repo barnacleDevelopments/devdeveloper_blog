@@ -9,7 +9,8 @@ interface PostData {
     _id: string,
     title: string,
     content: string,
-    date: string
+    date: string,
+    catId: string
 }
 
 interface NewPostData {

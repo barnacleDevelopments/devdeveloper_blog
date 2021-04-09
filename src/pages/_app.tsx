@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: index.tsx
 */
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // COMPONENTS
 import ErrorNotification from "../components/ErrorNotification";
@@ -33,6 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const ErrorContextData = useError();
 
   return (
+
     // auth0 provider
     <UserProvider>
       {/* error provider */}
@@ -47,6 +48,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Container>
       </ErrorContext.Provider>
     </UserProvider>
+
+
   )
 }
 
