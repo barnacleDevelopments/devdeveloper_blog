@@ -41,10 +41,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ErrorContext.Provider value={ErrorContextData}>
         {/* app container layout */}
         <Container>
-          <Head>
-            <title>devdeveloper_blog</title>
-            <link rel="icon" href="/img/logo_3.png" />
-          </Head>
           {/* pages */}
           <Component {...pageProps} />
           {/* ERROR MESSAGES */}

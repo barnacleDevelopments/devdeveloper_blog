@@ -43,6 +43,13 @@ const Body = styled("article")`
         border-radius: 30px;
         color: #f5f5f5;
     }
+    @media (min-width: 992px) {
+        width: 65%;
+    }
+
+    @media (min-width: 1200px) {
+        width: 60%;
+    }
 `;
 
 const Content = styled("div")`
