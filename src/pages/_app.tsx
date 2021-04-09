@@ -26,6 +26,7 @@ import type { AppProps /*, AppContext */ } from "next/app"
 
 // AUTH
 import { UserProvider } from '@auth0/nextjs-auth0';
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -40,6 +41,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ErrorContext.Provider value={ErrorContextData}>
         {/* app container layout */}
         <Container>
+          <Head>
+            <title>devdeveloper_blog</title>
+            <link rel="icon" href="/img/logo_3.png" />
+          </Head>
           {/* pages */}
           <Component {...pageProps} />
           {/* ERROR MESSAGES */}

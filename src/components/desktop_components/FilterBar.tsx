@@ -4,7 +4,7 @@ DATE: April 6th, 2021
 FILE: FilterBar.tsx
 */
 
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
 // COMPONENTS 
@@ -39,13 +39,12 @@ const BiscList = styled("ul")`
 `;
 
 interface FilterBarData {
-    postList: PostData[],
     categoryList: CategoryData[],
     addActiveCategory(catId: string): void,
     removeActiveCategory(catId: string): void
 }
 
-const FilterBar: FunctionComponent<FilterBarData> = ({ postList, categoryList, addActiveCategory, removeActiveCategory }) => {
+const FilterBar: FunctionComponent<FilterBarData> = ({ categoryList, addActiveCategory, removeActiveCategory }) => {
 
     return (
         <Body>
