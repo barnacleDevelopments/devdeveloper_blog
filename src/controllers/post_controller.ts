@@ -6,7 +6,7 @@ FILE: post_controller.ts
 
 import { RessourceId } from "../customTypings/global_types";
 
-const LOCAL_URL = "http://localhost:3000";
+const LOCAL_URL = "https://devdeveloper.ca";
 
 class Post {
     constructor() { }
