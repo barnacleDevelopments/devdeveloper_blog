@@ -69,6 +69,7 @@ class Category {
             title: "",
             content: "",
             date: "",
+            catId: ""
         }]
 
         await fetch(`${LOCAL_URL}/api/posts/${catId}`, {

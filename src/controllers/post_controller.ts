@@ -16,7 +16,8 @@ class Post {
             _id: "",
             title: "",
             content: "",
-            date: ""
+            date: "",
+            catId: ""
         }];
         await fetch(`${LOCAL_URL}/api/posts/all`, {
             method: "GET",
@@ -36,7 +37,8 @@ class Post {
             _id: "",
             title: "",
             content: "",
-            date: ""
+            date: "",
+            catId: ""
         };
         await fetch(`${LOCAL_URL}/api/posts/view/${postId}`, {
             method: "GET",
@@ -57,6 +59,7 @@ class Post {
             title: "",
             content: "",
             date: "",
+            catId: ""
         }
 
         await fetch(`${LOCAL_URL}/api/posts/create/${catId}`, {
@@ -79,7 +82,8 @@ class Post {
             _id: "",
             title: "",
             content: "",
-            date: ""
+            date: "",
+            catId: ""
         }
 
         await fetch(`${LOCAL_URL}/api/posts/update/${postId}`, {
