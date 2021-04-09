@@ -26,7 +26,6 @@ import type { AppProps /*, AppContext */ } from "next/app"
 
 // AUTH
 import { UserProvider } from '@auth0/nextjs-auth0';
-import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
 
