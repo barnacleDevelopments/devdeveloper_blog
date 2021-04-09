@@ -21,7 +21,8 @@ export const PostsContextDefaultValue: PostsContextData = {
         _id: "",
         title: "",
         content: "",
-        date: ""
+        date: "",
+        catId: ""
     }],
     addPost: () => null,
     deletePost: () => null,

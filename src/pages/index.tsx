@@ -92,7 +92,6 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
           <FilterBar
             addActiveCategory={addActiveCategory}
             removeActiveCategory={removeActiveCategory}
-            postList={postList}
             categoryList={categoriesList} />
           <PostList>
             {postList.length === 0 ? <FallbackMessage message="Failed to retrieve posts... Try refreshing the page." /> :

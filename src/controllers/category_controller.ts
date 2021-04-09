@@ -5,7 +5,7 @@ FILE: category_controller.ts
 */
 import { RessourceId } from "../customTypings/global_types";
 
-const LOCAL_URL = "http://localhost:3000";
+const LOCAL_URL = "http://blog.devdeveloper.ca";
 
 class Category {
     constructor() { }
@@ -69,6 +69,7 @@ class Category {
             title: "",
             content: "",
             date: "",
+            catId: ""
         }]
 
         await fetch(`${LOCAL_URL}/api/posts/${catId}`, {
