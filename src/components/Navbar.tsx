@@ -20,7 +20,6 @@ import useNav from "../hooks/useNav";
 import DropDownMenu from "./DropDownMenu";
 import useAuth from "../hooks/useAuth";
 
-
 const Navbody = styled("nav")`
     background-color: #314455;
     width: 100%;
@@ -56,8 +55,6 @@ const Navbar: React.FunctionComponent = () => {
 
     return (
         <Navbody>
-
-
 
             {backBtnStatus && (<Link href={backBtnParams}>
                 <Icon icon={faArrowLeft} />
