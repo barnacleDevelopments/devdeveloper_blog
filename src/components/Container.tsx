@@ -9,8 +9,6 @@ import styled from "@emotion/styled";
 
 // COMPONENTS 
 import Navbar from "../components/Navbar";
-import Head from "next/head"
-
 
 const ContainerBody = styled("div")`
     width: 90%;
