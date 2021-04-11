@@ -51,7 +51,7 @@ const Logo = styled("img")`
 
 const Navbar: React.FunctionComponent = () => {
     const { backBtnParams, backBtnStatus } = useNav();
-    const { user, isLoading, } = useAuth();
+    const { user, isLoading } = useAuth();
 
     return (
         <Navbody>

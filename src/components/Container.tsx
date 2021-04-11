@@ -36,10 +36,6 @@ const ContainerBody = styled("div")`
 `
 const Container: React.FunctionComponent = ({ children }) => (
     <ContainerBody>
-        <Head>
-            <title>devdeveloper_blog</title>
-            <link rel="icon" href="/img/logo_3.png" />
-        </Head>
         <Navbar />
         {children}
     </ContainerBody>

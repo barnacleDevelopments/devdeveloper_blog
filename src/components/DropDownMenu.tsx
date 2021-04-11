@@ -22,7 +22,7 @@ const Body = styled("div")`
         color: #f5f5f5;
         font-size: 2.1em;
         margin-right: 5px;
-    }
+    } 
 `;
 
 const List = styled("ul")`
@@ -73,6 +73,7 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
         isOpen ? setIsOpen(false) : setIsOpen(true);
     }
 
+
     return (
         <Body>
             {(user && !isLoading) && (
@@ -81,6 +82,7 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
                     :
                     <Icon onClick={toggleDropdown} icon={faUser} />
             )}
+
             {/* Display dropdown menu and display shadow on open */}
             {isOpen && <Shadow onClick={toggleDropdown} />}
             {isOpen && <List>
