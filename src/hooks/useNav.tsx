@@ -7,31 +7,39 @@ FILE: useNav.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-export default () => {
+
+const useNav = () => {
     const router = useRouter();
     const [backBtnStatus, setBackBtnStatus] = useState(false);
-    const [backBtnParams, setBackBtnParams] = useState("/");
+    const [previousURL, setPreviousURL] = useState<string>("");
+    const [currentURL, setCurrentURL] = useState<string>("");
 
     useEffect(() => {
-        if (router.pathname !== "/") {
-            setBackBtnStatus(true);
-        } else {
-            setBackBtnStatus(false);
-        }
-    }, [router]);
-
-    const checkBackBtn = () => {
-        if (router.pathname === "/categories/:title") {
-            setBackBtnParams(router.pathname)
-        }
-    }
-
-    useEffect(() => {
-        checkBackBtn()
+        updateNavParams()
     }, [router])
 
+    const updateNavParams = () => {
+        if (router.asPath === "/") {
+            setBackBtnStatus(false)
+        }
+
+        if (router.pathname === "/posts/[catId]") {
+            setPreviousURL("/");
+            setCurrentURL(router.asPath)
+            setBackBtnStatus(true)
+        }
+
+        if (router.pathname === "/posts/one/[postId]") {
+            setPreviousURL(currentURL)
+            setBackBtnStatus(true)
+        }
+    }
+
     return {
-        backBtnStatus,
-        backBtnParams
+        previousURL,
+        updateNavParams,
+        backBtnStatus
     }
 }
+
+export default useNav;

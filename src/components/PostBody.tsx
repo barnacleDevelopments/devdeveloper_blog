@@ -43,12 +43,8 @@ const Body = styled("article")`
         border-radius: 30px;
         color: #f5f5f5;
     }
-    @media (min-width: 992px) {
-        width: 65%;
-    }
-
     @media (min-width: 1200px) {
-        width: 60%;
+        width: 70%;
     }
 `;
 
@@ -88,6 +84,37 @@ const Content = styled("div")`
         line-height: 1.5;
         margin-bottom: 25px;
         font-weight: 100;
+    }
+
+    ul {
+        margin: 20px 0px 20px 0px;
+        padding-left: 25px;
+        li {
+            line-height: 30px;
+            list-style-type: circle;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: #97aabd;
+        border-bottom: 1px solid #97aabd;
+    }
+
+    a:visited {
+        color: #97aabde6;
+    }
+
+    pre {
+        background-color: #97aabd;
+        padding: 14px 20px;
+        color: #f5f5f5;
+        border-radius: 4px;
+        margin: 20px 0px 20px 0px;
+        line-height: 2em;
+        p {
+            font-weight: 600;
+        }
     }
 `;
 

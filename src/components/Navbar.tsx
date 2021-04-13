@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: Navbar.tsx
 */
 
-import React from "react";
+import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 
@@ -12,13 +12,12 @@ import Link from "next/link";
 import { faArrowLeft, faSign } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 
-
-// HOOKS
-import useNav from "../hooks/useNav";
-
 // COMPONENTS
 import DropDownMenu from "./DropDownMenu";
 import useAuth from "../hooks/useAuth";
+
+// CONTEXTS
+import NavContext from "../contexts/NavContext";
 
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -38,6 +37,7 @@ const Navbody = styled("nav")`
         color: #f5f5f5;
         font-size: 2.1em;
         margin-right: 5px;
+        width: 1em;
     }
 `;
 
@@ -50,15 +50,15 @@ const Logo = styled("img")`
 `;
 
 const Navbar: React.FunctionComponent = () => {
-    const { backBtnParams, backBtnStatus } = useNav();
     const { user, isLoading } = useAuth();
-
+    const { previousURL, backBtnStatus, updateNavParams } = useContext(NavContext);
     return (
         <Navbody>
-
-            {backBtnStatus && (<Link href={backBtnParams}>
-                <Icon icon={faArrowLeft} />
-            </Link>)}
+            {backBtnStatus && (
+                <Link href={previousURL}>
+                    <Icon onClick={updateNavParams} icon={faArrowLeft} />
+                </Link>
+            )}
 
             <Logo src="../img/logo_3.png" />
 

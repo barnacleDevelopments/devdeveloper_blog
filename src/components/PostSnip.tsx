@@ -16,7 +16,6 @@ import Link from "next/link";
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 
-
 // COMPONENTS
 import ConfirmForm from "./ConfirmForm";
 import PostContext from "../contexts/PostContext";

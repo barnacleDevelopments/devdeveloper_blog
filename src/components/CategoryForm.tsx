@@ -143,7 +143,6 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
                     name="desc"
                     placeholder={"Category Description..."}
                     defaultValue={desc}
-
                 />
                 {<FormError>{errors.desc && `${errors.desc?.message}.`}</FormError>}
 

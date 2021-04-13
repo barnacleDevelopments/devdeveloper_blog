@@ -4,7 +4,7 @@ DATE: January 2st, 2021
 FILE: PostsView.tsx
 */
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { InferGetServerSidePropsType } from 'next'
@@ -46,7 +46,7 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
                 }} /> : null}
 
                 {/* if admin is logged in display create btn */}
-                {(user && isAdmin) ? <CreateBtn func={toggleCreateForm} /> : null}
+                {(user && isAdmin) ? <CreateBtn isDesktop={false} toggleCreateForm={toggleCreateForm} /> : null}
 
                 {/* if posts exists display them */}
                 {postContextData.posts.length <= 0 ? <PostSnipFallback /> :

@@ -14,7 +14,7 @@ const TextAreaBody = styled("article")`
     padding: 15px 15px 20px 15px;
     margin-bottom: 14px;
     border-radius: 4px;
-    box-shadow: 3px 3px 30px -20px black;
+    box-shadow: 1px 1px 5px 0px #00000040;
     min-width: 270px;
     h1 {
         font-size: 2em;

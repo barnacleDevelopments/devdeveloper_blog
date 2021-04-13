@@ -9,12 +9,14 @@ import styled from "@emotion/styled";
 
 // COMPONENTS 
 import Biscuit from "./Biscuit";
+import useCategories from "../../hooks/useCategories";
 
 const Body = styled("div")`
     background-color: #314455;
     padding: 19px;
     border-radius: 4px;
     box-shadow: 1px 1px 5px 0px #00000030;
+    height: min-content;
     h2 {
         color: #f5f5f5;
         font-weight: bold;
@@ -35,7 +37,6 @@ const Body = styled("div")`
 
 const BiscList = styled("ul")`
         text-decoration: none;
-
 `;
 
 interface FilterBarData {
@@ -45,18 +46,27 @@ interface FilterBarData {
 }
 
 const FilterBar: FunctionComponent<FilterBarData> = ({ categoryList, addActiveCategory, removeActiveCategory }) => {
+    const { deleteCategory, updateCategory, categories } = useCategories(categoryList);
+
+
 
     return (
         <Body>
             <h2>Category: </h2>
             <BiscList>
-                {categoryList.map(cat => {
-                    return <Biscuit
-                        addActiveCategory={addActiveCategory}
-                        removeActiveCategory={removeActiveCategory}
-                        textContent={cat.name}
-                        catId={cat._id}
-                    />
+                {categories.map(cat => {
+                    return (
+                        <Biscuit
+                            key={cat._id}
+                            catDescription={cat.desc}
+                            updateCategory={updateCategory}
+                            deleteCategory={deleteCategory}
+                            addActiveCategory={addActiveCategory}
+                            removeActiveCategory={removeActiveCategory}
+                            textContent={cat.name}
+                            catId={cat._id}
+                        />
+                    )
                 })}
             </BiscList>
         </Body>

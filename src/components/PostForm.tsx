@@ -24,8 +24,8 @@ let newPostSchema: any = yup.object().shape({
 });
 
 interface PostFormComponent {
-    title: string,
-    content: string,
+    title?: string,
+    content?: string,
     btnText: string,
     submitFunc(postData: PostFormData): void,
     cancleFunc(): void

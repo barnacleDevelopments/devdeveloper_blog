@@ -25,6 +25,7 @@ import useCategories from "../hooks/useCategories";
 import useAuth from "../hooks/useAuth";
 import PostSnip from "../components/PostSnip";
 import useFilterBar from "../hooks/useFIlterBar";
+import PostForm from "../components/PostForm";
 
 
 // STYLES 
@@ -58,13 +59,13 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
   const { deleteCategory, updateCategory, addCategory, categories } = useCategories(categoriesList);
 
   // form visibility state
-  const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
+  const [createFormVisible, setCreateFormVisible] = useState<boolean>(false);
 
   // authentication authorization hook
   const { isLoading, user, isAdmin } = useAuth();
 
   // check if is desktop
-  const [isDesktop, setDesktop] = useState<Boolean>();
+  const [isDesktop, setDesktop] = useState<boolean>();
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1200);
@@ -98,18 +99,21 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
 
               /* DISPLAY POST CARDS*/
               updatedPostList.map((post) => {
-                return <PostSnip postId={post._id} title={post.title} content={post.content} />
+                return <PostSnip key={post._id} postId={post._id} title={post.title} content={post.content} />
               })}
 
           </PostList>
         </Container>
-        {/* CREATE FORM */}
-        {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
-
         {/* CREATE BUTTON */}
         {(!isLoading && isAdmin && user) &&
-          <CreateBtn func={toggleCreateForm} />}
+          <CreateBtn
+            isDesktop={isDesktop}
+            toggleCreateForm={toggleCreateForm}
+          />}
+        {/* CREATE FORM */}
+        {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
       </DesktopBody>
+
     )
 
   } else {
@@ -120,7 +124,7 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
 
         {/* CREATE BUTTON */}
         {(!isLoading && isAdmin && user) &&
-          <CreateBtn func={toggleCreateForm} />}
+          <CreateBtn isDesktop={false} toggleCreateForm={toggleCreateForm} />}
         <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
 
         {/* FALLBACK MESSAGE */}
@@ -129,7 +133,7 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
           /* DISPLAY CATEGORY CARDS*/
           categories.map((cat) => {
             let postCount = cat.posts.length;
-            return <Card deleteCategory={deleteCategory} updateCategory={updateCategory} key={cat._id} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
+            return <Card key={cat._id} deleteCategory={deleteCategory} updateCategory={updateCategory} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
           })}
       </MobileBody>
     )

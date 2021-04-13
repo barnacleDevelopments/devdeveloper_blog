@@ -5,7 +5,7 @@ FILE: Card.tsx
 */
 
 // DEPENDENCIES
-import * as React from "react";
+import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 
@@ -19,7 +19,6 @@ import ConfirmForm from "./ConfirmForm";
 // FONT AWESOME 
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-
 
 // INTERFACES
 interface CategoryComponentData {
@@ -35,6 +34,7 @@ interface CategoryComponentData {
 // STATELESS COMPONENTS
 import { CardBtn, EditBtn, DeleteBtn } from "../styled_components/buttons";
 import useAuth from "../hooks/useAuth";
+
 
 
 const CardBody = styled("div")`
@@ -123,6 +123,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
         <CardBody>
             <CardImg src="./img/logo.png" />
             <CardCount>{count}</CardCount>
+            {/* CARD CONTENT */}
             <CardContent>
                 <h2>{name ? name : "No Name"}</h2>
                 {<p>{desc ? desc : "This category has no description."}</p>}
@@ -132,7 +133,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
             </CardContent>
 
             {/* DELETE FORM */}
-            {deleteFormVisible ?
+            {deleteFormVisible &&
                 <ConfirmForm
                     cancelHandler={toggleDeleteForm}
                     confirmHandler={() => {
@@ -140,10 +141,10 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
                         toggleDeleteForm();
                     }}
                     btnText="Confirm"
-                    message="You sure you want to delete this category?" /> : null}
+                    message="You sure you want to delete this category?" />}
 
             {/* EDIT FORM */}
-            {editFormVisible ?
+            {editFormVisible &&
                 <CategoryForm
                     cancelFunc={toggleEditForm}
                     submitFunc={(data: CategoryFormData) => {
@@ -153,16 +154,13 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
                     btnText="Confirm"
                     name={name}
                     desc={desc}
-                /> : null}
+                />}
 
             {/* EDIT BUTTON */}
-            {
-                (isAdmin && !isLoading && user) && < EditBtn onClick={toggleEditForm}><Icon icon={faPen} /></EditBtn>}
+            {(isAdmin && !isLoading && user) && < EditBtn onClick={toggleEditForm}><Icon icon={faPen} /></EditBtn>}
 
             {/* DELETE BUTTON */}
-            {
-                (isAdmin && !isLoading && user) && <DeleteBtn onClick={toggleDeleteForm} ><Icon icon={faTrash} /></DeleteBtn>
-            }
+            {(isAdmin && !isLoading && user) && <DeleteBtn onClick={toggleDeleteForm} ><Icon icon={faTrash} /></DeleteBtn>}
         </CardBody >
     )
 }
