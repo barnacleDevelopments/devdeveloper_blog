@@ -30,11 +30,9 @@ const usePosts = (initialPosts: any) => {
         let adjustedPostsList = posts;
         Post.prototype.create(title, content, catId)
             .then((data) => {
-                console.log(data)
                 adjustedPostsList = [data, ...adjustedPostsList];
                 setPosts(adjustedPostsList);
-            }).catch(err => addError(err.message)
-            )
+            }).catch(err => addError(err.message));
     }
 
     /**
@@ -56,6 +54,7 @@ const usePosts = (initialPosts: any) => {
     * @description update existing post.
     */
     const updatePost = (postId: RessourceId, title: string, content: string) => {
+        console.log("fff")
         Post.prototype.update(postId, {
             title: title,
             content: content,

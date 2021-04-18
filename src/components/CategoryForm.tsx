@@ -87,6 +87,7 @@ const Form = styled("form")`
         border-radius: 4px;
         background-color: #f5f5f5;
         text-transform: capitalize;
+        font-weight: 500;
     }
 
     textarea {

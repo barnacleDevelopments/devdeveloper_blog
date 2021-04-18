@@ -26,7 +26,7 @@ const Form = styled("form")`
     display: grid;
     grid-template-rows: 1fr 1fr;
     background-color: #314455;
-    padding: 14px;
+    padding: 16px 20px;
     border-radius: 4px;
     @media (min-width: 576px) {
         width: 85%;
@@ -46,8 +46,11 @@ const Form = styled("form")`
     p {
         grid-column: 1 / span 2;
         color: #f5f5f5;
-        font-size: 1.2em;
+        font-size: 1.2em;   
+        font-weight: 500;
+        text-align: left;
     }
+  
     
 `;
 

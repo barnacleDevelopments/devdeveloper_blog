@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 // FONT AWESOME 
-import { faCircle, faFile, faFolder, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faFile, faFolder, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 
 const Body = styled("div")`
@@ -110,10 +110,11 @@ const WestDrawerButton = styled("div")`
 
 interface CreateBtnData {
     isDesktop: boolean,
-    toggleCreateForm?(): void
+    toggleCategoryCreateForm?(): void,
+    togglePostCreateForm?(): void
 }
 
-const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCreateForm }) => {
+const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCategoryCreateForm, togglePostCreateForm }) => {
 
     const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
 
@@ -162,13 +163,13 @@ const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCr
     if (isDesktop) {
         return (
             <Body>
-                <TopDrawerButton onClick={toggleCreateForm} style={TopDrawerStyle}>
+                <TopDrawerButton onClick={toggleCategoryCreateForm} style={TopDrawerStyle}>
                     <div><p>Category</p><Icon icon={faFolder} /></div>
                 </TopDrawerButton>
                 <Button onClick={toggleCreateBtnDrawers}>
                     <Icon icon={faPlus} />
                 </Button>
-                <WestDrawerButton style={WestDrawerStyle}>
+                <WestDrawerButton onClick={togglePostCreateForm} style={WestDrawerStyle}>
                     <div><p>Post</p><Icon icon={faFile} /></div>
                 </WestDrawerButton>
             </Body>
@@ -176,7 +177,7 @@ const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCr
     } else {
         return (
             <Body>
-                <Button onClick={toggleCreateForm}>
+                <Button onClick={toggleCategoryCreateForm}>
                     <Icon icon={faPlus} />
                 </Button>
             </Body>

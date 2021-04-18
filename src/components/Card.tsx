@@ -5,9 +5,8 @@ FILE: Card.tsx
 */
 
 // DEPENDENCIES
-import React, { useContext } from "react";
+import React from "react";
 import styled from "@emotion/styled";
-import Link from "next/link";
 
 // CONTROLLERS
 import { useState } from "react";
@@ -34,8 +33,7 @@ interface CategoryComponentData {
 // STATELESS COMPONENTS
 import { CardBtn, EditBtn, DeleteBtn } from "../styled_components/buttons";
 import useAuth from "../hooks/useAuth";
-
-
+import { useRouter } from "next/router";
 
 const CardBody = styled("div")`
     background-color: #314455;
@@ -101,13 +99,12 @@ const CardCount = styled("div")`
     display: flex;
     justify-content: center;
     align-items: center;
-
 `;
 
 const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, desc, count, deleteCategory, updateCategory }) => {
     const [deleteFormVisible, setDeleteFormVisible] = useState<boolean>(false);
     const [editFormVisible, setEditFormVisible] = useState<Boolean>(false);
-
+    const router = useRouter();
     const { isLoading, user, isAdmin } = useAuth();
 
     const toggleDeleteForm = () => {
@@ -128,7 +125,7 @@ const Card: React.FunctionComponent<CategoryComponentData> = ({ catId, name, des
                 <h2>{name ? name : "No Name"}</h2>
                 {<p>{desc ? desc : "This category has no description."}</p>}
                 <div>
-                    <Link href={`/posts/${catId}`}><CardBtn>View</CardBtn></Link>
+                    <CardBtn onClick={() => router.push(`/posts/${catId}`)}>View</CardBtn>
                 </div>
             </CardContent>
 

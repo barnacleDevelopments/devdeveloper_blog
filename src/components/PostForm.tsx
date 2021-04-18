@@ -20,21 +20,25 @@ import { FormError } from "../styled_components/errors";
 // VALIDATION SCHEMAS
 let newPostSchema: any = yup.object().shape({
     title: yup.string().required().min(5).max(15),
-    content: yup.string().required().min(50)
+    content: yup.string().required().min(50),
+    catId: yup.string().required()
 });
 
 interface PostFormComponent {
     title?: string,
     content?: string,
     btnText: string,
+    categoryList?: CategoryData[],
     submitFunc(postData: PostFormData): void,
-    cancleFunc(): void
+    cancelFunc(): void,
+    includesCategoryPicker: boolean
 }
 
 type PostInputData = {
     [index: string]: string,
     title: string,
-    content: string
+    content: string,
+    catId: string
 }
 
 const Body = styled("div")`
@@ -113,7 +117,7 @@ const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
 `;
 
-const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, btnText, submitFunc, cancleFunc }) => {
+const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, title, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<PostInputData>({
         resolver: yupResolver(newPostSchema)
@@ -121,15 +125,14 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
 
     const handlePostSubmit = (data: any) => {
         submitFunc(data)
-        cancleFunc();
+        console.log(data.catId)
+        cancelFunc();
     }
-
-
 
     return (
         <Body style={{ height: "100%" }}>
             {/* SHADOW OVERLAY */}
-            <Shadow onClick={cancleFunc}></Shadow>
+            <Shadow onClick={cancelFunc}></Shadow>
             {/* POST FORM */}
             <Form onSubmit={handleSubmit(handlePostSubmit)} >
                 {/* TITLE INPUT */}
@@ -140,18 +143,34 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, content, 
                     placeholder={"Post Title..."}
                     defaultValue={title}
                 />
-                {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
-                {/* TEXT INPUT */}
+                {/* CONTENT INPUT */}
                 <textarea
                     ref={register}
                     name="content"
                     placeholder={"Post Content..."}
                     defaultValue={content}
                 />
+                {includesCategoryPicker && (
+                    <select
+                        ref={register}
+                        name="catId"
+                    >
+                        {categoryList?.map(cat => (
+                            <option
+                                key={cat._id}
+                                value={cat._id}>{cat.name}
+                            </option>
+                        ))}
+                    </select>
+                )}
+
+                {/* FORM ERRORS */}
+                {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
+
                 {<FormError>{errors.content && `${errors.content?.message}.`}</FormError>}
                 {/* FORM BUTTONS */}
                 <ButtonContainer>
-                    <CancelBtn onClick={cancleFunc} >Cancle</CancelBtn>
+                    <CancelBtn onClick={cancelFunc} >Cancle</CancelBtn>
                     <ConfirmBtn type="submit">{btnText}</ConfirmBtn>
                 </ButtonContainer>
             </Form>

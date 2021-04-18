@@ -48,6 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <UserProvider>
         {/* error provider */}
         <ErrorContext.Provider value={ErrorContextData}>
+          {/* nav context provider */}
           <NavContext.Provider value={NavContextData}>
             {/* app container layout */}
             <Container>
@@ -57,6 +58,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               {ErrorContextData.currentError &&
                 <ErrorNotification error={ErrorContextData.currentError} />}
             </Container>
+
           </NavContext.Provider>
         </ErrorContext.Provider>
       </UserProvider>

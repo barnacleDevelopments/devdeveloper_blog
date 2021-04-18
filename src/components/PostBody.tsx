@@ -43,9 +43,6 @@ const Body = styled("article")`
         border-radius: 30px;
         color: #f5f5f5;
     }
-    @media (min-width: 1200px) {
-        width: 70%;
-    }
 `;
 
 const Content = styled("div")`

@@ -10,7 +10,6 @@ import React, { useState, useContext } from "react";
 import { stripHtml } from "string-strip-html";
 
 import styled from "@emotion/styled";
-import Link from "next/link";
 
 // FONT AWESOME 
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -90,8 +89,8 @@ const PostSnip: React.FunctionComponent<PostData> = ({ postId, title, content })
     // auth context 
     const { isAdmin, user } = useAuth();
     // query parameters 
-    const Router = useRouter();
-    const { catId } = Router.query
+    const router = useRouter();
+    const { catId } = router.query
 
     // toggle delete form visibility
     const toggleDeleteForm = () => {
@@ -111,53 +110,47 @@ const PostSnip: React.FunctionComponent<PostData> = ({ postId, title, content })
                 <h2>{title ? title : "No Title"}</h2>
                 <p>{content ? stripHtml(content).result : "This post has no content."}</p>
                 <div>
-                    <Link href={`/posts/one/${postId}`}>
-                        <CardBtn>Read</CardBtn>
-                    </Link>
+                    <CardBtn
+                        onClick={() =>
+                            router.push(`/posts/one/${postId}`)}>Read</CardBtn>
                 </div>
             </PostSnipContent>
 
             {/* POST EDIT FORM */}
-            {
-                editFormVisible &&
+            {editFormVisible &&
                 <PostForm
                     title={title}
                     content={content}
                     btnText="Update"
-                    cancleFunc={toggleEditForm}
-                    submitFunc={(postData: PostFormData) =>
-                        updatePost(postId, postData.title, postData.content)} />
-            }
-
+                    includesCategoryPicker={false}
+                    cancelFunc={toggleEditForm}
+                    submitFunc={(postData: PostFormData) => {
+                        updatePost(postId, postData.title, postData.content)
+                    }} />}
 
             {/* ADMIN COMPONENTS */}
-            {
-                deleteFormVisible &&
+            {deleteFormVisible &&
                 <ConfirmForm
                     cancelHandler={toggleDeleteForm}
+                    btnText="Confirm"
+                    message="You sure you want to delete this thing?"
                     confirmHandler={() => {
                         toggleDeleteForm();
                         if (catId !== undefined) {
                             deletePost(postId, catId);
                         }
-
-                    }} btnText="Confirm" message="You sure you want to delete this thing?" />
-            }
+                    }}
+                />}
 
             {/* EDIT FORM BUTTON */}
-            {
-
-                (user && isAdmin) && <EditBtn onClick={
-                    () => toggleEditForm()
-                }><Icon icon={faPen}></Icon></EditBtn>
-            }
+            {(user && isAdmin) && <EditBtn onClick={
+                () => toggleEditForm()
+            }><Icon icon={faPen}></Icon></EditBtn>}
 
             {/* DELETE FORM BUTTON */}
-            {
-                (user && isAdmin) && <DeleteBtn onClick={
-                    () => toggleDeleteForm()
-                }><Icon icon={faTrash}></Icon></DeleteBtn>
-            }
+            {(user && isAdmin) && <DeleteBtn onClick={
+                () => toggleDeleteForm()
+            }><Icon icon={faTrash}></Icon></DeleteBtn>}
         </Body >
     )
 }

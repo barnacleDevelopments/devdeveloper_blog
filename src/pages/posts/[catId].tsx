@@ -4,7 +4,7 @@ DATE: January 2st, 2021
 FILE: PostsView.tsx
 */
 
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { InferGetServerSidePropsType } from 'next'
@@ -32,7 +32,7 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
     const { user, isAdmin } = useAuth();
     const postContextData = usePosts(postList);
 
-    const toggleCreateForm = () => {
+    const togglePostCreateForm = () => {
         createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true);
     }
 
@@ -40,19 +40,37 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
         <Body>
             <PostContext.Provider value={postContextData}>
                 {/* CREATE FORM */}
-                {createFormVisible ? <PostForm title="" content="" btnText="Create" cancleFunc={toggleCreateForm} submitFunc={(postData: PostFormData) => {
-                    if (catId !== undefined)
-                        postContextData.addPost(postData.title, postData.content, catId)
-                }} /> : null}
+                {createFormVisible && (
+                    <PostForm
+                        title=""
+                        content=""
+                        includesCategoryPicker={false}
+                        btnText="Create"
+                        cancelFunc={togglePostCreateForm}
+                        submitFunc={(postData: PostFormData) => {
+                            if (catId !== undefined)
+                                postContextData.addPost(postData.title, postData.content, catId)
+                        }} />
+                )}
 
                 {/* if admin is logged in display create btn */}
-                {(user && isAdmin) ? <CreateBtn isDesktop={false} toggleCreateForm={toggleCreateForm} /> : null}
+                {(user && isAdmin) && (
+                    <CreateBtn
+                        isDesktop={false}
+                        togglePostCreateForm={togglePostCreateForm}
+                    />
+                )}
 
                 {/* if posts exists display them */}
                 {postContextData.posts.length <= 0 ? <PostSnipFallback /> :
                     postContextData.posts.map(post => {
                         return (
-                            <PostSnip key={post._id} postId={post._id} title={post.title} content={post.content} />
+                            <PostSnip
+                                key={post._id}
+                                postId={post._id}
+                                title={post.title}
+                                content={post.content}
+                            />
                         );
                     })}
             </PostContext.Provider>

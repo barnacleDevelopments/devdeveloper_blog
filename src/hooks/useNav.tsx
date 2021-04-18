@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: useNav.tsx
 */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 
@@ -13,6 +13,7 @@ const useNav = () => {
     const [backBtnStatus, setBackBtnStatus] = useState(false);
     const [previousURL, setPreviousURL] = useState<string>("");
     const [currentURL, setCurrentURL] = useState<string>("");
+
 
     useEffect(() => {
         updateNavParams()
@@ -35,10 +36,13 @@ const useNav = () => {
         }
     }
 
+
+
     return {
         previousURL,
         updateNavParams,
-        backBtnStatus
+        backBtnStatus,
+        currentURL
     }
 }
 

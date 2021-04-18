@@ -26,6 +26,7 @@ import useAuth from "../hooks/useAuth";
 import PostSnip from "../components/PostSnip";
 import useFilterBar from "../hooks/useFIlterBar";
 import PostForm from "../components/PostForm";
+import usePosts from "../hooks/usePosts";
 
 
 // STYLES 
@@ -48,18 +49,21 @@ const Container = styled("div")`
     column-gap: 10px;
 `;
 
-
-
 function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-
-  // filter state
-  const { updatedPostList, addActiveCategory, removeActiveCategory } = useFilterBar(postList);
-
   // category hook 
   const { deleteCategory, updateCategory, addCategory, categories } = useCategories(categoriesList);
 
-  // form visibility state
-  const [createFormVisible, setCreateFormVisible] = useState<boolean>(false);
+  // post hook
+  const { addPost, posts } = usePosts(postList);
+
+  // filter state
+  const { updatedPostList, addActiveCategory, removeActiveCategory } = useFilterBar(posts);
+
+  // category form visibility state
+  const [createCategoryFormVisible, setCreateCategoryFormVisible] = useState<boolean>(false);
+
+  // post form visibility state
+  const [createPostFormVisible, setCreatePostFormVisible] = useState<boolean>(false);
 
   // authentication authorization hook
   const { isLoading, user, isAdmin } = useAuth();
@@ -81,51 +85,97 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
   });
 
   // form toggling function 
-  const toggleCreateForm = () => {
-    createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true)
+  const toggleCategoryCreateForm = () => {
+    createCategoryFormVisible ? setCreateCategoryFormVisible(false) : setCreateCategoryFormVisible(true)
+  }
+
+  const togglePostCreateForm = () => {
+    createPostFormVisible ? setCreatePostFormVisible(false) : setCreatePostFormVisible(true);
   }
 
   if (isDesktop) {
     return (
       <DesktopBody>
-        <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
+        <TextArea
+          title="Welcome to my Blog"
+          content="A collection of articles for techies, fitness junkies and more!" />
         <Container>
           <FilterBar
             addActiveCategory={addActiveCategory}
             removeActiveCategory={removeActiveCategory}
             categoryList={categoriesList} />
           <PostList>
-            {postList.length === 0 ? <FallbackMessage message="Failed to retrieve posts... Try refreshing the page." /> :
-
+            {posts.length === 0 ? <FallbackMessage message="Failed to retrieve posts... Try refreshing the page." /> :
               /* DISPLAY POST CARDS*/
               updatedPostList.map((post) => {
-                return <PostSnip key={post._id} postId={post._id} title={post.title} content={post.content} />
+                return (
+                  <PostSnip
+                    key={post._id}
+                    postId={post._id}
+                    title={post.title}
+                    content={post.content}
+                  // cancelFunc={toggleForm}
+                  // submitFunc={(postData: PostFormData) => {
+                  //   updatePost(post._id, postData.title, postData.content)
+                  // }} 
+                  />
+                )
               })}
-
           </PostList>
         </Container>
+
         {/* CREATE BUTTON */}
         {(!isLoading && isAdmin && user) &&
           <CreateBtn
             isDesktop={isDesktop}
-            toggleCreateForm={toggleCreateForm}
+            toggleCategoryCreateForm={toggleCategoryCreateForm}
+            togglePostCreateForm={togglePostCreateForm}
           />}
-        {/* CREATE FORM */}
-        {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
+
+        {/* CREATE CATEGORY FORM */}
+        {createCategoryFormVisible &&
+          <CategoryForm
+            btnText="Create"
+            name=""
+            desc=""
+            submitFunc={(formData) => addCategory(formData.name, formData.desc)}
+            cancelFunc={toggleCategoryCreateForm}
+          />}
+
+        {/* CREATE POST FORM */}
+        {createPostFormVisible &&
+          <PostForm
+            btnText="Create"
+            title=""
+            content=""
+            cancelFunc={togglePostCreateForm}
+            includesCategoryPicker={true}
+            categoryList={categories}
+            submitFunc={(postData) => {
+              addPost(postData.title, postData.content, postData.catId)
+            }}
+          />
+        }
       </DesktopBody>
-
     )
-
   } else {
     return (
       <MobileBody>
         {/* CREATE FORM */}
-        {createFormVisible ? <CategoryForm btnText="Create" name="" desc="" submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCreateForm} /> : null}
+        {createCategoryFormVisible ? <CategoryForm
+          btnText="Create"
+          name=""
+          desc=""
+          submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCategoryCreateForm} /> : null}
 
         {/* CREATE BUTTON */}
         {(!isLoading && isAdmin && user) &&
-          <CreateBtn isDesktop={false} toggleCreateForm={toggleCreateForm} />}
-        <TextArea title="Welcome to my Blog" content="A collection of articles for techies, fitness junkies and more!" />
+          <CreateBtn
+            isDesktop={false}
+            toggleCategoryCreateForm={toggleCategoryCreateForm} />}
+        <TextArea
+          title="Welcome to my Blog"
+          content="A collection of articles for techies, fitness junkies and more!" />
 
         {/* FALLBACK MESSAGE */}
         {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :

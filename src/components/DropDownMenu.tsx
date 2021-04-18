@@ -73,7 +73,6 @@ const DropDownMenu: FunctionComponent<DropDownMenuInterface> = () => {
         isOpen ? setIsOpen(false) : setIsOpen(true);
     }
 
-
     return (
         <Body>
             {(user && !isLoading) && (

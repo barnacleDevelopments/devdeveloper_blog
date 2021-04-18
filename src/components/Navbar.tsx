@@ -6,7 +6,6 @@ FILE: Navbar.tsx
 
 import React, { useContext } from "react";
 import styled from "@emotion/styled";
-import Link from "next/link";
 
 // FONT AWESOME 
 import { faArrowLeft, faSign } from '@fortawesome/free-solid-svg-icons'
@@ -18,6 +17,7 @@ import useAuth from "../hooks/useAuth";
 
 // CONTEXTS
 import NavContext from "../contexts/NavContext";
+import { useRouter } from "next/router";
 
 const Navbody = styled("nav")`
     background-color: #314455;
@@ -51,13 +51,12 @@ const Logo = styled("img")`
 
 const Navbar: React.FunctionComponent = () => {
     const { user, isLoading } = useAuth();
-    const { previousURL, backBtnStatus, updateNavParams } = useContext(NavContext);
+    const router = useRouter();
+    const { backBtnStatus } = useContext(NavContext);
     return (
         <Navbody>
             {backBtnStatus && (
-                <Link href={previousURL}>
-                    <Icon onClick={updateNavParams} icon={faArrowLeft} />
-                </Link>
+                <Icon onClick={router.back} icon={faArrowLeft} />
             )}
 
             <Logo src="../img/logo_3.png" />
