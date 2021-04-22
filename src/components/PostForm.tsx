@@ -24,6 +24,11 @@ let newPostSchema: any = yup.object().shape({
     catId: yup.string().required()
 });
 
+let updatePostSchema: any = yup.object().shape({
+    title: yup.string().required().min(5).max(15),
+    content: yup.string().required().min(50),
+})
+
 interface PostFormComponent {
     title?: string,
     content?: string,
@@ -120,12 +125,11 @@ const ButtonContainer = styled("div")`
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, title, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<PostInputData>({
-        resolver: yupResolver(newPostSchema)
+        resolver: includesCategoryPicker ? yupResolver(newPostSchema) : yupResolver(updatePostSchema)
     });
 
     const handlePostSubmit = (data: any) => {
         submitFunc(data)
-        console.log(data.catId)
         cancelFunc();
     }
 
@@ -171,7 +175,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, ti
                 {/* FORM BUTTONS */}
                 <ButtonContainer>
                     <CancelBtn onClick={cancelFunc} >Cancle</CancelBtn>
-                    <ConfirmBtn type="submit">{btnText}</ConfirmBtn>
+                    <ConfirmBtn type="submit" >{btnText}</ConfirmBtn>
                 </ButtonContainer>
             </Form>
         </Body>

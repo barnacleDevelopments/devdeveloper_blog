@@ -54,7 +54,7 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
   const { deleteCategory, updateCategory, addCategory, categories } = useCategories(categoriesList);
 
   // post hook
-  const { addPost, posts } = usePosts(postList);
+  const { addPost, posts, updatePost, deletePost } = usePosts(postList);
 
   // filter state
   const { updatedPostList, addActiveCategory, removeActiveCategory } = useFilterBar(posts);
@@ -112,12 +112,11 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
                   <PostSnip
                     key={post._id}
                     postId={post._id}
+                    catId={post.catId}
                     title={post.title}
                     content={post.content}
-                  // cancelFunc={toggleForm}
-                  // submitFunc={(postData: PostFormData) => {
-                  //   updatePost(post._id, postData.title, postData.content)
-                  // }} 
+                    updatePost={updatePost}
+                    deletePost={deletePost}
                   />
                 )
               })}
@@ -161,21 +160,22 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
   } else {
     return (
       <MobileBody>
-        {/* CREATE FORM */}
-        {createCategoryFormVisible ? <CategoryForm
-          btnText="Create"
-          name=""
-          desc=""
-          submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCategoryCreateForm} /> : null}
+        <TextArea
+          title="Welcome to my Blog"
+          content="A collection of articles for techies, fitness junkies and more!" />
 
         {/* CREATE BUTTON */}
         {(!isLoading && isAdmin && user) &&
           <CreateBtn
             isDesktop={false}
             toggleCategoryCreateForm={toggleCategoryCreateForm} />}
-        <TextArea
-          title="Welcome to my Blog"
-          content="A collection of articles for techies, fitness junkies and more!" />
+
+        {/* CREATE CATEGORY FORM */}
+        {createCategoryFormVisible ? <CategoryForm
+          btnText="Create"
+          name=""
+          desc=""
+          submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCategoryCreateForm} /> : null}
 
         {/* FALLBACK MESSAGE */}
         {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
