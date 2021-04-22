@@ -5,7 +5,7 @@ FILE: PostSnip.tsx
 */
 
 // DEPENDENCIES
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 
 import { stripHtml } from "string-strip-html";
 
@@ -17,7 +17,7 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 
 // COMPONENTS
 import ConfirmForm from "./ConfirmForm";
-import PostContext from "../contexts/PostContext";
+
 import PostForm from "./PostForm";
 import useAuth from "../hooks/useAuth";
 
@@ -29,8 +29,11 @@ import { useRouter } from "next/router";
 // INTERFACES
 interface PostData {
     postId: string,
+    catId: string,
     title: string,
-    content: string
+    content: string,
+    updatePost(postId: string, title: string, content: string): void,
+    deletePost(postId: string, catId: string | string[]): void
 }
 
 const Body = styled("div")`
@@ -79,19 +82,16 @@ const PostSnipContent = styled("div")`
     }
 `;
 
-const PostSnip: React.FunctionComponent<PostData> = ({ postId, title, content }) => {
+const PostSnip: React.FunctionComponent<PostData> = ({ postId, catId, title, content, updatePost, deletePost }) => {
     // edit form visibility state 
     const [editFormVisible, setEditFormVisible] = useState<boolean>(false);
     // delete form visibility state 
     const [deleteFormVisible, setDeleteFormVisible] = useState<boolean>(false);
-    // post context reference
-    const { deletePost, updatePost } = useContext(PostContext);
+
     // auth context 
     const { isAdmin, user } = useAuth();
     // query parameters 
     const router = useRouter();
-    const { catId } = router.query
-
     // toggle delete form visibility
     const toggleDeleteForm = () => {
         deleteFormVisible ?

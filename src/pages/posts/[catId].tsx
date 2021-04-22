@@ -20,7 +20,6 @@ import PostForm from "../../components/PostForm";
 import useAuth from "../../hooks/useAuth";
 import Category from "../../controllers/category_controller";
 import usePosts from "../../hooks/usePosts";
-import PostContext from "../../contexts/PostContext";
 
 const Body = styled("section")`
 
@@ -30,7 +29,7 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
     const { catId } = router.query
     const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
     const { user, isAdmin } = useAuth();
-    const postContextData = usePosts(postList);
+    const { addPost, deletePost, updatePost, posts } = usePosts(postList);
 
     const togglePostCreateForm = () => {
         createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true);
@@ -38,42 +37,43 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
 
     return (
         <Body>
-            <PostContext.Provider value={postContextData}>
-                {/* CREATE FORM */}
-                {createFormVisible && (
-                    <PostForm
-                        title=""
-                        content=""
-                        includesCategoryPicker={false}
-                        btnText="Create"
-                        cancelFunc={togglePostCreateForm}
-                        submitFunc={(postData: PostFormData) => {
-                            if (catId !== undefined)
-                                postContextData.addPost(postData.title, postData.content, catId)
-                        }} />
-                )}
+            {/* CREATE FORM */}
+            {createFormVisible && (
+                <PostForm
+                    title=""
+                    content=""
+                    includesCategoryPicker={false}
+                    btnText="Create"
+                    cancelFunc={togglePostCreateForm}
+                    submitFunc={(postData: PostFormData) => {
+                        if (catId !== undefined)
+                            addPost(postData.title, postData.content, catId)
+                    }} />
+            )}
 
-                {/* if admin is logged in display create btn */}
-                {(user && isAdmin) && (
-                    <CreateBtn
-                        isDesktop={false}
-                        togglePostCreateForm={togglePostCreateForm}
-                    />
-                )}
+            {/* if admin is logged in display create btn */}
+            {(user && isAdmin) && (
+                <CreateBtn
+                    isDesktop={false}
+                    togglePostCreateForm={togglePostCreateForm}
+                />
+            )}
 
-                {/* if posts exists display them */}
-                {postContextData.posts.length <= 0 ? <PostSnipFallback /> :
-                    postContextData.posts.map(post => {
-                        return (
-                            <PostSnip
-                                key={post._id}
-                                postId={post._id}
-                                title={post.title}
-                                content={post.content}
-                            />
-                        );
-                    })}
-            </PostContext.Provider>
+            {/* if posts exists display them */}
+            {posts.length <= 0 ? <PostSnipFallback /> :
+                posts.map(post => {
+                    return (
+                        <PostSnip
+                            key={post._id}
+                            postId={post._id}
+                            catId={post.catId}
+                            title={post.title}
+                            content={post.content}
+                            updatePost={updatePost}
+                            deletePost={deletePost}
+                        />
+                    );
+                })}
         </Body>
     )
 }

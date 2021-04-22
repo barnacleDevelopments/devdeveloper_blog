@@ -35,7 +35,7 @@ const useFilterBar = (postList: PostData[]) => {
         if (activeCategories.length === 0) {
             setUpdatedPostList(postList);
         }
-    }, [activeCategories])
+    }, [activeCategories, postList])
 
     return {
         activeCategories,
