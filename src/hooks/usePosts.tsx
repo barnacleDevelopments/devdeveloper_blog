@@ -8,16 +8,19 @@ FILE: usePosts.tsx
 import { useState, useContext } from "react";
 import Post from "../controllers/post_controller";
 import Category from "../controllers/category_controller";
-import { RessourceId } from "../customTypings/global_types";
 
 // CONTEXTS
 import ErrorContext from "../contexts/ErrorContext";
 
+/**
+ * 
+ * @param initialPosts 
+ * @returns Post management utilities.
+ * @description Post hook to to manage post state and make requests to controlers.
+ */
 const usePosts = (initialPosts: any) => {
-    // get error context
-    const { addError } = useContext(ErrorContext)
-    // post state
     const [posts, setPosts] = useState<PostData[]>(initialPosts);
+    const { addError } = useContext(ErrorContext)
 
     /**
      * 
@@ -28,7 +31,7 @@ const usePosts = (initialPosts: any) => {
      */
     const addPost = (title: string, content: string, catId: RessourceId) => {
         let adjustedPostsList = posts;
-        Post.prototype.create(title, content, catId)
+        Post.create(title, content, catId)
             .then((data) => {
                 adjustedPostsList = [data, ...adjustedPostsList];
                 setPosts(adjustedPostsList);
@@ -41,7 +44,7 @@ const usePosts = (initialPosts: any) => {
     * @description get all posts associated with a category.
     */
     const getCategoryPosts = (catId: RessourceId) => {
-        Category.prototype.getPosts(catId)
+        Category.getPosts(catId)
             .then(data => setPosts(data))
             .catch(err => addError(err.message))
     }
@@ -54,18 +57,13 @@ const usePosts = (initialPosts: any) => {
     * @description update existing post.
     */
     const updatePost = (postId: RessourceId, title: string, content: string) => {
-        console.log("fff")
-        Post.prototype.update(postId, {
+        Post.update(postId, {
             title: title,
             content: content,
         }).then((data) => {
-            let newPostList: PostData[] = posts.map(post => {
-                if (post._id === data._id) {
-                    return data;
-                } else {
-                    return post;
-                }
-            });
+            let newPostList: PostData[] = posts.map(post => (
+                post._id === data._id ? data : post
+            ));
             setPosts(newPostList);
         }).catch(err => addError(err.message));
     }
@@ -77,12 +75,12 @@ const usePosts = (initialPosts: any) => {
     * @description delete post.
     */
     const deletePost = (postId: RessourceId, catId: any) => {
-        Post.prototype.delete(postId, catId)
+        Post.delete(postId, catId)
             .then(() => {
-                const newCatList = posts.filter(post =>
+                const newPostList: PostData[] = posts.filter(post => (
                     post._id === postId ? false : true
-                );
-                setPosts(newCatList);
+                ));
+                setPosts(newPostList);
             }).catch(err => addError(err.message))
     }
 

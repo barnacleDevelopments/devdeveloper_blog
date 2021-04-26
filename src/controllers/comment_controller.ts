@@ -4,14 +4,12 @@
 // FILE: comment_controller.ts
 // */
 
-import { RessourceId } from "../customTypings/global_types";
-
 const LOCAL_URL = "http://localhost:3000";
 
 class Comment {
     constructor() { }
 
-    async getFromPost(postId: RessourceId): Promise<CommentComponentData[]> {
+    public static async getFromPost(postId: RessourceId): Promise<CommentComponentData[]> {
         let recievedData: CommentComponentData[] = [
             {
                 _id: "",
@@ -37,7 +35,7 @@ class Comment {
         return recievedData;
     }
 
-    async create(postId: RessourceId, newComment: NewCommentData): Promise<CommentComponentData> {
+    public static async create(postId: RessourceId, newComment: CommentFormData): Promise<CommentComponentData> {
         let recievedData: CommentComponentData = {
             _id: "",
             content: "",
@@ -63,7 +61,15 @@ class Comment {
         return recievedData;
     }
 
-    async update(comId: RessourceId, newComment: NewCommentData) {
+    public static async update(comId: RessourceId, newComment: CommentFormData): Promise<CommentComponentData> {
+
+        let recievedData: CommentComponentData = {
+            _id: "",
+            content: "",
+            date: "",
+            username: "",
+        }
+
         await fetch(`${LOCAL_URL}/categories/update/${comId}`, {
             method: "PUT",
             mode: "cors",
@@ -73,10 +79,20 @@ class Comment {
             },
             body: JSON.stringify(newComment)
         })
+            .then(response => response.json())
+            .then(data => recievedData = data);
+
+        return recievedData;
     }
 
-    async delete(commentId: RessourceId, postId: RessourceId): Promise<BasicResponse> {
-        let recievedData: BasicResponse = { status: "pending" }
+    public static async delete(commentId: RessourceId, postId: RessourceId): Promise<CommentComponentData> {
+        let recievedData: CommentComponentData = {
+            _id: "",
+            content: "",
+            date: "",
+            username: "",
+        }
+
         await fetch(`${LOCAL_URL}/api/comments/delete/${postId}/${commentId}`, {
             method: "DELETE",
             mode: "cors",
@@ -86,12 +102,10 @@ class Comment {
             }
         })
             .then(response => response.json())
-            .then(data => {
-                recievedData = data;
-            })
+            .then(data => recievedData = data);
+
         return recievedData;
     }
-
 }
 
 export default Comment;

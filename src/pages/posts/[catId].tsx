@@ -82,7 +82,7 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
 export async function getServerSideProps(context: any) {
     let catId = context.params.catId
     // retrieve all categories from api
-    const postList = await Category.prototype.getPosts(catId);
+    const postList = await Category.getPosts(catId);
 
     // pass them as props
     return {

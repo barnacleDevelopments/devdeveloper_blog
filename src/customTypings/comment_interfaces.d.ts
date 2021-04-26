@@ -5,14 +5,14 @@ FILE: comment_interfaces.ts
 */
 
 // INTERFACES
-interface CommentComponentData {
+type CommentComponentData = {
     _id: string,
     content: string,
     date: string,
     username: string,
 }
 
-interface NewCommentData {
+type NewCommentData = {
     _id: string,
     content: string,
     date: string,
@@ -20,7 +20,13 @@ interface NewCommentData {
     userId: string
 }
 
-interface CommentFormData {
+type CommentFormData = {
     content: string,
     date: string
+}
+
+type CategoryInputData = {
+    [index: string]: string,
+    name: string,
+    desc: string
 }

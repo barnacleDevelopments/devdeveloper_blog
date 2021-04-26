@@ -3,14 +3,13 @@ AUTHOR: Devin Davis
 DATE: January 3rd, 2021
 FILE: category_controller.ts
 */
-import { RessourceId } from "../customTypings/global_types";
 
 const LOCAL_URL = "http://localhost:3000";
 
 class Category {
     constructor() { }
 
-    async getAll(): Promise<CategoryData[]> {
+    public static async getAll(): Promise<CategoryData[]> {
         let recievedData: CategoryData[] = [{
             _id: "",
             name: "",
@@ -36,7 +35,7 @@ class Category {
         return recievedData
     }
 
-    async getOne(catId: RessourceId): Promise<CategoryData> {
+    public static async getOne(catId: RessourceId): Promise<CategoryData> {
         let recievedData: CategoryData = {
             _id: "",
             name: "",
@@ -61,7 +60,7 @@ class Category {
         return recievedData;
     }
 
-    async getPosts(catId: RessourceId): Promise<PostData[]> {
+    public static async getPosts(catId: RessourceId): Promise<PostData[]> {
         let recievedData: PostData[] = [{
             _id: "",
             title: "",
@@ -85,7 +84,7 @@ class Category {
         return recievedData
     }
 
-    async create(name: string, desc: string): Promise<CategoryData> {
+    public static async create(name: string, desc: string): Promise<CategoryData> {
         let recievedData: CategoryData = {
             _id: "",
             name: "",
@@ -112,7 +111,7 @@ class Category {
         return recievedData;
     }
 
-    async update(catId: RessourceId, name: string, desc: string): Promise<CategoryData> {
+    public static async update(catId: RessourceId, name: string, desc: string): Promise<CategoryData> {
         let recievedData: CategoryData = {
             _id: "",
             name: "",
@@ -137,7 +136,7 @@ class Category {
         return recievedData;
     }
 
-    async delete(catId: RessourceId) {
+    public static async delete(catId: RessourceId) {
         await fetch(`${LOCAL_URL}/api/categories/delete/${catId}`, {
             method: "DELETE",
             mode: "cors",

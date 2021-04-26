@@ -4,14 +4,12 @@ DATE: January 3rd, 2021
 FILE: post_controller.ts
 */
 
-import { RessourceId } from "../customTypings/global_types";
-
 const LOCAL_URL = "http://localhost:3000";
 
 class Post {
     constructor() { }
 
-    async getAll(): Promise<PostData[]> {
+    public static async getAll(): Promise<PostData[]> {
         let recievedData: PostData[] = [{
             _id: "",
             title: "",
@@ -32,7 +30,7 @@ class Post {
 
         return recievedData
     }
-    async getOne(postId: RessourceId): Promise<PostData> {
+    public static async getOne(postId: RessourceId): Promise<PostData> {
         let recievedData: PostData = {
             _id: "",
             title: "",
@@ -53,7 +51,7 @@ class Post {
         return recievedData
     }
 
-    async create(title: string, content: string, catId: RessourceId): Promise<PostData> {
+    public static async create(title: string, content: string, catId: RessourceId): Promise<PostData> {
         let recievedData: PostData = {
             _id: "",
             title: "",
@@ -77,7 +75,7 @@ class Post {
         return recievedData;
     }
 
-    async update(postId: RessourceId, newPost: EditPostData): Promise<PostData> {
+    public static async update(postId: RessourceId, newPost: EditPostData): Promise<PostData> {
         let recievedData: PostData = {
             _id: "",
             title: "",
@@ -101,7 +99,7 @@ class Post {
         return recievedData;
     }
 
-    async delete(postId: RessourceId, catId: any): Promise<BasicResponse> {
+    public static async delete(postId: RessourceId, catId: any): Promise<BasicResponse> {
         let response: BasicResponse = {
             status: "pending",
             message: ""

@@ -4,10 +4,12 @@ DATE: January 31st, 2021
 FILE: useError.tsx
 */
 
-
 import { useEffect, useState } from "react";
 
-
+/**
+ * @description Holds current state error list.
+ * @returns Current error and add error function.
+ */
 const useError = () => {
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const [currentError, setCurrentError] = useState<string>("");

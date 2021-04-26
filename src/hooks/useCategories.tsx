@@ -6,11 +6,17 @@ FILE: useCategories.tsx
 
 import { useState, useContext } from "react";
 import Category from "../controllers/category_controller";
-import { RessourceId } from "../customTypings/global_types";
 
 // CONTEXTS
 import ErrorContext from "../contexts/ErrorContext";
 
+
+/**
+ * 
+ * @param initialCategories 
+ * @returns Category management utilities.
+ * @description Category hook to to manage category state and make requests to controllers.
+ */
 const useCategories = (initialCategories: any) => {
     const [categories, setCategories] = useState<CategoryData[]>(initialCategories);
     const { addError } = useContext(ErrorContext);
@@ -23,37 +29,12 @@ const useCategories = (initialCategories: any) => {
      */
     const addCategory = async (name: string, desc: string) => {
         let adjustedCatList = categories;
-        try {
-            await Category.prototype.create(name, desc)
-                .then(data => {
-                    adjustedCatList = [data, ...adjustedCatList]
-                    setCategories(adjustedCatList);
-                })
-                .catch(err => addError(err.message))
-
-        } catch (error) {
-            console.log(error)
-            addError("Failed to authorize category creation. Try login in again.")
-        }
-    }
-
-    /**
-     * 
-     * @param catId Category ID.
-     * @description Makes a DELETE request to remove a category directed at the devdevloper_blog api.
-     */
-    const deleteCategory = async (catId: RessourceId) => {
-        try {
-            await Category.prototype.delete(catId)
-                .then(() => {
-                    let newCatList = categories.filter(category => category._id === catId ? false : true);
-                    setCategories(newCatList);
-                }).catch(err => addError(err.message))
-
-        } catch (error) {
-            console.log(error)
-            addError("Failed to authorize category deletion. Try login in again.")
-        }
+        await Category.create(name, desc)
+            .then(data => {
+                adjustedCatList = [data, ...adjustedCatList]
+                setCategories(adjustedCatList);
+            })
+            .catch(err => addError(err.message))
     }
 
     /**
@@ -64,23 +45,28 @@ const useCategories = (initialCategories: any) => {
      * @description Makes a PUT request containing updates for a category entry directed at the devdevloper_blog api.
      */
     const updateCategory = async (catId: RessourceId, name: string, desc: string) => {
-        try {
-            await Category.prototype.update(catId, name, desc)
-                .then((data) => {
-                    let newCategories = categories.map(category => {
-                        if (category._id === data._id) {
-                            return data;
-                        } else {
-                            return category;
-                        }
-                    })
-                    setCategories(newCategories);
-                }).catch(err => addError(err.message));
+        await Category.update(catId, name, desc)
+            .then((updatedCategory) => {
+                let newCategories = categories.map(category => (
+                    category._id === updatedCategory._id ? updatedCategory : category
+                ))
+                setCategories(newCategories);
+            }).catch(err => addError(err.message));
+    }
 
-        } catch (error) {
-            console.log(error)
-            addError("Failed to authorize category update. Try login in again.")
-        }
+    /**
+     * 
+     * @param catId Category ID.
+     * @description Makes a DELETE request to remove a category directed at the devdevloper_blog api.
+     */
+    const deleteCategory = async (catId: RessourceId) => {
+        await Category.delete(catId)
+            .then(() => {
+                let newCatList = categories.filter(category => (
+                    category._id === catId ? false : true
+                ))
+                setCategories(newCatList);
+            }).catch(err => addError(err.message))
     }
 
     return {

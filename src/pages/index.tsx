@@ -171,19 +171,29 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
             toggleCategoryCreateForm={toggleCategoryCreateForm} />}
 
         {/* CREATE CATEGORY FORM */}
-        {createCategoryFormVisible ? <CategoryForm
-          btnText="Create"
-          name=""
-          desc=""
-          submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCategoryCreateForm} /> : null}
+        {createCategoryFormVisible ?
+          <CategoryForm
+            btnText="Create"
+            name=""
+            desc=""
+            submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCategoryCreateForm} /> : null}
 
         {/* FALLBACK MESSAGE */}
-        {categories.length === 0 ? <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
+        {categories.length === 0 ?
+          <FallbackMessage message="Failed to retrieve categories... Try refreshing the page." /> :
 
           /* DISPLAY CATEGORY CARDS*/
           categories.map((cat) => {
             let postCount = cat.posts.length;
-            return <Card key={cat._id} deleteCategory={deleteCategory} updateCategory={updateCategory} count={postCount} catId={cat._id} name={cat.name} desc={cat.desc} img="/" />
+            return <Card
+              key={cat._id}
+              deleteCategory={deleteCategory}
+              updateCategory={updateCategory}
+              count={postCount}
+              catId={cat._id}
+              name={cat.name}
+              desc={cat.desc}
+              img="/" />
           })}
       </MobileBody>
     )
@@ -193,8 +203,8 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
 export async function getServerSideProps() {
 
   // retrieve all categories from api
-  const categoriesList = await Category.prototype.getAll();
-  const postList = await Post.prototype.getAll();
+  const categoriesList = await Category.getAll();
+  const postList = await Post.getAll();
 
   return {
     props: {

@@ -4,7 +4,7 @@ DATE: January 1st, 2021
 FILE: Navbar.tsx
 */
 
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
 // FONT AWESOME 
@@ -16,7 +16,6 @@ import DropDownMenu from "./DropDownMenu";
 import useAuth from "../hooks/useAuth";
 
 // CONTEXTS
-import NavContext from "../contexts/NavContext";
 import { useRouter } from "next/router";
 
 const Navbody = styled("nav")`
@@ -52,7 +51,18 @@ const Logo = styled("img")`
 const Navbar: React.FunctionComponent = () => {
     const { user, isLoading } = useAuth();
     const router = useRouter();
-    const { backBtnStatus } = useContext(NavContext);
+    const [backBtnStatus, setBackButtonStatus] = useState(false);
+
+    const { pathname } = useRouter();
+
+    useEffect(() => {
+        if (pathname === "/") {
+            setBackButtonStatus(false);
+        } else {
+            setBackButtonStatus(true);
+        }
+    });
+
     return (
         <Navbody>
             {backBtnStatus && (
