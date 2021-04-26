@@ -24,7 +24,7 @@ import usePosts from "../../hooks/usePosts";
 const Body = styled("section")`
 
 `;
-const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const PostsView = ({ postList, catTitle }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const router = useRouter();
     const { catId } = router.query
     const [createFormVisible, setCreateFormVisible] = useState<Boolean>(false);
@@ -39,7 +39,7 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
     return (
         <Body>
             {/* CATEGORY NAME */}
-            <Title title="Web Development" />
+            <Title title={catTitle} />
             {/* CREATE FORM */}
             {createFormVisible && (
                 <PostForm
@@ -83,12 +83,15 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
 
 export async function getServerSideProps(context: any) {
     let catId = context.params.catId
+    console.log(catId)
     // retrieve all categories from api
     const postList = await Category.getPosts(catId);
+    const category = await Category.getOne(catId);
 
     // pass them as props
     return {
         props: {
+            catTitle: category.name,
             postList
         }
     }
