@@ -11,7 +11,7 @@ import { InferGetServerSidePropsType } from 'next'
 
 // COMPONENTS
 import PostSnip from "../../components/PostSnip"
-// import Title from "./Title";
+import Title from "../../components/Title";
 import PostSnipFallback from "../../components/PostSnipFallback";
 import CreateBtn from "../../components/CreateBtn";
 import PostForm from "../../components/PostForm";
@@ -32,11 +32,14 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
     const { addPost, deletePost, updatePost, posts } = usePosts(postList);
 
     const togglePostCreateForm = () => {
+        console.log("fff")
         createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true);
     }
 
     return (
         <Body>
+            {/* CATEGORY NAME */}
+            <Title title="Web Development" />
             {/* CREATE FORM */}
             {createFormVisible && (
                 <PostForm
@@ -78,7 +81,6 @@ const PostsView = ({ postList }: InferGetServerSidePropsType<typeof getServerSid
     )
 }
 
-
 export async function getServerSideProps(context: any) {
     let catId = context.params.catId
     // retrieve all categories from api
@@ -91,22 +93,5 @@ export async function getServerSideProps(context: any) {
         }
     }
 }
-
-
-// export async function getStaticPaths() {
-//     // get all category path ids
-//     const paths = await Category.prototype.getAll()
-//         .then(categories => categories.map((category: { _id: any; }) => {
-//             return { params: { catId: category._id } }
-//         }))
-
-//     // return possible path ids
-//     return {
-//         paths: paths,
-//         fallback: false
-//     }
-
-// }
-
 
 export default PostsView;

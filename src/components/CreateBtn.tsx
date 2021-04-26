@@ -177,16 +177,12 @@ const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCa
     } else {
         return (
             <Body>
-                <Button onClick={toggleCategoryCreateForm}>
+                <Button onClick={togglePostCreateForm}>
                     <Icon icon={faPlus} />
                 </Button>
             </Body>
-
         )
     }
-
-
-
 }
 
 export default CreateBtn;
