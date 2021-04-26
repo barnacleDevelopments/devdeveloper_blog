@@ -10,7 +10,7 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 
 // CONTROLLERS
-import Comment from "../../../controllers/comment_controler";
+import Comment from "../../../controllers/comment_controller";
 import Post from "../../../controllers/post_controller";
 
 //COMPONENTS
@@ -22,6 +22,7 @@ import CommentForm from "../../../components/CommentForm";
 // HOOKS
 import useAuth from "../../../hooks/useAuth";
 import { useRouter } from "next/router";
+import useComments from "../../../hooks/useComments";
 
 // INTERFACES 
 interface PostView {
@@ -62,72 +63,40 @@ const Fallback = styled("div")`
 `;
 
 const PostView: React.FunctionComponent<PostView> = ({ post }) => {
-    // Retrieve post ID from url
-    const Router = useRouter();
-    const { postId } = Router.query
-
     // get autheticated user
     const { user, isLoading } = useAuth();
-
-    // initialize comment state
-    const [comments, setComments] = useState<CommentComponentData[]>([]);
-
-    // retrieve comments from a post and add them to state.
-    useEffect(() => {
-        if (postId !== undefined)
-            Comment.prototype.getFromPost(postId)
-                .then(comments => setComments(comments))
-    }, [])
-
-    /**
-     * 
-     * @param comment comment content.
-     * @description Creates new comments associated with a user and post.
-     */
-    const createComment = async (comment: NewCommentData) => {
-        if (postId !== undefined)
-            Comment.prototype.create(postId, comment)
-                .then(data => {
-                    let newCommentList: CommentComponentData[] = comments
-                    setComments([data, ...newCommentList]);
-                })
-    }
-
+    const { createComment, deleteComment, comments } = useComments(post._id);
+    console.log(comments)
     return (
         <Body>
-            {
-                post &&
+            {post &&
                 <PostBody
                     title={post.title}
-                    content={post.content} />
-            }
+                    content={post.content} />}
 
             <Title title="COMMENTS" />
 
-            {
-                (user && !isLoading) && <CommentForm
-                    createComment={createComment}
-                    username={user.name}
-                />
-            }
+            {(user && !isLoading) && <CommentForm
+                createComment={createComment}
+                username={user.name}
+            />}
 
             {(!user && !isLoading) && <Link href="/login">Login</Link>}
 
-            {
-                comments.length > 0 ?
-                    comments.map((comment) => {
-                        return <CommentBody
-                            username={comment.username}
-                            key={comment._id}
-                            commentId={comment._id}
-                            content={comment.content}
-                            date={comment.date} />
-                    })
-                    :
-                    <Fallback>
-                        <h2>No comments... <br />be the first!</h2>
-                    </Fallback>
-            }
+            {comments?.length ?? 0 > 0 ?
+                comments.map((comment) => {
+                    return <CommentBody
+                        username={comment.username}
+                        key={comment._id}
+                        commentId={comment._id}
+                        content={comment.content}
+                        date={comment.date}
+                        deleteComment={deleteComment} />
+                })
+                :
+                <Fallback>
+                    <h2>No comments... <br />be the first!</h2>
+                </Fallback>}
         </Body>
     )
 }
@@ -135,8 +104,7 @@ const PostView: React.FunctionComponent<PostView> = ({ post }) => {
 export async function getServerSideProps(context: any) {
     // get post ID parameter
     const postId = context.params.postId
-    console.log(postId)
-    const post = await Post.prototype.getOne(postId)
+    const post = await Post.getOne(postId)
         .then((data: PostData) => data)
 
     return {
@@ -145,21 +113,5 @@ export async function getServerSideProps(context: any) {
         }, // will be passed to the page component as props
     }
 }
-
-// export async function getStaticPaths() {
-//     // Get the paths we want to pre-render based on posts
-//     const paths = await Post.prototype.getAll()
-//         .then(posts => posts.map(post => ({
-//             params: {
-//                 postId: post._id,
-//             }
-//         })));
-
-//     // We'll pre-render only these paths at build time.
-//     return {
-//         paths,
-//         fallback: false
-//     }
-// }
 
 export default PostView;

@@ -15,15 +15,11 @@ interface CategoryFormComponent {
     name: string,
     desc: string,
     btnText: string,
-    submitFunc(data: NewCategoryData): void
+    submitFunc(data: CategoryFormData): void
     cancelFunc(): void
 }
 
-type CategoryInputData = {
-    [index: string]: string,
-    name: string,
-    desc: string
-}
+
 
 // STATELESS COMPONENTS
 import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";

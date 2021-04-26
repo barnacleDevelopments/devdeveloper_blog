@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 
 // INTERFACES
 interface CommentFormComponent {
-    createComment(comment: CommentFormData): void,
+    createComment(postId: RessourceId, comment: CommentFormData): void,
     username?: any,
 }
 
@@ -80,7 +80,6 @@ const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComm
     const router = useRouter();
     const { postId } = router.query
 
-
     const handleFormData = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (!isLoading && user) {
             let comment = {
@@ -101,7 +100,7 @@ const CommentForm: React.FunctionComponent<CommentFormComponent> = ({ createComm
                 <p>{ }</p>
             </Content>
             <div>
-                <a onClick={() => createComment(commentData)}>ADD</a>
+                <a onClick={() => createComment(postId ?? "", commentData)}>ADD</a>
             </div>
         </Body>
     )

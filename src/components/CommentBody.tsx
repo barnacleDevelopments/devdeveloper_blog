@@ -5,27 +5,24 @@ FILE: Comment.tsx
 */
 
 // DEPENDENCIES
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
-
-// CONTROLLERS
-import Comment from "../controllers/comment_controler";
 
 // HOOKS
 import useAuth from "../hooks/useAuth";
-import { useRouter } from "next/router";
 
 // FONT AWESOME 
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-
+import { useRouter } from "next/router";
 
 // INTERFACES 
 interface CommentComponent {
     commentId: string,
     content: string,
     date: string,
-    username: string
+    username: string,
+    deleteComment(commendId: RessourceId, postId: RessourceId): void
 }
 
 // STYLES
@@ -102,44 +99,26 @@ const Content = styled("div")`
 `;
 
 // COMPONENT
-const CommentBody: React.FunctionComponent<CommentComponent> = ({ commentId, content, date, username }) => {
-    const [isDeleted, setIsDeleted] = useState(false)
+const CommentBody: React.FunctionComponent<CommentComponent> = ({ commentId, content, date, username, deleteComment }) => {
     const { isAdmin, isLoading, user } = useAuth();
+
     const router = useRouter();
-    const { postId } = router.query
-    // delete comment
-    const deleteComment = async () => {
-        try {
-            if (postId !== undefined)
-                Comment.prototype.delete(commentId, postId)
-                    .then((res) => {
-                        res.status === "success" ? setIsDeleted(true) : setIsDeleted(false)
-                    })
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    const { postId } = router.query;
 
-    // display comment if not deleted
-    if (isDeleted) {
-        return null;
-    } else {
-        return (
-            <Body>
-                <h1>{username}</h1>
-                <Content>
-                    <p>{content}</p>
-                    <p>{date}</p>
-                </Content>
-                <div>
-                    {(user && isAdmin && !isLoading) &&
-                        <a onClick={deleteComment}><Icon icon={faTrash} /></a>}
-                </div>
-            </Body>
-        )
-
-    }
-
+    return (
+        <Body>
+            <h1>{username}</h1>
+            <Content>
+                <p>{content}</p>
+                <p>{date}</p>
+            </Content>
+            <div>
+                {(user && isAdmin && !isLoading) &&
+                    <a onClick={() => deleteComment(commentId, postId ?? "")
+                    }><Icon icon={faTrash} /></a>}
+            </div>
+        </Body>
+    )
 }
 
 export default CommentBody;

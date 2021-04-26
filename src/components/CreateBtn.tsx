@@ -118,7 +118,6 @@ const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCa
 
     const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
 
-
     const [TopDrawerStyle, setTopDrawerStyle] = useState({
         bottom: "10px",
         height: "34px",
@@ -177,16 +176,12 @@ const CreateBtn: React.FunctionComponent<CreateBtnData> = ({ isDesktop, toggleCa
     } else {
         return (
             <Body>
-                <Button onClick={toggleCategoryCreateForm}>
+                <Button onClick={togglePostCreateForm || toggleCategoryCreateForm}>
                     <Icon icon={faPlus} />
                 </Button>
             </Body>
-
         )
     }
-
-
-
 }
 
 export default CreateBtn;
