@@ -5,7 +5,7 @@ FILE: TextProcessor.tsx
 */
 
 // DEPENDENCIES
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -105,12 +105,6 @@ const Form = styled("form")`
         border-radius: 4px;
         height: 100%;
     }
-
-    fieldset {
-        padding: 14px;
-        width: 100%;
-        height: 100%;
-    }
 `;
 
 
@@ -119,65 +113,148 @@ const ButtonContainer = styled("div")`
     padding: 10px 0px 10px;
     background-color: #314455; 
     width: 100%;
+    position: absolute;
+    bottom: 0px;
     padding-right: 14px;
     button {
         float: right;
     }
 `;
 
+const TextInputBody = styled("div")`
+    font-size: 1.3em;
+    height:100%;
+    width: 100%;
+    outline: none;
+    line-height: 1.3em;
+    overflow: scroll;
+    padding: 60px 30px;
+    word-wrap: break-word;
+    h1 {
+        font-size: 2em;
+        line-height: 2em;
+    }
+    h2 {
+        font-size: 1.6em;
+        line-height: 2em;
+    }
+    b {
+        font-weight: 600;
+    }
+    i {
+        font-style: italic;
+    }
+`;
+
 const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, title, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
+    const [isCap, setIsCap] = useState(false);
+    const [controlIsPressed, setControlIsPressed] = useState<boolean>(true);
+    const [textBodyContent, setTextBodyContent] = useState("");
+    const textBody: any = useRef(null);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<PostInputData>({
-        resolver: includesCategoryPicker ? yupResolver(newPostSchema) : yupResolver(updatePostSchema)
-    });
+    const handlePostSubmit = () => {
+        let data = {
+            title: textBody.current.firstElementChild.textContent,
+            content: ""
+        }
 
-    const handlePostSubmit = (data: any) => {
+        textBody.current.removeChild(textBody.current.firstElementChild)
+
+        data.content = textBody.current.innerHTML
+
         submitFunc(data)
         cancelFunc();
     }
+
+    const handleKeyDown = (e: any) => {
+
+        if (e.key === "Control") {
+            setControlIsPressed(true)
+        }
+
+        if (controlIsPressed && e.key === "b") {
+            e.preventDefault();
+            document.execCommand("bold", false)
+        }
+
+        if (controlIsPressed && e.key === "i") {
+            e.preventDefault();
+            document.execCommand("italic", false)
+        }
+
+        if (controlIsPressed && e.key === "u") {
+            e.preventDefault();
+            document.execCommand("underline", false)
+        }
+    }
+
+    const handleKeyUp = (e: any) => {
+        if (e.key === "Control") {
+            setControlIsPressed(false);
+        }
+
+        if (e.getModifierState("CapsLock")) {
+
+            setIsCap(true);
+            console.log(isCap)
+        } else {
+
+            setIsCap(false);
+            console.log(isCap)
+        }
+    }
+
+    const focusTextBody = () => textBody.current.focus()
+
+    useEffect(() => {
+        if (textBody.current.textContent === ("" || " ")) {
+            document.execCommand("removeFormat", false);
+        }
+
+    }, [textBody.current?.textContent]);
 
     return (
         <Body style={{ height: "100%" }}>
             {/* SHADOW OVERLAY */}
             <Shadow onClick={cancelFunc}></Shadow>
             {/* POST FORM */}
-            <Form onSubmit={handleSubmit(handlePostSubmit)} >
-                <fieldset>
-                    {/* TITLE INPUT */}
-                    <input
+            <Form onSubmit={handlePostSubmit} >
+
+                {/* TITLE INPUT */}
+                {/* <input
                         ref={register}
                         name="title"
                         type="text"
                         placeholder={"Post Title..."}
                         defaultValue={title}
-                    />
-                    {/* CONTENT INPUT */}
-                    <textarea
-                        ref={register}
-                        name="content"
-                        placeholder={"Post Content..."}
-                        defaultValue={content}
-                    />
-                    {includesCategoryPicker && (
-                        <select
-                            ref={register}
-                            name="catId"
-                        >
-                            {categoryList?.map(cat => (
-                                <option
-                                    key={cat._id}
-                                    value={cat._id}>{cat.name}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-                </fieldset>
-                {/* FORM ERRORS */}
-                {<FormError>{errors.title && `${errors.title?.message}.`}</FormError>}
-                {<FormError>{errors.content && `${errors.content?.message}.`}</FormError>}
+                    /> */}
 
                 {/* EDIT BAR */}
-                <EditBar />
+                <EditBar isCap={isCap} focusTextBody={focusTextBody} />
+
+                {/* CONTENT INPUT */}
+                <TextInputBody
+                    ref={textBody}
+                    onInput={() => setTextBodyContent(textBody.current.textContent)}
+                    contentEditable="true"
+                    placeholder={"Post Content..."}
+                    defaultValue={content}
+                    onKeyDown={handleKeyDown}
+                    onKeyUp={handleKeyUp}
+                />
+                {includesCategoryPicker && (
+                    <select
+                        name="catId"
+                    >
+                        {categoryList?.map(cat => (
+                            <option
+                                key={cat._id}
+                                value={cat._id}>{cat.name}
+                            </option>
+                        ))}
+                    </select>
+                )}
+
                 {/* FORM BUTTONS */}
                 <ButtonContainer>
                     <ConfirmBtn type="submit" >{btnText}</ConfirmBtn>
