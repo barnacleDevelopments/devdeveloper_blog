@@ -32,7 +32,6 @@ const PostsView = ({ postList, catTitle }: InferGetServerSidePropsType<typeof ge
     const { addPost, deletePost, updatePost, posts } = usePosts(postList);
 
     const togglePostCreateForm = () => {
-        console.log("fff")
         createFormVisible ? setCreateFormVisible(false) : setCreateFormVisible(true);
     }
 
@@ -83,7 +82,7 @@ const PostsView = ({ postList, catTitle }: InferGetServerSidePropsType<typeof ge
 
 export async function getServerSideProps(context: any) {
     let catId = context.params.catId
-    console.log(catId)
+
     // retrieve all categories from api
     const postList = await Category.getPosts(catId);
     const category = await Category.getOne(catId);

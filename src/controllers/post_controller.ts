@@ -96,7 +96,7 @@ class Post {
         })
             .then(response => response.json())
             .then(data => recievedData = data.data)
-            .catch(err => console.log(err))
+
         return recievedData;
     }
 
@@ -115,7 +115,6 @@ class Post {
         })
             .then(response => response.json())
             .then(data => response = data)
-            .catch(err => console.log(err))
 
         return response;
 

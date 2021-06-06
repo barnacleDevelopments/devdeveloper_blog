@@ -24,6 +24,7 @@ const Body = styled("div")`
     display: flex;
     position: absolute;
     align-items: center;
+    z-index: 1000000;
     a {
         text-decoration: none;
     }

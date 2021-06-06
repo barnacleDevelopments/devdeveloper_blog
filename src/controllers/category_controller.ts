@@ -127,7 +127,7 @@ class Category {
                 Accept: "application/json",
             }
         })
-            .catch(err => console.log(err))
+
     }
 }
 
