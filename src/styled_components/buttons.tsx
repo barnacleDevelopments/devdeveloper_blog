@@ -28,6 +28,10 @@ export const ConfirmBtn = styled("button")`
     border: none;
     box-shadow: 1px 1px 5px 0px #00000030;
     font-size: 1.01em;
+    :disabled {
+        background-color: #97aabd;
+        opacity: .5;
+    }
 `;
 
 export const CardBtn = styled("button")`

@@ -54,7 +54,7 @@ const useCategories = (postId: RessourceId) => {
                     comment._id !== deletedComment._id ?
                         true : false;
                 });
-                console.log(updatedCommentList)
+
                 setComments(updatedCommentList);
             }).catch(err => addError(err.message));
     }

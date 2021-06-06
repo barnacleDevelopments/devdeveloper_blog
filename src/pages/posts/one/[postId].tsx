@@ -66,7 +66,7 @@ const PostView: React.FunctionComponent<PostView> = ({ post }) => {
     // get autheticated user
     const { user, isLoading } = useAuth();
     const { createComment, deleteComment, comments } = useComments(post._id);
-    console.log(comments)
+
     return (
         <Body>
             {post &&

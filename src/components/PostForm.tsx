@@ -149,6 +149,7 @@ const TextInputBody = styled("div")`
 const TextAreaInput = styled("div")`
     height: 100%;
     position: relative;
+    color: black;
 
 `;
 
@@ -371,24 +372,38 @@ const useContentEditable = () => {
     }
 }
 
-const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
+const PostForm: React.FunctionComponent<PostFormComponent> = ({ title, categoryList, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
 
-    const { handleKeyDown, textAreaInputText, handleKeyUp, textAreaInput, focusTextAreaInput, isCap } = useContentEditable();
-    const handlePostSubmit = () => {
-        let data = {
-            title: textAreaInput.current.firstElementChild.textContent,
-            content: ""
+    const [hasTitle, setHasTitle] = useState(false)
+    const { handleKeyDown, handleKeyUp, textAreaInput, focusTextAreaInput, isCap } = useContentEditable();
+    const handlePostSubmit = (e: any) => {
+        e.preventDefault()
+
+        if (hasTitle) {
+            let data = {
+                title: textAreaInput.current.firstElementChild.textContent,
+                content: ""
+            }
+
+            textAreaInput.current.removeChild(textAreaInput.current.firstElementChild)
+
+            data.content = textAreaInput.current.innerHTML
+
+            submitFunc(data)
+            cancelFunc();
         }
-
-        textAreaInput.current.removeChild(textAreaInput.current.firstElementChild)
-
-        data.content = textAreaInput.current.innerHTML
-
-        submitFunc(data)
-        cancelFunc();
     }
 
+    const checkHasTitle = () => {
+        const titleElement = textAreaInput.current.firstElementChild
 
+        if (titleElement.nodeName === "H1" && titleElement.textContent.length >= 1) {
+            setHasTitle(true)
+        } else {
+            setHasTitle(false)
+        }
+
+    }
 
     return (
         <Body style={{ height: "100%" }}>
@@ -396,15 +411,6 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, co
             <Shadow onClick={cancelFunc}></Shadow>
             {/* POST FORM */}
             <Form onSubmit={handlePostSubmit} >
-
-                {/* TITLE INPUT */}
-                {/* <input
-                        ref={register}
-                        name="title"
-                        type="text"
-                        placeholder={"Post Title..."}
-                        defaultValue={title}
-                    /> */}
 
                 {/* EDIT BAR */}
                 <EditBar isCap={isCap} focusTextBody={focusTextAreaInput} />
@@ -416,11 +422,15 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, co
                 >
                     <TextAreaInput
                         id="initialInputField"
-                        dangerouslySetInnerHTML={{ __html: textAreaInputText }}
+                        dangerouslySetInnerHTML={{ __html: `<h1>${title}</h1>${content}` }}
                         ref={textAreaInput}
                         defaultValue={content}
                         onKeyDown={handleKeyDown}
-                        onKeyUp={handleKeyUp} contentEditable="true" placeholder={"Post Content..."}></TextAreaInput>
+                        onKeyUp={handleKeyUp} contentEditable="true" placeholder={"Post Content..."}
+                        onInput={checkHasTitle}
+                    >
+
+                    </TextAreaInput>
                 </TextInputBody>
                 {includesCategoryPicker && (
                     <select
@@ -437,7 +447,7 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, co
 
                 {/* FORM BUTTONS */}
                 <ButtonContainer>
-                    <ConfirmBtn type="submit" >{btnText}</ConfirmBtn>
+                    <ConfirmBtn disabled={!hasTitle} type="submit" >{btnText}</ConfirmBtn>
                     <CancelBtn onClick={cancelFunc} >Cancle</CancelBtn>
                 </ButtonContainer>
             </Form>
