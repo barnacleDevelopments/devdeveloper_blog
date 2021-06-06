@@ -7,7 +7,7 @@ export default withApiAuthRequired(async function createPost(req, res) {
         const { accessToken } = await getAccessToken(req, res, { scopes: ["create:post"] });
         const catId = req.query.catId
         const body = req.body;
-        console.log(body, catId)
+
         await fetch(`${API_URL}/posts/create/${catId}`, {
             method: "POST",
             mode: "cors",

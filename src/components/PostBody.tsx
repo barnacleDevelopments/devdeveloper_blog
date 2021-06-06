@@ -18,7 +18,6 @@ const Body = styled("article")`
     margin-bottom: 14px;
     position: relative;
     min-width: 270px;
-
     img {
         width: 100%;
         border-top-left-radius: 4px;
@@ -43,6 +42,8 @@ const Body = styled("article")`
         border-radius: 30px;
         color: #f5f5f5;
     }
+
+ 
 `;
 
 const Content = styled("div")`

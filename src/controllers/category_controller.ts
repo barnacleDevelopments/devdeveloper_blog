@@ -9,30 +9,22 @@ const LOCAL_URL = "https://blog.devdeveloper.ca";
 class Category {
     constructor() { }
 
-    public static async getAll(): Promise<CategoryData[]> {
-        let recievedData: CategoryData[] = [{
-            _id: "",
-            name: "",
-            desc: "",
-            count: 0,
-            img: "",
-            posts: []
-        }]
-            ;
-
-        await fetch(`${LOCAL_URL}/api/categories/all`, {
-            method: "GET",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            }
+    public static async getAll() {
+        const promise = new Promise((resolve, reject) => {
+            fetch(`${LOCAL_URL}/api/categories/all`, {
+                method: "GET",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => resolve(data.data))
+                .catch(err => reject(err));
         })
-            .then(response => response.json())
-            .then(data => {
-                recievedData = data.data;
-            });
-        return recievedData
+
+        return promise;
     }
 
     public static async getOne(catId: RessourceId): Promise<CategoryData> {
@@ -84,31 +76,21 @@ class Category {
         return recievedData
     }
 
-    public static async create(name: string, desc: string): Promise<CategoryData> {
-        let recievedData: CategoryData = {
-            _id: "",
-            name: "",
-            desc: "",
-            count: 0,
-            img: "",
-            posts: []
-        }
-
-        await fetch(`${LOCAL_URL}/api/categories/create`, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8",
-                Accept: "application/json"
-            },
-            body: JSON.stringify({ name, desc })
-        })
-            .then(response => response.json())
-            .then(data => {
-                recievedData = data.data;
+    public static async create(category: CategoryFormData): Promise<CategoryData> {
+        return new Promise((resolve, reject) => {
+            fetch(`${LOCAL_URL}/api/categories/create`, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify(category)
             })
-
-        return recievedData;
+                .then(response => response.json())
+                .then(data => resolve(data.data))
+                .catch(err => reject(err))
+        })
     }
 
     public static async update(catId: RessourceId, name: string, desc: string): Promise<CategoryData> {

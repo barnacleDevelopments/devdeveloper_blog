@@ -121,6 +121,7 @@ const CategoryForm: React.FunctionComponent<CategoryFormComponent> = ({ name, de
         cancelFunc() // close form
     }
 
+
     return (
         <Body>
             <Shadow onClick={cancelFunc}></Shadow>

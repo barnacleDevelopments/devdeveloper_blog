@@ -10,6 +10,7 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 
 // CONTROLLERS
+// import Comment from "../../../controllers/comment_controller";
 import Post from "../../../controllers/post_controller";
 
 //COMPONENTS
@@ -20,6 +21,7 @@ import CommentForm from "../../../components/CommentForm";
 
 // HOOKS
 import useAuth from "../../../hooks/useAuth";
+// import { useRouter } from "next/router";
 import useComments from "../../../hooks/useComments";
 
 // INTERFACES 

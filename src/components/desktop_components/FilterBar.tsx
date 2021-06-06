@@ -40,7 +40,7 @@ const BiscList = styled("ul")`
 `;
 
 interface FilterBarData {
-    categoryList: CategoryData[],
+    categoryList: any,
     addActiveCategory(catId: string): void,
     removeActiveCategory(catId: string): void
 }
