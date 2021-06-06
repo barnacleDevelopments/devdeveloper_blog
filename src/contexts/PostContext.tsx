@@ -6,7 +6,7 @@ FILE: PostContext.tsx
 
 
 import { createContext } from "react";
-import { RessourceId } from "../customTypings/global_types";
+// import { RessourceId } from "../customTypings/global_types";
 
 interface PostsContextData {
     posts: PostData[],

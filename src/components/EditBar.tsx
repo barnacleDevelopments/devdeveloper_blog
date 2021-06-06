@@ -5,12 +5,12 @@ FILE: TextProcessor.tsx
 */
 
 // DEPENDENCIES
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
-// FONT AWESOME 
-import { faImage, faLink } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
+// // FONT AWESOME 
+// import { faImage, faLink } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 
 interface editBarProps {
     focusTextBody(): void
@@ -74,7 +74,6 @@ const IsCapWarning = styled("div")`
 `;
 
 const EditBar: FunctionComponent<editBarProps> = ({ focusTextBody, isCap }) => {
-    const selectedBtn = useState();
 
     const format = (command: string, value?: string) => {
         focusTextBody();
@@ -106,10 +105,10 @@ const EditBar: FunctionComponent<editBarProps> = ({ focusTextBody, isCap }) => {
             <FormatBtn href="javascript:void(0)" onClick={() => format("")}><Icon icon={faLink}></Icon></FormatBtn>
             <FormatBtn>{"{ }"}</FormatBtn> */}
             <HeadingSelect>
-                <option onClick={(e) => setHeading("H1")}>H1</option>
-                <option onClick={(e) => setHeading("H2")}>H2</option>
-                <option onClick={(e) => setHeading("H3")}>H3</option>
-                <option onClick={(e) => setHeading("H4")}>H4</option>
+                <option onClick={() => setHeading("H1")}>H1</option>
+                <option onClick={() => setHeading("H2")}>H2</option>
+                <option onClick={() => setHeading("H3")}>H3</option>
+                <option onClick={() => setHeading("H4")}>H4</option>
             </HeadingSelect>
 
             { isCap && (<IsCapWarning>CAPS ON</IsCapWarning>)}

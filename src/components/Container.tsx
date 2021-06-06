@@ -22,11 +22,11 @@ const ContainerBody = styled("div")`
 
 
     @media (min-width: 992px) {
-        width: 85%;
+        width: 50%;
     }
 
     @media (min-width: 1200px) {
-        width: 80%;
+        width: 60%;
     }
 `
 const Container: React.FunctionComponent = ({ children }) => (

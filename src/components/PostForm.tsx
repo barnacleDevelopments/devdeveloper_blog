@@ -7,30 +7,29 @@ FILE: TextProcessor.tsx
 // DEPENDENCIES
 import React, { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
-import * as yup from "yup"
-import { yupResolver } from "@hookform/resolvers/yup";
-
-// HOOKS 
-import { useForm } from "react-hook-form";
+// import * as yup from "yup"
+// import { yupResolver } from "@hookform/resolvers/yup";
 
 // COMPONENTS 
 import EditBar from "./EditBar";
 
 // STYLED COMPONENTS
 import { CancelBtn, ConfirmBtn } from "../styled_components/buttons";
-import { FormError } from "../styled_components/errors";
+// import { FormError } from "../styled_components/errors";
+// import Category from "../controllers/category_controller";
+// import Post from "../controllers/post_controller";
 
 // VALIDATION SCHEMAS
-let newPostSchema: any = yup.object().shape({
-    title: yup.string().required().min(5).max(15),
-    content: yup.string().required().min(50),
-    catId: yup.string().required()
-});
+// let newPostSchema: any = yup.object().shape({
+//     title: yup.string().required().min(5).max(15),
+//     content: yup.string().required().min(50),
+//     catId: yup.string().required()
+// });
 
-let updatePostSchema: any = yup.object().shape({
-    title: yup.string().required().min(5).max(15),
-    content: yup.string().required().min(50),
-})
+// let updatePostSchema: any = yup.object().shape({
+//     title: yup.string().required().min(5).max(15),
+//     content: yup.string().required().min(50),
+// })
 
 interface PostFormComponent {
     title?: string,
@@ -42,12 +41,12 @@ interface PostFormComponent {
     includesCategoryPicker: boolean
 }
 
-type PostInputData = {
-    [index: string]: string,
-    title: string,
-    content: string,
-    catId: string
-}
+// type PostInputData = {
+//     [index: string]: string,
+//     title: string,
+//     content: string,
+//     catId: string
+// }
 
 const Body = styled("div")`
     position: fixed;
@@ -128,8 +127,9 @@ const TextInputBody = styled("div")`
     outline: none;
     line-height: 1.3em;
     overflow: scroll;
-    padding: 60px 30px;
+    padding: 80px 30px;
     word-wrap: break-word;
+
     h1 {
         font-size: 2em;
         line-height: 2em;
@@ -146,25 +146,29 @@ const TextInputBody = styled("div")`
     }
 `;
 
-const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, title, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
+const TextAreaInput = styled("div")`
+    height: 100%;
+    position: relative;
+
+`;
+
+
+const useContentEditable = () => {
+
     const [isCap, setIsCap] = useState(false);
-    const [controlIsPressed, setControlIsPressed] = useState<boolean>(true);
-    const [textBodyContent, setTextBodyContent] = useState("");
-    const textBody: any = useRef(null);
+    const [controlIsPressed, setControlIsPressed] = useState<boolean>(false);
+    const textAreaInput: any = useRef(null);
+    const [textAreaInputText] = useState<string>(textAreaInput.value)
+    // const [currentListType, setCurrentListType] = useState<string>()
+    // const [categories, setCategories] = useState<CategoryData[]>([])
+    // const [posts, setPosts] = useState([])
 
-    const handlePostSubmit = () => {
-        let data = {
-            title: textBody.current.firstElementChild.textContent,
-            content: ""
-        }
+    // const [currentCursorPosition, setCurrentCursorPosition] = useState<any>()
 
-        textBody.current.removeChild(textBody.current.firstElementChild)
+    useEffect(() => {
+        focusTextAreaInput()
+    })
 
-        data.content = textBody.current.innerHTML
-
-        submitFunc(data)
-        cancelFunc();
-    }
 
     const handleKeyDown = (e: any) => {
 
@@ -189,29 +193,202 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, ti
     }
 
     const handleKeyUp = (e: any) => {
-        if (e.key === "Control") {
-            setControlIsPressed(false);
-        }
-
+        setControlIsPressed(false)
         if (e.getModifierState("CapsLock")) {
 
             setIsCap(true);
-            console.log(isCap)
         } else {
 
             setIsCap(false);
-            console.log(isCap)
         }
     }
 
-    const focusTextBody = () => textBody.current.focus()
+    // focuses user input into editiable content div
+    const focusTextAreaInput = () => {
+        textAreaInput.current.focus()
+        // removeExistingLists()
+    };
 
-    useEffect(() => {
-        if (textBody.current.textContent === ("" || " ")) {
-            document.execCommand("removeFormat", false);
+    // // removes any existing appended list elements 
+    // const removeExistingLists = () => {
+    //     const selectLists = document.getElementsByClassName("selectList")
+    //     for (var l of selectLists) {
+    //         l.remove()
+    //     }
+    // }
+
+    // const focusCurrentList = () => {
+    //     const selectList = document.querySelector(".selectList")
+
+    // }
+
+    // // detexts when user inputs cateogory or post and prompts them to add a link to that particular item. 
+    // const appendList = async (e: any) => {
+    //     const textNode = window.getSelection()?.focusNode;
+
+    //     // check if input text is entity type and return the type
+    //     const detectEntityType = () => {
+    //         const listTypes = ["category", "post"]; // types of lists 
+
+    //         const textStr = textNode?.textContent // textNode value 
+
+    //         const textArr = textNode?.textContent?.split(" ") // split text 
+
+    //         console.log(textArr)
+
+
+    //         const promise = new Promise((resolve, reject) => {
+    //             for (let w of textArr) {
+    //                 for (let t of listTypes) {
+    //                     if (`${w.toLowerCase()}` === `:${t}`) {
+
+    //                         setCurrentListType(t)
+    //                         setTextAreaInputText(textStr.replace(`:${t}`, `${t.toUpperCase()}`))
+    //                         resolve(t);
+    //                     }
+    //                 }
+    //             }
+    //         })
+
+    //         return promise;
+    //     }
+
+    //     // retrieve enties if they don't exist in state and create them 
+    //     const retrieveTypeList = async (type: string | undefined) => {
+
+    //         const promise = new Promise((resolve, reject) => {
+    //             if (type === "category") {
+    //                 categories.length === 0 ? Category.getAll()
+    //                     .then(data => resolve(data)) : null;
+    //             }
+
+    //             if (type === "post") {
+    //                 posts.length === 0 ? Post.getAll()
+    //                     .then(data => resolve(data)) : null
+    //             }
+    //         })
+
+    //         return promise;
+    //     }
+
+    //     // create a HTML collection of all the entities
+    //     const createSelectList = (entityList: any) => {
+    //         const entitySelectList = document.createElement("select");
+    //         entitySelectList.setAttribute("style", "position: absolute; bottom: -10px")
+    //         entitySelectList.setAttribute("contentEditable", "false")
+
+    //         for (let e of entityList) {
+    //             let newOption = document.createElement("option")
+
+    //             newOption.textContent = e.name || e.title
+    //             newOption.value = e._id
+    //             entitySelectList.append(newOption)
+
+    //         }
+
+    //         return entitySelectList;
+
+    //     }
+
+    //     // position cursor at the end 
+    //     const positionCursor = () => {
+
+    //         const cursor = window.getSelection();
+
+    //         const rangeObj = document.createRange();
+
+    //         const textLength = cursor?.anchorNode?.nodeValue?.length
+
+    //         rangeObj.setStart(cursor?.focusNode?.parentElement.childNodes[0], textLength);
+
+    //         cursor?.removeAllRanges()
+
+    //         rangeObj.collapse(true);
+
+    //         cursor?.addRange(rangeObj)
+    //     }
+
+    //     const transformToLink = (linkText: any, link: any) => {
+    //         removeExistingLists()
+
+    //         const cursor = window.getSelection();
+    //         const textArr = cursor?.focusNode.textContent.split(" ")
+    //         const textStr = cursor?.focusNode.textContent
+
+    //         console.log(textStr)
+
+    //         for (let w of textArr) {
+    //             if (w.toLowerCase() === currentListType)
+    //                 setTextAreaInputText(textStr.replace(`${w?.toUpperCase()}`, `<a href="/posts/${link}">${linkText}</a>`))
+    //         }
+    //         // positionCursor()
+    //     }
+
+    //     const appendSelectList = (list: any) => {
+    //         const cursor = window.getSelection();
+
+    //         removeExistingLists()
+
+    //         const selectList = createSelectList(list);
+
+    //         const selectListParent = selectList.parentElement;
+
+    //         selectList.className = "selectList"
+
+    //         selectList.addEventListener("change", (e) => {
+    //             removeExistingLists()
+    //             transformToLink(e.target.textContent, e.target.value)
+    //         })
+
+    //         cursor?.focusNode.append(selectList)
+    //         selectListParent?.setAttribute("style", "position: relative")
+    //     }
+
+
+    //     detectEntityType()
+    //         .then((type) => {
+    //             removeExistingLists()
+    //             // positionCursor()
+    //             retrieveTypeList(type)
+    //                 .then((list) => {
+    //                     appendSelectList(list)
+    //                     // focusCurrentList()
+    //                 })
+    //                 .catch(() => removeExistingLists())
+    //         });
+
+    // }
+
+
+    return {
+        textAreaInputText,
+        textAreaInput,
+        handleKeyDown,
+        handleKeyUp,
+        isCap,
+        focusTextAreaInput,
+
+    }
+}
+
+const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, content, btnText, submitFunc, cancelFunc, includesCategoryPicker }) => {
+
+    const { handleKeyDown, textAreaInputText, handleKeyUp, textAreaInput, focusTextAreaInput, isCap } = useContentEditable();
+    const handlePostSubmit = () => {
+        let data = {
+            title: textAreaInput.current.firstElementChild.textContent,
+            content: ""
         }
 
-    }, [textBody.current?.textContent]);
+        textAreaInput.current.removeChild(textAreaInput.current.firstElementChild)
+
+        data.content = textAreaInput.current.innerHTML
+
+        submitFunc(data)
+        cancelFunc();
+    }
+
+
 
     return (
         <Body style={{ height: "100%" }}>
@@ -230,18 +407,21 @@ const PostForm: React.FunctionComponent<PostFormComponent> = ({ categoryList, ti
                     /> */}
 
                 {/* EDIT BAR */}
-                <EditBar isCap={isCap} focusTextBody={focusTextBody} />
+                <EditBar isCap={isCap} focusTextBody={focusTextAreaInput} />
 
                 {/* CONTENT INPUT */}
                 <TextInputBody
-                    ref={textBody}
-                    onInput={() => setTextBodyContent(textBody.current.textContent)}
-                    contentEditable="true"
-                    placeholder={"Post Content..."}
-                    defaultValue={content}
-                    onKeyDown={handleKeyDown}
-                    onKeyUp={handleKeyUp}
-                />
+                    id="textInputBody"
+
+                >
+                    <TextAreaInput
+                        id="initialInputField"
+                        dangerouslySetInnerHTML={{ __html: textAreaInputText }}
+                        ref={textAreaInput}
+                        defaultValue={content}
+                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyUp} contentEditable="true" placeholder={"Post Content..."}></TextAreaInput>
+                </TextInputBody>
                 {includesCategoryPicker && (
                     <select
                         name="catId"

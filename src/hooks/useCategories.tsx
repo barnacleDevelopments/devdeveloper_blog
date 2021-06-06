@@ -27,14 +27,10 @@ const useCategories = (initialCategories: any) => {
      * @param desc Category description.
      * @description Makes a POST request containing a new category entry directed at the devdevloper_blog api.
      */
-    const addCategory = async (name: string, desc: string) => {
-        let adjustedCatList = categories;
-        await Category.create(name, desc)
-            .then(data => {
-                adjustedCatList = [data, ...adjustedCatList]
-                setCategories(adjustedCatList);
-            })
-            .catch(err => addError(err.message))
+    const addCategory = async (category: CategoryFormData) => {
+        await Category.create(category)
+            .then(data => setCategories([data, ...categories]))
+            .catch(err => addError(err))
     }
 
     /**
@@ -51,7 +47,7 @@ const useCategories = (initialCategories: any) => {
                     category._id === updatedCategory._id ? updatedCategory : category
                 ))
                 setCategories(newCategories);
-            }).catch(err => addError(err.message));
+            }).catch(err => addError(err));
     }
 
     /**
@@ -66,7 +62,7 @@ const useCategories = (initialCategories: any) => {
                     category._id === catId ? false : true
                 ))
                 setCategories(newCatList);
-            }).catch(err => addError(err.message))
+            }).catch(err => addError(err))
     }
 
     return {

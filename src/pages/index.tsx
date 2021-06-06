@@ -137,7 +137,7 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
             btnText="Create"
             name=""
             desc=""
-            submitFunc={(formData) => addCategory(formData.name, formData.desc)}
+            submitFunc={(formData) => addCategory(formData)}
             cancelFunc={toggleCategoryCreateForm}
           />}
 
@@ -176,7 +176,7 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
             btnText="Create"
             name=""
             desc=""
-            submitFunc={(formData) => addCategory(formData.name, formData.desc)} cancelFunc={toggleCategoryCreateForm} /> : null}
+            submitFunc={(formData) => addCategory(formData)} cancelFunc={toggleCategoryCreateForm} /> : null}
 
         {/* FALLBACK MESSAGE */}
         {categories.length === 0 ?
@@ -184,7 +184,7 @@ function IndexPage({ categoriesList, postList }: InferGetServerSidePropsType<typ
 
           /* DISPLAY CATEGORY CARDS*/
           categories.map((cat) => {
-            let postCount = cat.posts.length;
+            let postCount = cat?.posts.length;
             return <Card
               key={cat._id}
               deleteCategory={deleteCategory}
